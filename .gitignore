@@ -1,4 +1,4 @@
 .cache/
 .direnv/
-gen-flake
 compile_commands.json
+spec

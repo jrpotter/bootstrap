@@ -1,6 +1,6 @@
-# gen-flake
+# spec
 
-CLI utility for initializing projects deterministically using flakes.
+CLI utility for initializing projects in reproducible ways.
 
 ## Problem
 
