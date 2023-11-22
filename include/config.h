@@ -1,18 +1,18 @@
-#ifndef GEN_FLAKE_CONFIG_H
-#define GEN_FLAKE_CONFIG_H
+#ifndef _SPEC_CONFIG_H
+#define _SPEC_CONFIG_H
 
 struct Config {
   // The root directory housing our specs. This string is nonempty.
-  const char *spec_path;
+  const char *root_dir;
   // The name of the spec we want to load. This string is nonempty.
   const char *target;
 };
 
 enum ConfigError {
-  // Indicates the `$GEN_FLAKE_SPEC_PATH` environment variable is not set.
-  ENV_SPEC_PATH_EMPTY = 1,
-  // Indicates the `$GEN_FLAKE_SPEC_PATH` environment variable is empty.
-  ENV_SPEC_PATH_MISSING,
+  // Indicates the `$SPEC_ROOT_DIR` environment variable is empty.
+  ENV_SPEC_ROOT_DIR_MISSING = 1,
+  // Indicates the `$SPEC_ROOT_DIR` environment variable is not set.
+  ENV_SPEC_ROOT_DIR_EMPTY,
   // Indicates the target argument is invalid.
   INVALID_TARGET,
 };
@@ -21,4 +21,4 @@ enum ConfigError load_config(const char *target, struct Config *config);
 
 void free_config(struct Config *config);
 
-#endif /* GEN_FLAKE_CONFIG_H */
+#endif /* _SPEC_CONFIG_H */

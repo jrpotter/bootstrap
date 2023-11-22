@@ -1,5 +1,5 @@
-#ifndef GEN_FLAKE_DYN_ARRAY_H
-#define GEN_FLAKE_DYN_ARRAY_H
+#ifndef _SPEC_DYN_ARRAY_H
+#define _SPEC_DYN_ARRAY_H
 
 #include <stdlib.h>
 
@@ -19,4 +19,4 @@ void dyn_array_push(struct DynArray *a, void *item);
 
 void dyn_array_free(struct DynArray *a);
 
-#endif /* GEN_FLAKE_DYN_ARRAY_H */
+#endif /* _SPEC_DYN_ARRAY_H */

@@ -31,7 +31,7 @@
             ncurses
           ];
           shellHook = ''
-            export GEN_FLAKE_SPEC_PATH="${./specs}"
+            export SPEC_ROOT_DIR="${./specs}"
           '';
         };
       }

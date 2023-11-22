@@ -12,13 +12,11 @@ struct DynArray *dyn_array_new(size_t capacity) {
 
 size_t dyn_array_size(struct DynArray *a) {
   assert(a);
-
   return a->size;
 }
 
 void dyn_array_push(struct DynArray *a, void *item) {
   assert(a);
-
   if (a->size == a->_capacity) {
     // We assume reallocation will work.
     a->_capacity *= 2;
@@ -30,7 +28,6 @@ void dyn_array_push(struct DynArray *a, void *item) {
 
 void dyn_array_free(struct DynArray *a) {
   assert(a);
-
   free(a->buf);
   free(a);
 }
