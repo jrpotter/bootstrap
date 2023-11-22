@@ -19,12 +19,17 @@
         '';
       in
       {
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs.mkShell.override {
+          # https://nixos.wiki/wiki/Using_Clang_instead_of_GCC
+          stdenv = pkgs.clangStdenv;
+        } {
           packages = with pkgs; [
             bear
-            clang
             clang-tools
             codelldb
+          ];
+          buildInputs = with pkgs; [
+            ncurses
           ];
         };
       }
