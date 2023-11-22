@@ -2,14 +2,6 @@
 
 #include "dyn_array.h"
 
-struct DynArray {
-  void **buf;
-  // The size of @buf excluding `NUL`.
-  size_t size;
-  // The allocated size of @buf including `NUL`.
-  size_t _capacity;
-};
-
 struct DynArray *dyn_array_new(size_t capacity) {
   struct DynArray *a = malloc(sizeof(struct DynArray));
   a->buf = calloc(capacity, sizeof(void *));

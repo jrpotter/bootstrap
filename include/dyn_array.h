@@ -3,7 +3,13 @@
 
 #include <stdlib.h>
 
-struct DynArray;
+struct DynArray {
+  void **buf;
+  // The size of @buf excluding `NUL`.
+  size_t size;
+  // The allocated size of @buf including `NUL`.
+  size_t _capacity;
+};
 
 struct DynArray *dyn_array_new(size_t capacity);
 

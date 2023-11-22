@@ -1,15 +1,39 @@
 #include <assert.h>
-#include <curses.h>
 #include <glob.h>
 #include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "config.h"
 #include "dyn_array.h"
 
-static int glob_specs(char *name, struct DynArray *entries) {
+static const char *glob_spec_pattern(const struct Config *const config) {
+  assert(config);
+
+  int spec_path_length = strlen(config->spec_path);
+  int target_length = strlen(config->target);
+  // Support paths that have trailing forward slashes.
+  int sep_length = 0;
+  if (config->spec_path[spec_path_length - 1] == '/') {
+    sep_length = 1;
+  }
+
+  char *pattern = calloc(1, spec_path_length + sep_length + target_length + 1);
+  memcpy(pattern, config->spec_path, spec_path_length);
+  if (sep_length) {
+    memcpy(pattern + spec_path_length, "/", sep_length);
+  }
+  memcpy(pattern + spec_path_length + sep_length, config->target,
+         target_length);
+
+  return pattern;
+}
+
+static int glob_specs(char *name, const char *spec_path,
+                      struct DynArray *entries) {
   assert(name);
   assert(entries);
 
@@ -41,12 +65,6 @@ cleanup:
   return retval;
 }
 
-static void cleanup(int sig) {
-  endwin();
-
-  exit(EXIT_SUCCESS);
-}
-
 int main(int argc, char **argv) {
   int num = 0;
 
@@ -55,13 +73,23 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  // Allow interrupting the program cleanly.
-  // TODO: How does this cleanup spec correctly?
-  signal(SIGINT, cleanup);
+  struct Config config;
+  switch (load_config(argv[1], &config)) {
+  case ENV_SPEC_PATH_EMPTY:
+    fprintf(stderr, "Must specify GEN_FLAKE_SPEC_PATH environment variable.");
+    exit(EXIT_FAILURE);
+  case ENV_SPEC_PATH_MISSING:
+    fprintf(stderr,
+            "GEN_FLAKE_SPEC_PATH environment variable should not be empty.");
+    exit(EXIT_FAILURE);
+  case INVALID_TARGET:
+    fprintf(stderr, "Spec `%s` is invalid.", argv[1]);
+    exit(EXIT_FAILURE);
+  default:
+    // Return value of `0` indicates no issue.
+    break;
+  }
 
-  initscr();
-  keypad(stdscr, TRUE); // Enable keyboard mapping.
-  nonl();               // Disables NL to CR/NL conversion on output.
-
-  cleanup(0);
+  free_config(&config);
+  return EXIT_SUCCESS;
 }

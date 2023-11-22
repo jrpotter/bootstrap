@@ -1,5 +1,7 @@
+COMMAND=clang -g -I include src/*.c main.c -o gen-flake
+
 all:
-	@clang -g -lncurses -I include src/*.c main.c -o gen-flake
+	@${COMMAND}
 
 bear:
-	@bear -- clang -g -lncurses -I include src/*.c main.c -o gen-flake
+	@bear -- ${COMMAND}
