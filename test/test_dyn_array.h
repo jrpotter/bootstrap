@@ -1,5 +1,5 @@
-#ifndef _SPEC_TEST_DYN_ARRAY
-#define _SPEC_TEST_DYN_ARRAY
+#ifndef _BOOTSTRAP_TEST_DYN_ARRAY
+#define _BOOTSTRAP_TEST_DYN_ARRAY
 
 #include "dyn_array.h"
 #include "sput.h"
@@ -44,4 +44,4 @@ static void test_dyn_array_nonzero_capacity() {
   dyn_array_free(a);
 }
 
-#endif /* _SPEC_TEST_DYN_ARRAY */
+#endif /* _BOOTSTRAP_TEST_DYN_ARRAY */

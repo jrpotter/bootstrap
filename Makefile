@@ -1,4 +1,4 @@
-BUILD=clang -Og -g -I include src/*.c main.c -o spec
+BUILD=clang -Og -g -I include src/*.c main.c -o bootstrap
 
 all: build bear
 

@@ -1,5 +1,5 @@
 .cache/
 .direnv/
 compile_commands.json
-spec
+bootstrap
 test/runner

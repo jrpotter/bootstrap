@@ -13,7 +13,7 @@ enum ConfigError config_load(
     return CE_ENV_CWD_INVALID;
   }
   if (root_dir == 0) {
-    return CE_ENV_SPEC_ROOT_DIR_INVALID;
+    return CE_ENV_ROOT_DIR_INVALID;
   }
   if (target == 0) {
     return CE_TARGET_INVALID;

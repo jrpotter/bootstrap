@@ -31,7 +31,7 @@
             ncurses
           ];
           shellHook = ''
-            export SPEC_ROOT_DIR="${./specs}"
+            export BOOTSTRAP_ROOT_DIR="${./specs}"
           '';
         };
       }

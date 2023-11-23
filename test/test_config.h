@@ -1,10 +1,10 @@
-#ifndef _SPEC_TEST_CONFIG
-#define _SPEC_TEST_CONFIG
+#ifndef _BOOTSTRAP_TEST_CONFIG
+#define _BOOTSTRAP_TEST_CONFIG
 
 #include "config.h"
 #include "sput.h"
 
-static const char *SAMPLE_CWD = "/home/jrpotter/Documents/spec";
+static const char *SAMPLE_CWD = "/home/jrpotter/Documents/bootstrap";
 static const char *SAMPLE_ROOT_DIR = "/usr/local/share/specs";
 static const char *SAMPLE_TARGET = "example-target";
 
@@ -18,7 +18,7 @@ static void test_config_load_cwd_invalid() {
 static void test_config_load_root_dir_invalid() {
   struct Config *config = 0;
   enum ConfigError retval = config_load(SAMPLE_CWD, 0, SAMPLE_TARGET, &config);
-  sput_fail_unless(retval == CE_ENV_SPEC_ROOT_DIR_INVALID, "root_dir == 0");
+  sput_fail_unless(retval == CE_ENV_ROOT_DIR_INVALID, "root_dir == 0");
 }
 
 static void test_config_load_target_invalid() {
@@ -42,4 +42,4 @@ static void test_config_load_success() {
   config_free(config);
 }
 
-#endif /* _SPEC_TEST_CONFIG */
+#endif /* _BOOTSTRAP_TEST_CONFIG */
