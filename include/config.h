@@ -2,22 +2,28 @@
 #define _SPEC_CONFIG_H
 
 struct Config {
-  // The root directory housing our specs. This string is nonempty.
+  // The directory the `spec` command was run from.
+  // OWNERSHIP: Does not own this pointer.
+  const char *cwd;
+  // The root directory housing our specs.
+  // OWNERSHIP: Does not own this pointer.
   const char *root_dir;
-  // The name of the spec we want to load. This string is nonempty.
+  // The name of the spec we want to load.
+  // OWNERSHIP: Does not own this pointer.
   const char *target;
 };
 
 enum ConfigError {
+  // Indicates the $CWD could not be retrieved.
+  CE_ENV_CWD_INVALID = 1,
   // Indicates the `$SPEC_ROOT_DIR` environment variable is empty.
-  ENV_SPEC_ROOT_DIR_MISSING = 1,
-  // Indicates the `$SPEC_ROOT_DIR` environment variable is not set.
-  ENV_SPEC_ROOT_DIR_EMPTY,
+  CE_ENV_SPEC_ROOT_DIR_INVALID,
   // Indicates the target argument is invalid.
-  INVALID_TARGET,
+  CE_TARGET_INVALID,
 };
 
 enum ConfigError config_load(
+  const char *cwd,
   const char *root_dir,
   const char *target,
   struct Config **config
