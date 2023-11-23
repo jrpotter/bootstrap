@@ -1,6 +1,6 @@
 {
   description = ''
-  An opinionated clang flake.
+    An opinionated clang flake.
   '';
 
   inputs = {
@@ -14,7 +14,6 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         codelldb = pkgs.writeShellScriptBin "codelldb" ''
-          #!/usr/bin/env bash
           exec ${pkgs.vscode-extensions.vadimcn.vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/adapter/codelldb "$@"
         '';
       in
