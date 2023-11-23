@@ -4,9 +4,10 @@
 
 struct DynArray *dyn_array_new(size_t capacity) {
   struct DynArray *a = malloc(sizeof(struct DynArray));
-  a->buf = calloc(capacity, sizeof(void *));
+  size_t new_capacity = capacity ? capacity : 1;
+  a->buf = calloc(new_capacity, sizeof(void *));
   a->size = 0;
-  a->_capacity = capacity;
+  a->_capacity = new_capacity;
   return a;
 }
 
@@ -18,16 +19,17 @@ size_t dyn_array_size(struct DynArray *a) {
 void dyn_array_push(struct DynArray *a, void *item) {
   assert(a);
   if (a->size == a->_capacity) {
-    // We assume reallocation will work.
     a->_capacity *= 2;
-    a = realloc(a, sizeof(void *) * a->_capacity);
+    a->buf = realloc(a->buf, sizeof(void *) * a->_capacity);
   }
-  a->size += 1;
   a->buf[a->size] = item;
+  a->size += 1;
 }
 
 void dyn_array_free(struct DynArray *a) {
-  assert(a);
+  if (!a) {
+    return;
+  }
   free(a->buf);
   free(a);
 }

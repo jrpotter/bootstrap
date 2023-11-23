@@ -1,4 +1,4 @@
-BUILD=clang -g -I include src/*.c main.c -o spec
+BUILD=clang -Og -g -I include src/*.c main.c -o spec
 
 all: build bear
 
@@ -11,7 +11,7 @@ bear: include/*.h src/*.c
 test: test/runner
 	$^
 
-test/runner: include/*.h src/*.c test/*.c
+test/runner: include/*.h src/*.c test/*.h test/*.c
 	clang -I include src/*.c test/*.c -o test/runner
 
 .PHONY: test

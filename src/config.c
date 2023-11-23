@@ -3,10 +3,10 @@
 
 #include "config.h"
 
-enum ConfigError load_config(
+enum ConfigError config_load(
   const char *root_dir,
   const char *target,
-  struct Config *config
+  struct Config **config
 ) {
   if (root_dir == 0) {
     return ENV_SPEC_ROOT_DIR_MISSING;
@@ -23,17 +23,17 @@ enum ConfigError load_config(
     return INVALID_TARGET;
   }
 
-  config = malloc(sizeof(struct Config));
-  config->root_dir = root_dir;
+  *config = malloc(sizeof(struct Config));
+  (*config)->root_dir = root_dir;
 
   char *copy_target = calloc(1, target_len + 1);
   strcpy(copy_target, target);
-  config->target = copy_target;
+  (*config)->target = copy_target;
 
   return 0;
 }
 
-void free_config(struct Config *config) {
+void config_free(struct Config *config) {
   if (!config) {
     return;
   }

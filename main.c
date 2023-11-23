@@ -16,8 +16,8 @@ int main(int argc, char **argv) {
 
   const char *root_dir = getenv(ENV_SPEC_ROOT_DIR);
 
-  struct Config config;
-  switch (load_config(root_dir, argv[1], &config)) {
+  struct Config *config = 0;
+  switch (config_load(root_dir, argv[1], &config)) {
   case ENV_SPEC_ROOT_DIR_MISSING:
     fprintf(stderr, "Must specify $SPEC_ROOT_DIR environment variable.");
     exit(EXIT_FAILURE);
@@ -29,6 +29,6 @@ int main(int argc, char **argv) {
     exit(EXIT_FAILURE);
   }
 
-  free_config(&config);
+  config_free(config);
   return EXIT_SUCCESS;
 }
