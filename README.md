@@ -26,3 +26,19 @@ include:
 Once all prompts are evaluated, the keys of the object are converted into
 uppercase environment variables and passed to the `run.sh` file relative to the
 current directory.
+
+## Development
+
+This template includes an `.envrc` file for use with [direnv](https://direnv.net/).
+
+### Formatting
+
+A `pre-commit` file is included in `.githooks` to ensure consistent formatting.
+Run the following to configure `git` to use it:
+
+```bash
+git config --local core.hooksPath .githooks/
+```
+
+If running [direnv](https://direnv.net/), this is done automatically provided
+`git` is installed and a repository is initialized.
