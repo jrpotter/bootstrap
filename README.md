@@ -10,7 +10,7 @@ configured like so:
 
 ```spec.json
 {
-  versions: [...],
+  versions: [...]
 }
 ```
 

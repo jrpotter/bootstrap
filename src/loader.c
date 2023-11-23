@@ -42,7 +42,23 @@ read_spec_json(const struct Config *const config, cJSON **parsed) {
     return 0;
   }
 
-  // TODO: Need to parse the spec.json file.
+  // For simplicity, load the entire file into memory.
+  fseek(handle, 0, SEEK_END);
+  size_t file_size = ftell(handle);
+  fseek(handle, 0, SEEK_SET);
+  char *fcontent = malloc(file_size);
+  size_t read_count = fread(fcontent, 1, file_size, handle);
+  assert(read_count == file_size);
+
+  *parsed = cJSON_Parse(fcontent);
+
+  free(fcontent);
   fclose(handle);
-  assert(false);
+
+  // Can use `cJSON_GetErrorPtr()` to get the actual error message.
+  if (!*parsed) {
+    return SJE_JSON_INVALID;
+  }
+
+  return 0;
 }

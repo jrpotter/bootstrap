@@ -34,4 +34,46 @@ static void test_read_spec_json_missing() {
   free(root_dir);
 }
 
+static void test_read_spec_json_minimal() {
+  char *cwd = getcwd(0, 0);
+
+  const char *segments[] = {cwd, "test", "specs"};
+  char *root_dir = join_path_segments(sizeof(segments) / sizeof(char *), segments);
+
+  struct Config config = {
+    cwd,
+    root_dir,
+    "minimal_spec_json",
+  };
+
+  cJSON *parsed = 0;
+  enum SpecJsonError retval = read_spec_json(&config, &parsed);
+  sput_fail_unless(retval == 0, "minimal spec.json, success");
+  sput_fail_unless(parsed != 0, "minimal spec.json, parsed");
+
+  free(cwd);
+  free(root_dir);
+}
+
+static void test_read_spec_json_invalid() {
+  char *cwd = getcwd(0, 0);
+
+  const char *segments[] = {cwd, "test", "specs"};
+  char *root_dir = join_path_segments(sizeof(segments) / sizeof(char *), segments);
+
+  struct Config config = {
+    cwd,
+    root_dir,
+    "invalid_spec_json",
+  };
+
+  cJSON *parsed = 0;
+  enum SpecJsonError retval = read_spec_json(&config, &parsed);
+  sput_fail_unless(retval == SJE_JSON_INVALID, "invalid spec.json, JSON_INVALID");
+  sput_fail_unless(parsed == 0, "invalid spec.json, not parsed");
+
+  free(cwd);
+  free(root_dir);
+}
+
 #endif /* _BOOTSTRAP_TEST_LOADER */

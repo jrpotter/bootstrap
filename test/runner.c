@@ -22,6 +22,8 @@ int main(int argc, char *argv[]) {
 
   sput_enter_suite("loader");
   sput_run_test(test_read_spec_json_missing);
+  sput_run_test(test_read_spec_json_minimal);
+  sput_run_test(test_read_spec_json_invalid);
 
   sput_finish_testing();
 
