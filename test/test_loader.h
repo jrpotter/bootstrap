@@ -1,0 +1,37 @@
+#ifndef _BOOTSTRAP_TEST_LOADER
+#define _BOOTSTRAP_TEST_LOADER
+
+#include <unistd.h>
+
+#include "cJSON.h"
+#include "config.h"
+#include "loader.h"
+#include "path.h"
+#include "sput.h"
+
+/*
+A missing `spec.json` file is not an error. Our parsed @cJSON instance should
+be set to NULL in this case.
+*/
+static void test_read_spec_json_missing() {
+  char *cwd = getcwd(0, 0);
+
+  const char *segments[] = {cwd, "test", "specs"};
+  char *root_dir = join_path_segments(sizeof(segments) / sizeof(char *), segments);
+
+  struct Config config = {
+    cwd,
+    root_dir,
+    "no_spec_json",
+  };
+
+  cJSON *parsed = 0;
+  enum SpecJsonError retval = read_spec_json(&config, &parsed);
+  sput_fail_unless(retval == 0, "no spec.json, success");
+  sput_fail_unless(parsed == 0, "no spec.json, no parsed");
+
+  free(cwd);
+  free(root_dir);
+}
+
+#endif /* _BOOTSTRAP_TEST_LOADER */

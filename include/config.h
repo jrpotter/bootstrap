@@ -14,11 +14,11 @@ struct Config {
 };
 
 enum ConfigError {
-  // Indicates the $CWD could not be retrieved.
+  // The $CWD could not be retrieved.
   CE_ENV_CWD_INVALID = 1,
-  // Indicates the $BOOTSTRAP_ROOT_DIR environment variable is empty.
+  // The $BOOTSTRAP_ROOT_DIR environment variable is empty.
   CE_ENV_ROOT_DIR_INVALID,
-  // Indicates the target argument is invalid.
+  // The target argument is invalid.
   CE_TARGET_INVALID,
 };
 

@@ -4,6 +4,9 @@
 #include "dyn_array.h"
 #include "sput.h"
 
+/*
+A @DynArray with zero capacity can be instantiated and have entries pushed onto.
+*/
 static void test_dyn_array_empty() {
   struct DynArray *a = dyn_array_new(0);
   sput_fail_unless(a->size == 0, "a->size == 0");
@@ -22,6 +25,9 @@ static void test_dyn_array_empty() {
   dyn_array_free(a);
 }
 
+/*
+A @DynArray with nonzero capacity can be instantiated and have entries pushed onto.
+*/
 static void test_dyn_array_nonzero_capacity() {
   struct DynArray *a = dyn_array_new(3);
   sput_fail_unless(a->size == 0, "a->size == 0");
