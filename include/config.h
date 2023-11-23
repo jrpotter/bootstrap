@@ -17,7 +17,11 @@ enum ConfigError {
   INVALID_TARGET,
 };
 
-enum ConfigError load_config(const char *target, struct Config *config);
+enum ConfigError load_config(
+  const char *root_dir,
+  const char *target,
+  struct Config *config
+);
 
 void free_config(struct Config *config);
 

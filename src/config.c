@@ -3,10 +3,11 @@
 
 #include "config.h"
 
-const char *ENV_SPEC_ROOT_DIR = "SPEC_ROOT_DIR";
-
-enum ConfigError load_config(const char *target, struct Config *config) {
-  const char *root_dir = getenv(ENV_SPEC_ROOT_DIR);
+enum ConfigError load_config(
+  const char *root_dir,
+  const char *target,
+  struct Config *config
+) {
   if (root_dir == 0) {
     return ENV_SPEC_ROOT_DIR_MISSING;
   }
