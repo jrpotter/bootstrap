@@ -9,12 +9,13 @@ int main(int argc, char *argv[]) {
   sput_start_testing();
 
   sput_enter_suite("config");
-  sput_run_test(test_config_load_root_dir_invalid);
-  sput_run_test(test_config_load_target_invalid);
+  sput_run_test(test_config_load_invalid_args);
+  sput_run_test(test_config_load_spec_not_found);
+  sput_run_test(test_config_load_spec_not_dir);
   sput_run_test(test_config_load_success);
 
   sput_enter_suite("dyn_array");
-  sput_run_test(test_dyn_array_empty);
+  sput_run_test(test_dyn_array_zero_capacity);
   sput_run_test(test_dyn_array_nonzero_capacity);
 
   sput_enter_suite("path");

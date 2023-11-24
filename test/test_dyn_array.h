@@ -7,7 +7,7 @@
 /*
 A @DynArray with zero capacity can be instantiated and have entries pushed onto.
 */
-static void test_dyn_array_empty() {
+static void test_dyn_array_zero_capacity() {
   struct DynArray *a = dyn_array_new(0);
   sput_fail_unless(a->size == 0, "a->size == 0");
   sput_fail_unless(a->_capacity == 1, "a->_capacity == 1");

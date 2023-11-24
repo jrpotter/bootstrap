@@ -1,7 +1,10 @@
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "config.h"
+#include "path.h"
 
 enum ConfigError config_load(
   const char *cwd,
@@ -17,6 +20,27 @@ enum ConfigError config_load(
   }
   if (target == 0) {
     return CE_TARGET_INVALID;
+  }
+
+  { // Check if the specified directory exists.
+    struct stat sb;
+
+    const char *segments[] = {root_dir, target};
+    char *filepath =
+      join_path_segments(sizeof(segments) / sizeof(char *), segments);
+
+    int stat_res = stat(filepath, &sb);
+    free(filepath);
+
+    if (stat_res == -1) {
+      if (errno == ENOENT) {
+        return CE_TARGET_NOT_FOUND;
+      }
+      return CE_TARGET_INVALID;
+    }
+    if (!S_ISDIR(sb.st_mode)) {
+      return CE_TARGET_NOT_DIR;
+    }
   }
 
   *config = malloc(sizeof(struct Config));

@@ -9,76 +9,75 @@
 #include "path.h"
 #include "sput.h"
 
+struct TestParserFixture {
+  char *cwd;
+  char *root_dir;
+  const char *target;
+  struct Config config;
+};
+
+static struct TestParserFixture *test_parser_setup(const char *target) {
+  char *cwd = getcwd(0, 0);
+  const char *segments[] = {cwd, "test", "specs"};
+  char *root_dir =
+    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+
+  struct TestParserFixture *fixture = malloc(sizeof(struct TestParserFixture));
+  fixture->cwd = getcwd(0, 0);
+  fixture->root_dir = root_dir;
+  fixture->target = target;
+
+  // Reproduce in `Config` instance for convenience.
+  fixture->config.cwd = fixture->cwd;
+  fixture->config.root_dir = fixture->root_dir;
+  fixture->config.target = fixture->target;
+
+  return fixture;
+}
+
+static void test_parser_teardown(struct TestParserFixture *fixture) {
+  free(fixture->cwd);
+  free(fixture->root_dir);
+  free(fixture);
+}
+
 /*
 A missing `spec.json` file is not an error. Our parsed @cJSON instance should
 be set to NULL in this case.
 */
 static void test_parse_spec_json_missing() {
-  char *cwd = getcwd(0, 0);
-
-  const char *segments[] = {cwd, "test", "specs"};
-  char *root_dir =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
-
-  struct Config config = {
-    cwd,
-    root_dir,
-    "no_spec_json",
-  };
+  struct TestParserFixture *fixture = test_parser_setup("no_spec_json");
 
   cJSON *parsed = 0;
-  enum SpecParseError retval = parse_spec_json(&config, &parsed);
+  enum SpecParseError retval = parse_spec_json(&fixture->config, &parsed);
   sput_fail_unless(retval == 0, "no spec.json, success");
   sput_fail_unless(parsed == 0, "no spec.json, no parsed");
 
-  free(cwd);
-  free(root_dir);
+  test_parser_teardown(fixture);
 }
 
 static void test_parse_spec_json_minimal() {
-  char *cwd = getcwd(0, 0);
-
-  const char *segments[] = {cwd, "test", "specs"};
-  char *root_dir =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
-
-  struct Config config = {
-    cwd,
-    root_dir,
-    "minimal_spec_json",
-  };
+  struct TestParserFixture *fixture = test_parser_setup("minimal_spec_json");
 
   cJSON *parsed = 0;
-  enum SpecParseError retval = parse_spec_json(&config, &parsed);
+  enum SpecParseError retval = parse_spec_json(&fixture->config, &parsed);
   sput_fail_unless(retval == 0, "minimal spec.json, success");
   sput_fail_unless(parsed != 0, "minimal spec.json, parsed");
 
-  free(cwd);
-  free(root_dir);
+  test_parser_teardown(fixture);
 }
 
 static void test_parse_spec_json_invalid() {
-  char *cwd = getcwd(0, 0);
-
-  const char *segments[] = {cwd, "test", "specs"};
-  char *root_dir =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
-
-  struct Config config = {
-    cwd,
-    root_dir,
-    "invalid_spec_json",
-  };
+  struct TestParserFixture *fixture = test_parser_setup("invalid_spec_json");
 
   cJSON *parsed = 0;
-  enum SpecParseError retval = parse_spec_json(&config, &parsed);
+  enum SpecParseError retval = parse_spec_json(&fixture->config, &parsed);
   sput_fail_unless(
     retval == SPE_INVALID_SYNTAX, "invalid spec.json, INVALID_SYNTAX"
   );
   sput_fail_unless(parsed == 0, "invalid spec.json, not parsed");
 
-  free(cwd);
-  free(root_dir);
+  test_parser_teardown(fixture);
 }
 
 #endif /* _BOOTSTRAP_TEST_PARSER */

@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,76 +8,99 @@
 #include "parser.h"
 #include "validator.h"
 
-const char *ENV_BOOTSTRAP_ROOT_DIR = "BOOTSTRAP_ROOT_DIR";
-
-int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: bootstrap <spec>\n");
-    exit(EXIT_FAILURE);
-  }
-
-  int retval = EXIT_SUCCESS;
+static int run(const char *root_dir, const char *target) {
+  int retval = EXIT_FAILURE;
   char *cwd = getcwd(0, 0);
-  const char *root_dir = getenv(ENV_BOOTSTRAP_ROOT_DIR);
-  const char *target = argv[1];
-
-  // `cwd` must be free'd.
+  if (!root_dir) {
+    root_dir = getenv("BOOTSTRAP_ROOT_DIR");
+  }
 
   struct Config *config = 0;
   switch (config_load(cwd, root_dir, target, &config)) {
   case CE_ENV_CWD_INVALID:
-    fprintf(stderr, "Could not retrieve the $CWD value.");
-    retval = EXIT_FAILURE;
-    goto cwd_cleanup;
+    fprintf(stderr, "Could not retrieve $CWD.\n");
+    goto cleanup_cwd;
   case CE_ENV_ROOT_DIR_INVALID:
-    fprintf(stderr, "Must specify $BOOTSTRAP_ROOT_DIR environment variable.");
-    retval = EXIT_FAILURE;
-    goto cwd_cleanup;
+    fprintf(
+      stderr,
+      "Either supply a value to `-d` or specify the $BOOTSTRAP_ROOT_DIR "
+      "environment variable.\n"
+    );
+    goto cleanup_cwd;
   case CE_TARGET_INVALID:
-    fprintf(stderr, "Target spec `%s` is invalid.", argv[1]);
-    retval = EXIT_FAILURE;
-    goto cwd_cleanup;
+    fprintf(stderr, "Spec `%s` is invalid.\n", target);
+    goto cleanup_cwd;
+  case CE_TARGET_NOT_FOUND:
+    fprintf(stderr, "Spec `%s` not found.\n", target);
+    goto cleanup_cwd;
+  case CE_TARGET_NOT_DIR:
+    fprintf(stderr, "Spec `%s` is not a directory.\n", target);
+    goto cleanup_cwd;
   }
-
-  // `config` must be free'd.
 
   cJSON *parsed = 0;
   switch (parse_spec_json(config, &parsed)) {
   case SPE_CANNOT_OPEN:
-    fprintf(stderr, "Found `spec.json` but could not open.");
-    retval = EXIT_FAILURE;
-    goto config_cleanup;
+    fprintf(stderr, "Cannot open `%s/spec.json`.\n", target);
+    goto cleanup_config;
   case SPE_INVALID_SYNTAX:
-    fprintf(stderr, "`spec.json` does not conform to bootstrap format.");
-    retval = EXIT_FAILURE;
-    goto config_cleanup;
+    fprintf(stderr, "`%s/spec.json` is not valid JSON.\n", target);
+    goto cleanup_config;
   }
-
-  // `parsed` must be free'd.
 
   struct DynArray *prompts = 0;
   switch (validate_spec_json(parsed, &prompts)) {
   case SVE_NOT_TOPLEVEL_OBJECT:
-    fprintf(stderr, "`spec.json` top-level JSON value must be object.");
-    retval = EXIT_FAILURE;
-    goto parsed_cleanup;
+    fprintf(stderr, "`%s/spec.json` is not a JSON object.\n", target);
+    goto cleanup_parsed;
   case SVE_INVALID_VALUE:
-    fprintf(stderr, "Encountered unknown `spec.json` value type.");
-    retval = EXIT_FAILURE;
-    goto parsed_cleanup;
+    fprintf(stderr, "unknown value type found in `%s/spec.json`.\n", target);
+    goto cleanup_parsed;
   }
 
   // TODO: Extract the prompts out of the `spec.json` file.
   // TODO: Load in the curses interface.
   // TODO: Run `run.sh`.
 
-parsed_cleanup:
+  retval = EXIT_SUCCESS;
+
+cleanup_parsed:
   cJSON_Delete(parsed);
 
-config_cleanup:
+cleanup_config:
   config_free(config);
 
-cwd_cleanup:
+cleanup_cwd:
   free(cwd);
   return retval;
+}
+
+int main(int argc, char **argv) {
+  char *root_dir = 0;
+  char *target = 0;
+
+  int opt;
+  while ((opt = getopt(argc, argv, "d:")) != -1) {
+    switch (opt) {
+    case 'd':
+      root_dir = optarg;
+      break;
+    }
+  }
+
+  for (int index = optind; index < argc; index++) {
+    if (target == 0) {
+      target = argv[index];
+    } else {
+      fprintf(stderr, "Usage: bootstrap [-d <ROOT_DIR>] <spec>\n");
+      return EXIT_FAILURE;
+    }
+  }
+
+  if (!target) {
+    fprintf(stderr, "Usage: bootstrap [-d <ROOT_DIR>] <spec>\n");
+    return EXIT_FAILURE;
+  }
+
+  return run(root_dir, target);
 }

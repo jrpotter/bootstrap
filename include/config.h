@@ -20,6 +20,10 @@ enum ConfigError {
   CE_ENV_ROOT_DIR_INVALID,
   // The target argument is invalid.
   CE_TARGET_INVALID,
+  // No spec with the given name was found.
+  CE_TARGET_NOT_FOUND,
+  // The spec is not a directory.
+  CE_TARGET_NOT_DIR,
 };
 
 enum ConfigError config_load(
