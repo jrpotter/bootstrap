@@ -1,7 +1,7 @@
 #include "sput.h"
 #include "test_config.h"
 #include "test_dyn_array.h"
-#include "test_loader.h"
+#include "test_parser.h"
 #include "test_path.h"
 
 int main(int argc, char *argv[]) {
@@ -20,10 +20,10 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_join_path_single_segments);
   sput_run_test(test_join_path_multiple_segments);
 
-  sput_enter_suite("loader");
-  sput_run_test(test_read_spec_json_missing);
-  sput_run_test(test_read_spec_json_minimal);
-  sput_run_test(test_read_spec_json_invalid);
+  sput_enter_suite("parser");
+  sput_run_test(test_parse_spec_json_missing);
+  sput_run_test(test_parse_spec_json_minimal);
+  sput_run_test(test_parse_spec_json_invalid);
 
   sput_finish_testing();
 

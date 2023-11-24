@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "loader.h"
+#include "parser.h"
 #include "path.h"
 
 /*
@@ -28,12 +28,12 @@ static int find_spec_json(const struct Config *const config, FILE **handle) {
 }
 
 enum SpecParseError
-read_spec_json(const struct Config *const config, cJSON **parsed) {
+parse_spec_json(const struct Config *const config, cJSON **parsed) {
   FILE *handle = 0;
   int retval = find_spec_json(config, &handle);
 
   if (retval != 0) {
-    return SPE_PARSE_CANNOT_OPEN;
+    return SPE_CANNOT_OPEN;
   }
 
   // The `spec.json` file does not exist.
@@ -57,7 +57,7 @@ read_spec_json(const struct Config *const config, cJSON **parsed) {
 
   // Can use `cJSON_GetErrorPtr()` to get the actual error message.
   if (!*parsed) {
-    return SPE_PARSE_INVALID;
+    return SPE_INVALID_SYNTAX;
   }
 
   return 0;
