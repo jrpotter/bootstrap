@@ -30,6 +30,9 @@ void dyn_array_free(struct DynArray *a) {
   if (!a) {
     return;
   }
+  for (int i = 0; i < a->size; ++i) {
+    free(a->buf[i]);
+  }
   free(a->buf);
   free(a);
 }

@@ -58,14 +58,20 @@ static int run(const char *root_dir, const char *target) {
     goto cleanup_parsed;
   }
 
-  // TODO: Extract the prompts out of the `spec.json` file.
   // TODO: Load in the curses interface.
   // TODO: Run `run.sh`.
 
   retval = EXIT_SUCCESS;
 
+cleanup_prompts:
+  if (prompts) {
+    dyn_array_free(prompts);
+  }
+
 cleanup_parsed:
-  cJSON_Delete(parsed);
+  if (parsed) {
+    cJSON_Delete(parsed);
+  }
 
 cleanup_config:
   config_free(config);

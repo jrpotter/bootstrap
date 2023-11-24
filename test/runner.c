@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
 
   sput_enter_suite("validator");
   sput_run_test(test_validate_spec_json_not_toplevel_object);
+  sput_run_test(test_validate_spec_json_invalid_value_type);
 
   sput_finish_testing();
 
