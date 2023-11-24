@@ -27,13 +27,13 @@ static int find_spec_json(const struct Config *const config, FILE **handle) {
   return retval;
 }
 
-enum SpecJsonError
+enum SpecParseError
 read_spec_json(const struct Config *const config, cJSON **parsed) {
   FILE *handle = 0;
   int retval = find_spec_json(config, &handle);
 
   if (retval != 0) {
-    return SJE_JSON_CANNOT_OPEN;
+    return SPE_PARSE_CANNOT_OPEN;
   }
 
   // The `spec.json` file does not exist.
@@ -57,7 +57,7 @@ read_spec_json(const struct Config *const config, cJSON **parsed) {
 
   // Can use `cJSON_GetErrorPtr()` to get the actual error message.
   if (!*parsed) {
-    return SJE_JSON_INVALID;
+    return SPE_PARSE_INVALID;
   }
 
   return 0;

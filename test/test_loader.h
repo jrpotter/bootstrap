@@ -26,7 +26,7 @@ static void test_read_spec_json_missing() {
   };
 
   cJSON *parsed = 0;
-  enum SpecJsonError retval = read_spec_json(&config, &parsed);
+  enum SpecParseError retval = read_spec_json(&config, &parsed);
   sput_fail_unless(retval == 0, "no spec.json, success");
   sput_fail_unless(parsed == 0, "no spec.json, no parsed");
 
@@ -47,7 +47,7 @@ static void test_read_spec_json_minimal() {
   };
 
   cJSON *parsed = 0;
-  enum SpecJsonError retval = read_spec_json(&config, &parsed);
+  enum SpecParseError retval = read_spec_json(&config, &parsed);
   sput_fail_unless(retval == 0, "minimal spec.json, success");
   sput_fail_unless(parsed != 0, "minimal spec.json, parsed");
 
@@ -68,8 +68,8 @@ static void test_read_spec_json_invalid() {
   };
 
   cJSON *parsed = 0;
-  enum SpecJsonError retval = read_spec_json(&config, &parsed);
-  sput_fail_unless(retval == SJE_JSON_INVALID, "invalid spec.json, JSON_INVALID");
+  enum SpecParseError retval = read_spec_json(&config, &parsed);
+  sput_fail_unless(retval == SPE_PARSE_INVALID, "invalid spec.json, JSON_INVALID");
   sput_fail_unless(parsed == 0, "invalid spec.json, not parsed");
 
   free(cwd);

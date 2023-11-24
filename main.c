@@ -43,11 +43,11 @@ int main(int argc, char **argv) {
 
   cJSON *parsed = 0;
   switch (read_spec_json(config, &parsed)) {
-  case SJE_JSON_CANNOT_OPEN:
+  case SPE_PARSE_CANNOT_OPEN:
     fprintf(stderr, "Found `spec.json` but could not open.");
     retval = EXIT_FAILURE;
     goto config_cleanup;
-  case SJE_JSON_INVALID:
+  case SPE_PARSE_INVALID:
     fprintf(stderr, "`spec.json` does not conform to bootstrap format.");
     retval = EXIT_FAILURE;
     goto config_cleanup;
