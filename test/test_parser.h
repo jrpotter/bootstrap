@@ -1,5 +1,5 @@
-#ifndef _BOOTSTRAP_TEST_LOADER
-#define _BOOTSTRAP_TEST_LOADER
+#ifndef _BOOTSTRAP_TEST_PARSER
+#define _BOOTSTRAP_TEST_PARSER
 
 #include <unistd.h>
 
@@ -81,4 +81,4 @@ static void test_parse_spec_json_invalid() {
   free(root_dir);
 }
 
-#endif /* _BOOTSTRAP_TEST_LOADER */
+#endif /* _BOOTSTRAP_TEST_PARSER */

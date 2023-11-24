@@ -5,6 +5,7 @@
 #include "cJSON.h"
 #include "config.h"
 #include "parser.h"
+#include "validator.h"
 
 const char *ENV_BOOTSTRAP_ROOT_DIR = "BOOTSTRAP_ROOT_DIR";
 
@@ -51,9 +52,26 @@ int main(int argc, char **argv) {
     goto config_cleanup;
   }
 
+  // `parsed` must be free'd.
+
+  struct DynArray *prompts = 0;
+  switch (validate_spec_json(parsed, &prompts)) {
+  case SVE_NOT_TOPLEVEL_OBJECT:
+    fprintf(stderr, "`spec.json` top-level JSON value must be object.");
+    retval = EXIT_FAILURE;
+    goto parsed_cleanup;
+  case SVE_INVALID_VALUE:
+    fprintf(stderr, "Encountered unknown `spec.json` value type.");
+    retval = EXIT_FAILURE;
+    goto parsed_cleanup;
+  }
+
   // TODO: Extract the prompts out of the `spec.json` file.
   // TODO: Load in the curses interface.
   // TODO: Run `run.sh`.
+
+parsed_cleanup:
+  cJSON_Delete(parsed);
 
 config_cleanup:
   config_free(config);

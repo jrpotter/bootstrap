@@ -3,6 +3,7 @@
 #include "test_dyn_array.h"
 #include "test_parser.h"
 #include "test_path.h"
+#include "test_validator.h"
 
 int main(int argc, char *argv[]) {
   sput_start_testing();
@@ -24,6 +25,9 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_parse_spec_json_missing);
   sput_run_test(test_parse_spec_json_minimal);
   sput_run_test(test_parse_spec_json_invalid);
+
+  sput_enter_suite("validator");
+  sput_run_test(test_validate_spec_json_not_toplevel_object);
 
   sput_finish_testing();
 
