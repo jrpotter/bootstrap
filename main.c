@@ -50,15 +50,29 @@ static int run(const char *root_dir, const char *target) {
 
   struct DynArray *prompts = 0;
   switch (validate_spec_json(parsed, &prompts)) {
-  case SVE_NOT_TOPLEVEL_OBJECT:
+  case SVE_TOPLEVEL_NOT_OBJECT:
     fprintf(stderr, "`%s/spec.json` is not a JSON object.\n", target);
     goto cleanup_parsed;
-  case SVE_INVALID_VALUE:
-    fprintf(stderr, "unknown value type found in `%s/spec.json`.\n", target);
+  case SVE_FIELD_NOT_OBJECT:
+    fprintf(
+      stderr,
+      "Encountered child in `%s/spec.json` that is not a JSON object.\n",
+      target
+    );
+    goto cleanup_parsed;
+  case SVE_FIELD_TYPE_INVALID:
+    fprintf(stderr, "Types must be string values.\n");
+    goto cleanup_parsed;
+  case SVE_FIELD_TYPE_UNKNOWN:
+    fprintf(
+      stderr, "Encountered an unknown `type` in `%s/spec.json`.\n", target
+    );
+    goto cleanup_parsed;
+  case SVE_FIELD_PROMPT_INVALID:
+    fprintf(stderr, "Prompts must be string values.\n");
     goto cleanup_parsed;
   }
 
-  // TODO: Load in the curses interface.
   // TODO: Run `run.sh`.
 
   retval = EXIT_SUCCESS;

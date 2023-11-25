@@ -45,7 +45,7 @@ static void test_parser_teardown(struct TestParserFixture *fixture) {
 A missing `spec.json` file is not an error. Our parsed @cJSON instance should
 be set to NULL in this case.
 */
-static void test_parse_spec_json_missing() {
+static void test_parser_missing() {
   struct TestParserFixture *fixture = test_parser_setup("no_spec_json");
 
   cJSON *parsed = 0;
@@ -56,7 +56,7 @@ static void test_parse_spec_json_missing() {
   test_parser_teardown(fixture);
 }
 
-static void test_parse_spec_json_minimal() {
+static void test_parser_minimal() {
   struct TestParserFixture *fixture = test_parser_setup("minimal_spec_json");
 
   cJSON *parsed = 0;
@@ -67,7 +67,7 @@ static void test_parse_spec_json_minimal() {
   test_parser_teardown(fixture);
 }
 
-static void test_parse_spec_json_invalid() {
+static void test_parser_invalid() {
   struct TestParserFixture *fixture = test_parser_setup("invalid_spec_json");
 
   cJSON *parsed = 0;

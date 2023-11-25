@@ -6,10 +6,6 @@
 #include "parser.h"
 #include "path.h"
 
-/*
-Returns a file pointer to the `spec.json` file if it exists. Returns 0
-otherwise.
-*/
 static int find_spec_json(const struct Config *const config, FILE **handle) {
   const char *segments[] = {config->root_dir, config->target, "spec.json"};
   char *filepath =

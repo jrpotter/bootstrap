@@ -23,13 +23,17 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_join_path_multiple_segments);
 
   sput_enter_suite("parser");
-  sput_run_test(test_parse_spec_json_missing);
-  sput_run_test(test_parse_spec_json_minimal);
-  sput_run_test(test_parse_spec_json_invalid);
+  sput_run_test(test_parser_missing);
+  sput_run_test(test_parser_minimal);
+  sput_run_test(test_parser_invalid);
 
   sput_enter_suite("validator");
-  sput_run_test(test_validate_spec_json_not_toplevel_object);
-  sput_run_test(test_validate_spec_json_invalid_value_type);
+  sput_run_test(test_validator_toplevel_not_object);
+  sput_run_test(test_validator_field_not_object);
+  sput_run_test(test_validator_field_type_invalid);
+  sput_run_test(test_validator_field_type_unknown);
+  sput_run_test(test_validator_field_prompt_invalid);
+  sput_run_test(test_validator_valid);
 
   sput_finish_testing();
 

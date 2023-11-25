@@ -4,23 +4,27 @@
 #include "cJSON.h"
 #include "dyn_array.h"
 
-enum PromptType {
-  PT_STRING = 1,
+enum FieldType {
+  FT_STRING = 1,
 };
 
-struct Prompt {
+struct Field {
+  enum FieldType type;
   const char *key;
-  enum PromptType type;
+  const char *prompt;
 };
 
 enum SpecValidationError {
-  SVE_NOT_TOPLEVEL_OBJECT = 1,
-  // The value of a top-level key does not correspond to one of the following:
-  // * "$STRING"
-  SVE_INVALID_VALUE,
+  // The top-level JSON value of a `spec.json` file must be a JSON object.
+  SVE_TOPLEVEL_NOT_OBJECT = 1,
+  // The field is not a JSON object.
+  SVE_FIELD_NOT_OBJECT,
+  SVE_FIELD_TYPE_INVALID,
+  SVE_FIELD_TYPE_UNKNOWN,
+  SVE_FIELD_PROMPT_INVALID,
 };
 
 enum SpecValidationError
-validate_spec_json(const cJSON *const parsed, struct DynArray **prompts);
+validate_spec_json(const cJSON *const parsed, struct DynArray **fields);
 
 #endif /* _BOOTSTRAP_VALIDATOR_H */
