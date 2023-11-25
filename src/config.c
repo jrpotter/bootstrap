@@ -57,4 +57,5 @@ void config_free(struct Config *config) {
     return;
   }
   free(config);
+  config = 0;
 }

@@ -1,4 +1,4 @@
-BUILD=clang -Og -g -I include src/*.c main.c -o bootstrap
+BUILD=clang -Og -g -I include src/*.c main.c -o bootstrap -lm
 
 all: build bear
 
@@ -12,6 +12,6 @@ test: test/runner
 	$^
 
 test/runner: include/*.h src/*.c test/*.h test/*.c
-	clang -I include src/*.c test/*.c -o test/runner
+	clang -I include src/*.c test/*.c -o test/runner -lm
 
 .PHONY: test

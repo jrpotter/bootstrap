@@ -5,6 +5,7 @@
 
 #include "cJSON.h"
 #include "config.h"
+#include "evaluator.h"
 #include "parser.h"
 #include "validator.h"
 
@@ -73,7 +74,14 @@ static int run(const char *root_dir, const char *target) {
     goto cleanup_parsed;
   }
 
-  // TODO: Run `run.sh`.
+  switch (evaluate_spec_json(config, prompts)) {
+  case SEE_RUN_SH_NOT_FOUND:
+    fprintf(stderr, "Could not find `%s/run.sh`.\n", target);
+    goto cleanup_parsed;
+  case SEE_INVALID_PROMPT_RESPONSE:
+    fprintf(stderr, "Could not interpret response.\n");
+    goto cleanup_parsed;
+  }
 
   retval = EXIT_SUCCESS;
 

@@ -5,8 +5,10 @@
 #include "validator.h"
 
 enum SpecEvaluationError {
+  // Then `run.sh` file could not be found.
+  SEE_RUN_SH_NOT_FOUND = 1,
   // The provided input does not match the expected prompt response type.
-  SEE_INVALID_PROMPT_RESPONSE = 1
+  SEE_INVALID_PROMPT_RESPONSE,
 };
 
 enum SpecEvaluationError evaluate_spec_json(

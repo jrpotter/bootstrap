@@ -3,6 +3,7 @@
 #include "test_dyn_array.h"
 #include "test_parser.h"
 #include "test_path.h"
+#include "test_string_buf.h"
 #include "test_validator.h"
 
 int main(int argc, char *argv[]) {
@@ -17,6 +18,10 @@ int main(int argc, char *argv[]) {
   sput_enter_suite("dyn_array");
   sput_run_test(test_dyn_array_zero_capacity);
   sput_run_test(test_dyn_array_nonzero_capacity);
+
+  sput_enter_suite("string_buf");
+  sput_run_test(test_string_buf_sappend);
+  sput_run_test(test_string_buf_cappend);
 
   sput_enter_suite("path");
   sput_run_test(test_join_path_single_segments);
