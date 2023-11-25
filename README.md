@@ -27,7 +27,7 @@ We start with an example. Consider the following *spec*, which we'll name
 {
   "filename": {
     "type": "STRING",
-    "prompt": "What file should I create for you?"
+    "prompt": "What file should I create for you? "
   }
 }
 ```
@@ -43,12 +43,15 @@ Running `bootstrap` with these two files configured will invoke the following
 interactive script:
 ```bash
 > bootstrap example
-What file should I create for you? hello-world.txt
-Creating hello-world.txt
+I: What file should I create for you? hello-world.txt
+O: Creating hello-world.txt
 
 >
 ```
-You should now see a new `hello-world.txt` file in the current directory.
+Here the line prefixed with `I:` indicates a prompt that must be answered by
+the user. The line prefixed with `O:` indicates the output of the builder
+script. You should now see a new `hello-world.txt` file in your current working
+directory.
 
 ## Usage
 

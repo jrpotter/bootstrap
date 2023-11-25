@@ -46,9 +46,10 @@ static const char *prompt_field(struct Field *field) {
 
   switch (field->type) {
   case FT_STRING:
-    printf("%s> ", field->prompt);
-    char *input = calloc(1, 256);
-    if (fgets(input, 256, stdin)) {
+    printf("%s", field->prompt);
+    // TODO: Probably want this buffer size to be a bit more dynamic.
+    char *input = calloc(1, 1024);
+    if (fgets(input, 1024, stdin)) {
       size_t len = strlen(input);
       if (len > 0 && input[len - 1] == '\n') {
         input[len - 1] = '\0';
