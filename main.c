@@ -38,7 +38,7 @@ static int run(const char *root_dir, const char *target) {
     goto cleanup_parsed;
   }
 
-  if ((retval = evaluate_run_sh(config, prompts, &error))) {
+  if ((retval = evaluate_runner(config, prompts, &error))) {
     if (error) {
       fprintf(stderr, "%s", error->message);
     }

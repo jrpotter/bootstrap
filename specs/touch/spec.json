@@ -1,0 +1,6 @@
+{
+  "filename": {
+    "type": "text",
+    "prompt": "What file should I create for you? "
+  }
+}

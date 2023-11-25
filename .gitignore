@@ -3,4 +3,4 @@
 bootstrap
 compile_commands.json
 docs/
-test/runner
+test/test

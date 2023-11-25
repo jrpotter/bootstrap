@@ -11,11 +11,11 @@
 #include "string_buf.h"
 #include "validator.h"
 
-static struct Error *find_run_sh(const struct Config *const config) {
+static struct Error *find_run_exec(const struct Config *const config) {
   assert(config);
 
   struct stat sb;
-  const char *segments[] = {config->root_dir, config->target, "run.sh"};
+  const char *segments[] = {config->root_dir, config->target, "runner"};
   char *filepath =
     join_path_segments(sizeof(segments) / sizeof(char *), segments);
   int stat_res = stat(filepath, &sb);
@@ -23,18 +23,18 @@ static struct Error *find_run_sh(const struct Config *const config) {
 
   if (stat_res == -1 && errno == ENOENT) {
     return ERROR_NEW(
-      ERROR_EVALUATOR_RUN_SH_NOT_FOUND,
+      ERROR_EVALUATOR_RUNNER_NOT_FOUND,
       "Could not find ",
       config->target,
-      "/run.sh"
+      "/runner"
     );
   }
 
   if (!(sb.st_mode & S_IXUSR)) {
     return ERROR_NEW(
-      ERROR_EVALUATOR_RUN_SH_NOT_EXEC,
+      ERROR_EVALUATOR_RUNNER_NOT_EXEC,
       config->target,
-      "/run.sh is not executable."
+      "/runner is not executable."
     );
   }
 
@@ -45,7 +45,7 @@ static const char *prompt_field(struct Field *field) {
   assert(field);
 
   switch (field->type) {
-  case FT_STRING:
+  case FT_TEXT:
     printf("%s", field->prompt);
     // TODO: Probably want this buffer size to be a bit more dynamic.
     char *input = calloc(1, 1024);
@@ -74,12 +74,12 @@ static void push_env(
   string_buf_sappend(env, "' ");
 }
 
-int evaluate_run_sh(
+int evaluate_runner(
   const struct Config *const config,
   const struct DynArray *const fields,
   struct Error **error
 ) {
-  *error = find_run_sh(config);
+  *error = find_run_exec(config);
   if (*error) {
     return EXIT_FAILURE;
   }
@@ -102,7 +102,7 @@ int evaluate_run_sh(
     }
   }
 
-  const char *segments[] = {config->root_dir, config->target, "run.sh"};
+  const char *segments[] = {config->root_dir, config->target, "runner"};
   const char *filepath =
     join_path_segments(sizeof(segments) / sizeof(char *), segments);
   const char *env = string_buf_convert(env_buf);

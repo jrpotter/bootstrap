@@ -8,10 +8,10 @@ build: include/*.h src/*.c
 bear: include/*.h src/*.c
 	@bear -- ${BUILD}
 
-test: test/runner
+test: test/test
 	$^
 
-test/runner: include/*.h src/*.c test/*.h test/*.c
-	clang -I include src/*.c test/*.c -o test/runner -lm
+test/test: include/*.h src/*.c test/*.h test/*.c
+	clang -I include src/*.c test/*.c -o test/test -lm
 
 .PHONY: test

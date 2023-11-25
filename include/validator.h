@@ -13,7 +13,7 @@
 @brief The types of fields `bootstrap` can handle.
 */
 enum FieldType {
-  FT_STRING = 1,
+  FT_TEXT = 1,
 };
 
 /**
@@ -25,12 +25,12 @@ file. For instance, the fields of:
 ```json
 {
   "abc": {
-    "type": "STRING",
-    "prompt": "ABC"
+    "type": "text",
+    "prompt": "ABC> "
   },
   "def": {
-    "type": "STRING",
-    "prompt": "DEF"
+    "type": "text",
+    "prompt": "DEF> "
   },
 }
 ```

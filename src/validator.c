@@ -28,7 +28,7 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
   }
 
   if (strcmp(type->valuestring, "STRING") == 0) {
-    (*out)->type = FT_STRING;
+    (*out)->type = FT_TEXT;
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,

@@ -45,10 +45,10 @@ enum ErrorCode {
   /// The `prompt` of a `spec.json` field is not a string.
   ERROR_VALIDATOR_FIELD_PROMPT_INVALID,
 
-  /// The `run.sh` file could not be found.
-  ERROR_EVALUATOR_RUN_SH_NOT_FOUND,
-  /// The `run.sh` file is not executable.
-  ERROR_EVALUATOR_RUN_SH_NOT_EXEC,
+  /// The `runner` file could not be found.
+  ERROR_EVALUATOR_RUNNER_NOT_FOUND,
+  /// The `runner` file is not executable.
+  ERROR_EVALUATOR_RUNNER_NOT_EXEC,
   /// A user response to a prompt is not valid.
   ERROR_EVALUATOR_RESPONSE_INVALID,
 };
