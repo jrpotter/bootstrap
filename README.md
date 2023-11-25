@@ -5,7 +5,6 @@ CLI utility for defining custom project initialization scripts.
 TODO:
 - [ ] Add evaluator tests.
 - [ ] Color output to console.
-- [ ] Ensure keys are alphanumeric, underscore
 
 ## Overview
 
@@ -120,7 +119,8 @@ a string (submitted with a newline).
 
 If the user were to enter, say `fieldvalue`, in response to the prompt,
 the `runner` script would then have access to an environment variable
-`FIELDNAME` set to `fieldvalue` on launch.
+`FIELDNAME` set to `fieldvalue` on launch. Field names should consist of
+alphanumeric characters or underscores, and may not start with a digit.
 
 #### Types
 

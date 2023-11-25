@@ -1,5 +1,7 @@
 #include "validator.h"
 
+#include <ctype.h>
+
 #include "string_utils.h"
 
 static struct Error *read_field(const cJSON *const field, struct Field **out) {
@@ -10,6 +12,22 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
       field->string,
       "\" is not a JSON object."
     );
+  }
+
+  if (isdigit(field->string[0])) {
+    return ERROR_NEW(
+      ERROR_VALIDATOR_FIELD_NAME_INVALID,
+      "Field names may not begin with a digit."
+    );
+  } else {
+    for (const char *c = field->string; *c; ++c) {
+      if (*c != '_' && !isalnum(*c)) {
+        return ERROR_NEW(
+          ERROR_VALIDATOR_FIELD_NAME_INVALID,
+          "Field names must consist of alphanumeric characters or underscores."
+        );
+      }
+    }
   }
 
   struct Error *error = 0;

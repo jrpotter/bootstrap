@@ -52,6 +52,43 @@ static void test_validator_field_not_object() {
   test_validator_teardown(fixture);
 }
 
+static void test_validator_field_name_leading_digit() {
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"1abc\": {"
+    "    \"type\": \"text\""
+    "  }"
+    "}"
+  );
+
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_NAME_INVALID,
+    "field name leading digit"
+  );
+  error_free(error);
+
+  test_validator_teardown(fixture);
+}
+
+static void test_validator_field_name_non_alnum() {
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"a~bc\": {"
+    "    \"type\": \"text\""
+    "  }"
+    "}"
+  );
+
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_NAME_INVALID, "field name non alnum"
+  );
+  error_free(error);
+
+  test_validator_teardown(fixture);
+}
+
 static void test_validator_field_type_invalid() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"

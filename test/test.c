@@ -36,6 +36,8 @@ int main(int argc, char *argv[]) {
   sput_enter_suite("validator");
   sput_run_test(test_validator_toplevel_not_object);
   sput_run_test(test_validator_field_not_object);
+  sput_run_test(test_validator_field_name_leading_digit);
+  sput_run_test(test_validator_field_name_non_alnum);
   sput_run_test(test_validator_field_type_invalid);
   sput_run_test(test_validator_field_type_unknown);
   sput_run_test(test_validator_valid_type_ci);

@@ -37,6 +37,9 @@ enum ErrorCode {
   ERROR_VALIDATOR_TOP_LEVEL_NOT_OBJECT,
   /// A field in `spec.json` is not an object.
   ERROR_VALIDATOR_FIELD_NOT_OBJECT,
+  /// A field name in `spec.json` is not alphanumeric and beginning with a
+  /// non-digit.
+  ERROR_VALIDATOR_FIELD_NAME_INVALID,
   /// The `type` of a `spec.json` field is not a string.
   ERROR_VALIDATOR_FIELD_TYPE_INVALID,
   /// The `type` of a `spec.json` field does not correspond to a known prompt
