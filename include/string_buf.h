@@ -9,7 +9,13 @@
  * A `char*` wrapper. Appending `char`s or NUL-terminated strings allocates
  * additional space as needed.
  */
-struct StringBuf;
+struct StringBuf {
+  char *buf;
+  // The length of @buf excluding `NUL`.
+  size_t size;
+  // The allocated size of @buf including `NUL`.
+  size_t _capacity;
+};
 
 /**
  * Create a new `StringBuf` instance.

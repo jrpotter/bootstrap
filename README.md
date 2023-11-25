@@ -1,5 +1,11 @@
 # bootstrap
 
+TODO:
+- [ ] Make free-ing data consistent with null pointers.
+- [ ] Make error handling consistent.
+- [ ] Add documentation throughout (ownership, docstrings, etc.).
+- [ ] Have main.c return status code of run.sh.
+
 CLI utility for initializing projects in reproducible ways.
 
 ## Overview

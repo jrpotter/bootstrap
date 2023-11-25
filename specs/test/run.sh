@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-use flake
+echo "hello world"

@@ -5,6 +5,7 @@
 
 #include "cJSON.h"
 #include "config.h"
+#include "error.h"
 #include "evaluator.h"
 #include "parser.h"
 #include "validator.h"
@@ -16,26 +17,11 @@ static int run(const char *root_dir, const char *target) {
     root_dir = getenv("BOOTSTRAP_ROOT_DIR");
   }
 
+  struct Error *error = 0;
   struct Config *config = 0;
-  switch (config_load(cwd, root_dir, target, &config)) {
-  case CE_ENV_CWD_INVALID:
-    fprintf(stderr, "Could not retrieve $CWD.\n");
-    goto cleanup_cwd;
-  case CE_ENV_ROOT_DIR_INVALID:
-    fprintf(
-      stderr,
-      "Either supply a value to `-d` or specify the $BOOTSTRAP_ROOT_DIR "
-      "environment variable.\n"
-    );
-    goto cleanup_cwd;
-  case CE_TARGET_INVALID:
-    fprintf(stderr, "Spec `%s` is invalid.\n", target);
-    goto cleanup_cwd;
-  case CE_TARGET_NOT_FOUND:
-    fprintf(stderr, "Spec `%s` not found.\n", target);
-    goto cleanup_cwd;
-  case CE_TARGET_NOT_DIR:
-    fprintf(stderr, "Spec `%s` is not a directory.\n", target);
+
+  if ((error = config_load(cwd, root_dir, target, &config))) {
+    fprintf(stderr, "%s", error->message);
     goto cleanup_cwd;
   }
 
@@ -100,6 +86,7 @@ cleanup_config:
 
 cleanup_cwd:
   free(cwd);
+  error_free(error);
   return retval;
 }
 

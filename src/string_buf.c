@@ -5,14 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct StringBuf {
-  char *buf;
-  // The length of @buf excluding `NUL`.
-  size_t size;
-  // The allocated size of @buf including `NUL`.
-  size_t _capacity;
-};
-
 struct StringBuf *string_buf_new(size_t capacity) {
   struct StringBuf *sb = malloc(sizeof(struct StringBuf));
   sb->buf = calloc(capacity, sizeof(char));
@@ -25,12 +17,6 @@ size_t string_buf_size(struct StringBuf *sb) {
   assert(sb);
 
   return sb->size;
-}
-
-const char *string_buf_value(struct StringBuf *sb) {
-  assert(sb);
-
-  return sb->buf;
 }
 
 void string_buf_cappend(struct StringBuf *sb, char c) {

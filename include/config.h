@@ -1,6 +1,8 @@
 #ifndef _BOOTSTRAP_CONFIG_H
 #define _BOOTSTRAP_CONFIG_H
 
+#include "error.h"
+
 struct Config {
   // The directory the `bootstrap` command was run from.
   // OWNERSHIP: Does not own this pointer.
@@ -13,20 +15,7 @@ struct Config {
   const char *target;
 };
 
-enum ConfigError {
-  // The $CWD could not be retrieved.
-  CE_ENV_CWD_INVALID = 1,
-  // The $BOOTSTRAP_ROOT_DIR environment variable is empty.
-  CE_ENV_ROOT_DIR_INVALID,
-  // The target argument is invalid.
-  CE_TARGET_INVALID,
-  // No spec with the given name was found.
-  CE_TARGET_NOT_FOUND,
-  // The spec is not a directory.
-  CE_TARGET_NOT_DIR,
-};
-
-enum ConfigError config_load(
+struct Error *config_load(
   const char *cwd,
   const char *root_dir,
   const char *target,
