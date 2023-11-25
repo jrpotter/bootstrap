@@ -1,9 +1,10 @@
+#include "parser.h"
+
 #include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "parser.h"
 #include "path.h"
 
 static int find_spec_json(const struct Config *const config, FILE **handle) {
@@ -23,8 +24,9 @@ static int find_spec_json(const struct Config *const config, FILE **handle) {
   return retval;
 }
 
-enum SpecParseError
-parse_spec_json(const struct Config *const config, cJSON **parsed) {
+enum SpecParseError parse_spec_json(
+  const struct Config *const config, cJSON **parsed
+) {
   FILE *handle = 0;
   int retval = find_spec_json(config, &handle);
 

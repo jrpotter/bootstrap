@@ -114,7 +114,7 @@ CJSON_PUBLIC(double) cJSON_GetNumberValue(const cJSON *const item) {
 
 /* This is a safeguard to prevent copy-pasters from using incompatible C and
  * header files */
-#if (CJSON_VERSION_MAJOR != 1) || (CJSON_VERSION_MINOR != 7) ||                \
+#if (CJSON_VERSION_MAJOR != 1) || (CJSON_VERSION_MINOR != 7) || \
   (CJSON_VERSION_PATCH != 16)
 #error cJSON.h and cJSON.c have different versions. Make sure that both have the same.
 #endif
@@ -180,8 +180,9 @@ static void *CJSON_CDECL internal_realloc(void *pointer, size_t size) {
 static internal_hooks global_hooks = {
   internal_malloc, internal_free, internal_realloc};
 
-static unsigned char *
-cJSON_strdup(const unsigned char *string, const internal_hooks *const hooks) {
+static unsigned char *cJSON_strdup(
+  const unsigned char *string, const internal_hooks *const hooks
+) {
   size_t length = 0;
   unsigned char *copy = NULL;
 
@@ -275,20 +276,21 @@ typedef struct {
 
 /* check if the given size is left to read in a given parse buffer (starting
  * with 1) */
-#define can_read(buffer, size)                                                 \
+#define can_read(buffer, size) \
   ((buffer != NULL) && (((buffer)->offset + size) <= (buffer)->length))
 /* check if the buffer can be accessed at the given index (starting with 0) */
-#define can_access_at_index(buffer, index)                                     \
+#define can_access_at_index(buffer, index) \
   ((buffer != NULL) && (((buffer)->offset + index) < (buffer)->length))
-#define cannot_access_at_index(buffer, index)                                  \
+#define cannot_access_at_index(buffer, index) \
   (!can_access_at_index(buffer, index))
 /* get a pointer to the buffer at the position */
 #define buffer_at_offset(buffer) ((buffer)->content + (buffer)->offset)
 
 /* Parse the input text to generate a number, and populate the result into item.
  */
-static cJSON_bool
-parse_number(cJSON *const item, parse_buffer *const input_buffer) {
+static cJSON_bool parse_number(
+  cJSON *const item, parse_buffer *const input_buffer
+) {
   double number = 0;
   unsigned char *after_end = NULL;
   unsigned char number_c_string[64];
@@ -494,8 +496,9 @@ static cJSON_bool compare_double(double a, double b) {
 }
 
 /* Render the number nicely from the given item into a string. */
-static cJSON_bool
-print_number(const cJSON *const item, printbuffer *const output_buffer) {
+static cJSON_bool print_number(
+  const cJSON *const item, printbuffer *const output_buffer
+) {
   unsigned char *output_pointer = NULL;
   double d = item->valuedouble;
   int length = 0;
@@ -689,8 +692,9 @@ fail:
 }
 
 /* Parse the input text into an unescaped cinput, and populate item. */
-static cJSON_bool
-parse_string(cJSON *const item, parse_buffer *const input_buffer) {
+static cJSON_bool parse_string(
+  cJSON *const item, parse_buffer *const input_buffer
+) {
   const unsigned char *input_pointer = buffer_at_offset(input_buffer) + 1;
   const unsigned char *input_end = buffer_at_offset(input_buffer) + 1;
   unsigned char *output_pointer = NULL;
@@ -926,18 +930,24 @@ static cJSON_bool print_string(const cJSON *const item, printbuffer *const p) {
 }
 
 /* Predeclare these prototypes. */
-static cJSON_bool
-parse_value(cJSON *const item, parse_buffer *const input_buffer);
-static cJSON_bool
-print_value(const cJSON *const item, printbuffer *const output_buffer);
-static cJSON_bool
-parse_array(cJSON *const item, parse_buffer *const input_buffer);
-static cJSON_bool
-print_array(const cJSON *const item, printbuffer *const output_buffer);
-static cJSON_bool
-parse_object(cJSON *const item, parse_buffer *const input_buffer);
-static cJSON_bool
-print_object(const cJSON *const item, printbuffer *const output_buffer);
+static cJSON_bool parse_value(
+  cJSON *const item, parse_buffer *const input_buffer
+);
+static cJSON_bool print_value(
+  const cJSON *const item, printbuffer *const output_buffer
+);
+static cJSON_bool parse_array(
+  cJSON *const item, parse_buffer *const input_buffer
+);
+static cJSON_bool print_array(
+  const cJSON *const item, printbuffer *const output_buffer
+);
+static cJSON_bool parse_object(
+  cJSON *const item, parse_buffer *const input_buffer
+);
+static cJSON_bool print_object(
+  const cJSON *const item, printbuffer *const output_buffer
+);
 
 /* Utility to jump whitespace and cr/lf */
 static parse_buffer *buffer_skip_whitespace(parse_buffer *const buffer) {
@@ -1199,8 +1209,9 @@ cJSON_PrintPreallocated(
 }
 
 /* Parser core - when encountering text, process appropriately. */
-static cJSON_bool
-parse_value(cJSON *const item, parse_buffer *const input_buffer) {
+static cJSON_bool parse_value(
+  cJSON *const item, parse_buffer *const input_buffer
+) {
   if ((input_buffer == NULL) || (input_buffer->content == NULL)) {
     return false; /* no input */
   }
@@ -1246,8 +1257,9 @@ parse_value(cJSON *const item, parse_buffer *const input_buffer) {
 }
 
 /* Render a value to text. */
-static cJSON_bool
-print_value(const cJSON *const item, printbuffer *const output_buffer) {
+static cJSON_bool print_value(
+  const cJSON *const item, printbuffer *const output_buffer
+) {
   unsigned char *output = NULL;
 
   if ((item == NULL) || (output_buffer == NULL)) {
@@ -1312,8 +1324,9 @@ print_value(const cJSON *const item, printbuffer *const output_buffer) {
 }
 
 /* Build an array from input text. */
-static cJSON_bool
-parse_array(cJSON *const item, parse_buffer *const input_buffer) {
+static cJSON_bool parse_array(
+  cJSON *const item, parse_buffer *const input_buffer
+) {
   cJSON *head = NULL; /* head of the linked list */
   cJSON *current_item = NULL;
 
@@ -1398,8 +1411,9 @@ fail:
 }
 
 /* Render an array to text */
-static cJSON_bool
-print_array(const cJSON *const item, printbuffer *const output_buffer) {
+static cJSON_bool print_array(
+  const cJSON *const item, printbuffer *const output_buffer
+) {
   unsigned char *output_pointer = NULL;
   size_t length = 0;
   cJSON *current_element = item->child;
@@ -1452,8 +1466,9 @@ print_array(const cJSON *const item, printbuffer *const output_buffer) {
 }
 
 /* Build an object from the text. */
-static cJSON_bool
-parse_object(cJSON *const item, parse_buffer *const input_buffer) {
+static cJSON_bool parse_object(
+  cJSON *const item, parse_buffer *const input_buffer
+) {
   cJSON *head = NULL; /* linked list head */
   cJSON *current_item = NULL;
 
@@ -1551,8 +1566,9 @@ fail:
 }
 
 /* Render an object to text. */
-static cJSON_bool
-print_object(const cJSON *const item, printbuffer *const output_buffer) {
+static cJSON_bool print_object(
+  const cJSON *const item, printbuffer *const output_buffer
+) {
   unsigned char *output_pointer = NULL;
   size_t length = 0;
   cJSON *current_item = item->child;
@@ -1756,8 +1772,9 @@ static void suffix_object(cJSON *prev, cJSON *item) {
 }
 
 /* Utility for handling references. */
-static cJSON *
-create_reference(const cJSON *item, const internal_hooks *const hooks) {
+static cJSON *create_reference(
+  const cJSON *item, const internal_hooks *const hooks
+) {
   cJSON *reference = NULL;
   if (item == NULL) {
     return NULL;
@@ -1807,8 +1824,8 @@ CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item) {
   return add_item_to_array(array, item);
 }
 
-#if defined(__clang__) ||                                                      \
-  (defined(__GNUC__) &&                                                        \
+#if defined(__clang__) || \
+  (defined(__GNUC__) &&   \
    ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
 #pragma GCC diagnostic push
 #endif
@@ -1817,8 +1834,8 @@ CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToArray(cJSON *array, cJSON *item) {
 #endif
 /* helper function to cast away const */
 static void *cast_away_const(const void *string) { return (void *)string; }
-#if defined(__clang__) ||                                                      \
-  (defined(__GNUC__) &&                                                        \
+#if defined(__clang__) || \
+  (defined(__GNUC__) &&   \
    ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
 #pragma GCC diagnostic pop
 #endif

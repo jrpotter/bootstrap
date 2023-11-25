@@ -49,11 +49,13 @@ static void test_validator_field_not_object() {
 }
 
 static void test_validator_field_type_invalid() {
-  struct TestValidatorFixture *fixture = test_validator_setup("{"
-                                                              "  \"key\": {"
-                                                              "    \"type\": 2"
-                                                              "  }"
-                                                              "}");
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": 2"
+    "  }"
+    "}"
+  );
 
   enum SpecValidationError retval =
     validate_spec_json(fixture->parsed, &fixture->prompts);
@@ -63,12 +65,13 @@ static void test_validator_field_type_invalid() {
 }
 
 static void test_validator_field_type_unknown() {
-  struct TestValidatorFixture *fixture =
-    test_validator_setup("{"
-                         "  \"key\": {"
-                         "    \"type\": \"UNKNOWN\""
-                         "  }"
-                         "}");
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": \"UNKNOWN\""
+    "  }"
+    "}"
+  );
 
   enum SpecValidationError retval =
     validate_spec_json(fixture->parsed, &fixture->prompts);
@@ -78,13 +81,14 @@ static void test_validator_field_type_unknown() {
 }
 
 static void test_validator_field_prompt_invalid() {
-  struct TestValidatorFixture *fixture =
-    test_validator_setup("{"
-                         "  \"key\": {"
-                         "    \"type\": \"STRING\","
-                         "    \"prompt\": 2"
-                         "  }"
-                         "}");
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": \"STRING\","
+    "    \"prompt\": 2"
+    "  }"
+    "}"
+  );
 
   enum SpecValidationError retval =
     validate_spec_json(fixture->parsed, &fixture->prompts);
@@ -94,13 +98,14 @@ static void test_validator_field_prompt_invalid() {
 }
 
 static void test_validator_valid() {
-  struct TestValidatorFixture *fixture =
-    test_validator_setup("{"
-                         "  \"key\": {"
-                         "    \"type\": \"STRING\","
-                         "    \"prompt\": \"What value for key?\""
-                         "  }"
-                         "}");
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": \"STRING\","
+    "    \"prompt\": \"What value for key?\""
+    "  }"
+    "}"
+  );
 
   enum SpecValidationError retval =
     validate_spec_json(fixture->parsed, &fixture->prompts);

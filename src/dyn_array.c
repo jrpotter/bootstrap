@@ -1,6 +1,6 @@
-#include <assert.h>
-
 #include "dyn_array.h"
+
+#include <assert.h>
 
 struct DynArray *dyn_array_new(size_t capacity) {
   struct DynArray *a = malloc(sizeof(struct DynArray));

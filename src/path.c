@@ -1,7 +1,7 @@
+#include "path.h"
+
 #include <assert.h>
 #include <string.h>
-
-#include "path.h"
 
 char *join_path_segments(size_t n, const char *segments[static n]) {
   assert(n > 0);
@@ -10,7 +10,7 @@ char *join_path_segments(size_t n, const char *segments[static n]) {
   for (int i = 0; i < n; ++i) {
     length += strlen(segments[i]);
   }
-  length += n - 1; // Path separators.
+  length += n - 1;  // Path separators.
 
   size_t offset = 0;
   char *joined = calloc(1, length + 1);

@@ -1,9 +1,10 @@
+#include "config.h"
+
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 
-#include "config.h"
 #include "path.h"
 
 enum ConfigError config_load(
@@ -22,7 +23,7 @@ enum ConfigError config_load(
     return CE_TARGET_INVALID;
   }
 
-  { // Check if the specified directory exists.
+  {  // Check if the specified directory exists.
     struct stat sb;
 
     const char *segments[] = {root_dir, target};

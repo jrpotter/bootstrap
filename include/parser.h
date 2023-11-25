@@ -19,7 +19,8 @@ cannot be found, the @parsed pointer is set to NULL with a success return code.
 
 @return: 0 on success and a @SpecParseError otherwise.
 */
-enum SpecParseError
-parse_spec_json(const struct Config *const config, cJSON **parsed);
+enum SpecParseError parse_spec_json(
+  const struct Config *const config, cJSON **parsed
+);
 
 #endif /* _BOOTSTRAP_PARSER_H */

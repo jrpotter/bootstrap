@@ -24,7 +24,8 @@ enum SpecValidationError {
   SVE_FIELD_PROMPT_INVALID,
 };
 
-enum SpecValidationError
-validate_spec_json(const cJSON *const parsed, struct DynArray **fields);
+enum SpecValidationError validate_spec_json(
+  const cJSON *const parsed, struct DynArray **fields
+);
 
 #endif /* _BOOTSTRAP_VALIDATOR_H */

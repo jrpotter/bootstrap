@@ -1,9 +1,10 @@
-#include <string.h>
-
 #include "validator.h"
 
-static enum SpecValidationError
-read_field(const cJSON *const field, struct Field **out) {
+#include <string.h>
+
+static enum SpecValidationError read_field(
+  const cJSON *const field, struct Field **out
+) {
   if (!cJSON_IsObject(field)) {
     return SVE_FIELD_NOT_OBJECT;
   }
@@ -40,8 +41,9 @@ cleanup:
   return retval;
 }
 
-enum SpecValidationError
-validate_spec_json(const cJSON *const parsed, struct DynArray **fields) {
+enum SpecValidationError validate_spec_json(
+  const cJSON *const parsed, struct DynArray **fields
+) {
   *fields = 0;
 
   if (!parsed) {

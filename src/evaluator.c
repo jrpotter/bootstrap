@@ -1,7 +1,8 @@
+#include "evaluator.h"
+
 #include <errno.h>
 #include <stdio.h>
 
-#include "evaluator.h"
 #include "path.h"
 
 static int find_run_sh(const struct Config *const config, FILE **handle) {
