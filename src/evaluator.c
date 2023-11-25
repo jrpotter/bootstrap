@@ -7,7 +7,7 @@
 #include "path.h"
 #include "string_buf.h"
 
-static enum SpecEvaluationError find_run_sh(const struct Config *const config) {
+static struct Error *find_run_sh(const struct Config *const config) {
   struct stat sb;
   const char *segments[] = {config->root_dir, config->target, "run.sh"};
   char *filepath =
@@ -16,18 +16,25 @@ static enum SpecEvaluationError find_run_sh(const struct Config *const config) {
   free(filepath);
 
   if (stat_res == -1 && errno == ENOENT) {
-    return SEE_RUN_SH_NOT_FOUND;
+    return ERROR_NEW(
+      ERROR_EVALUATOR_RUN_SH_NOT_FOUND,
+      "Could not find ",
+      config->target,
+      "/run.sh"
+    );
   }
+
+  // TODO: Check run.sh is executable.
 
   return 0;
 }
 
-enum SpecEvaluationError evaluate_spec_json(
+struct Error *evaluate_spec_json(
   const struct Config *const config, const struct DynArray *const prompts
 ) {
-  enum SpecEvaluationError retval = find_run_sh(config);
-  if (retval != 0) {
-    return retval;
+  struct Error *error = find_run_sh(config);
+  if (error) {
+    return error;
   }
 
   if (prompts) {
@@ -56,7 +63,6 @@ enum SpecEvaluationError evaluate_spec_json(
 
   // TODO: Want to return this status out.
   int status = system(command);
-  ;
 
   return 0;
 }

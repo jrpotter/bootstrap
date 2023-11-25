@@ -12,6 +12,7 @@
 
 static int run(const char *root_dir, const char *target) {
   int retval = EXIT_FAILURE;
+
   char *cwd = getcwd(0, 0);
   if (!root_dir) {
     root_dir = getenv("BOOTSTRAP_ROOT_DIR");
@@ -26,46 +27,19 @@ static int run(const char *root_dir, const char *target) {
   }
 
   cJSON *parsed = 0;
-  switch (parse_spec_json(config, &parsed)) {
-  case SPE_CANNOT_OPEN:
-    fprintf(stderr, "Cannot open `%s/spec.json`.\n", target);
-    goto cleanup_config;
-  case SPE_INVALID_SYNTAX:
-    fprintf(stderr, "`%s/spec.json` is not valid JSON.\n", target);
+  if ((error = parse_spec_json(config, &parsed))) {
+    fprintf(stderr, "%s", error->message);
     goto cleanup_config;
   }
 
   struct DynArray *prompts = 0;
-  switch (validate_spec_json(parsed, &prompts)) {
-  case SVE_TOPLEVEL_NOT_OBJECT:
-    fprintf(stderr, "`%s/spec.json` is not a JSON object.\n", target);
-    goto cleanup_parsed;
-  case SVE_FIELD_NOT_OBJECT:
-    fprintf(
-      stderr,
-      "Encountered child in `%s/spec.json` that is not a JSON object.\n",
-      target
-    );
-    goto cleanup_parsed;
-  case SVE_FIELD_TYPE_INVALID:
-    fprintf(stderr, "Types must be string values.\n");
-    goto cleanup_parsed;
-  case SVE_FIELD_TYPE_UNKNOWN:
-    fprintf(
-      stderr, "Encountered an unknown `type` in `%s/spec.json`.\n", target
-    );
-    goto cleanup_parsed;
-  case SVE_FIELD_PROMPT_INVALID:
-    fprintf(stderr, "Prompts must be string values.\n");
+  if ((error = validate_spec_json(parsed, &prompts))) {
+    fprintf(stderr, "%s", error->message);
     goto cleanup_parsed;
   }
 
-  switch (evaluate_spec_json(config, prompts)) {
-  case SEE_RUN_SH_NOT_FOUND:
-    fprintf(stderr, "Could not find `%s/run.sh`.\n", target);
-    goto cleanup_parsed;
-  case SEE_INVALID_PROMPT_RESPONSE:
-    fprintf(stderr, "Could not interpret response.\n");
+  if ((error = evaluate_spec_json(config, prompts))) {
+    fprintf(stderr, "%s", error->message);
     goto cleanup_parsed;
   }
 

@@ -7,31 +7,35 @@
 
 #include "path.h"
 
-static int find_spec_json(const struct Config *const config, FILE **handle) {
+static struct Error *find_spec_json(
+  const struct Config *const config, FILE **handle
+) {
   const char *segments[] = {config->root_dir, config->target, "spec.json"};
   char *filepath =
     join_path_segments(sizeof(segments) / sizeof(char *), segments);
 
-  int retval = 0;
+  struct Error *error = 0;
   // It is ok if the file does not exist. It is not ok if we couldn't open the
   // file for any other reason.
   *handle = fopen(filepath, "r");
   if (!*handle && errno != ENOENT) {
-    retval = errno;
+    error = ERROR_NEW(
+      ERROR_PARSER_SPEC_JSON_INVALID, config->target, "/spec.json is invalid."
+    );
   }
 
   free(filepath);
-  return retval;
+  return error;
 }
 
-enum SpecParseError parse_spec_json(
+struct Error *parse_spec_json(
   const struct Config *const config, cJSON **parsed
 ) {
   FILE *handle = 0;
-  int retval = find_spec_json(config, &handle);
+  struct Error *error = find_spec_json(config, &handle);
 
-  if (retval != 0) {
-    return SPE_CANNOT_OPEN;
+  if (error) {
+    return error;
   }
 
   // The `spec.json` file does not exist.
@@ -55,7 +59,10 @@ enum SpecParseError parse_spec_json(
 
   // Can use `cJSON_GetErrorPtr()` to get the actual error message.
   if (!*parsed) {
-    return SPE_INVALID_SYNTAX;
+    return ERROR_NEW(
+      ERROR_PARSER_SPEC_JSON_INVALID_SYNTAX,
+      "The spec.json file contains invalid JSON."
+    );
   }
 
   return 0;

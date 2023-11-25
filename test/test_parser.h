@@ -49,8 +49,8 @@ static void test_parser_missing() {
   struct TestParserFixture *fixture = test_parser_setup("no_spec_json");
 
   cJSON *parsed = 0;
-  enum SpecParseError retval = parse_spec_json(&fixture->config, &parsed);
-  sput_fail_unless(retval == 0, "no spec.json, success");
+  struct Error *error = parse_spec_json(&fixture->config, &parsed);
+  sput_fail_unless(error == 0, "no spec.json, success");
   sput_fail_unless(parsed == 0, "no spec.json, no parsed");
 
   test_parser_teardown(fixture);
@@ -60,8 +60,8 @@ static void test_parser_minimal() {
   struct TestParserFixture *fixture = test_parser_setup("minimal_spec_json");
 
   cJSON *parsed = 0;
-  enum SpecParseError retval = parse_spec_json(&fixture->config, &parsed);
-  sput_fail_unless(retval == 0, "minimal spec.json, success");
+  struct Error *error = parse_spec_json(&fixture->config, &parsed);
+  sput_fail_unless(error == 0, "minimal spec.json, success");
   sput_fail_unless(parsed != 0, "minimal spec.json, parsed");
 
   test_parser_teardown(fixture);
@@ -71,10 +71,12 @@ static void test_parser_invalid() {
   struct TestParserFixture *fixture = test_parser_setup("invalid_spec_json");
 
   cJSON *parsed = 0;
-  enum SpecParseError retval = parse_spec_json(&fixture->config, &parsed);
+  struct Error *error = parse_spec_json(&fixture->config, &parsed);
   sput_fail_unless(
-    retval == SPE_INVALID_SYNTAX, "invalid spec.json, INVALID_SYNTAX"
+    error->code == ERROR_PARSER_SPEC_JSON_INVALID_SYNTAX,
+    "invalid spec.json, INVALID_SYNTAX"
   );
+  error_free(error);
   sput_fail_unless(parsed == 0, "invalid spec.json, not parsed");
 
   test_parser_teardown(fixture);

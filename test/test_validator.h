@@ -30,9 +30,11 @@ static void test_validator_teardown(struct TestValidatorFixture *fixture) {
 static void test_validator_toplevel_not_object() {
   struct TestValidatorFixture *fixture = test_validator_setup("[]");
 
-  enum SpecValidationError retval =
-    validate_spec_json(fixture->parsed, &fixture->prompts);
-  sput_fail_unless(retval == SVE_TOPLEVEL_NOT_OBJECT, "top-level not object");
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_TOP_LEVEL_NOT_OBJECT, "top-level not object"
+  );
+  error_free(error);
 
   test_validator_teardown(fixture);
 }
@@ -41,9 +43,11 @@ static void test_validator_field_not_object() {
   struct TestValidatorFixture *fixture =
     test_validator_setup("{\"key\": \"$UNKNOWN\"}");
 
-  enum SpecValidationError retval =
-    validate_spec_json(fixture->parsed, &fixture->prompts);
-  sput_fail_unless(retval == SVE_FIELD_NOT_OBJECT, "field not object");
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_NOT_OBJECT, "field not object"
+  );
+  error_free(error);
 
   test_validator_teardown(fixture);
 }
@@ -57,9 +61,11 @@ static void test_validator_field_type_invalid() {
     "}"
   );
 
-  enum SpecValidationError retval =
-    validate_spec_json(fixture->parsed, &fixture->prompts);
-  sput_fail_unless(retval == SVE_FIELD_TYPE_INVALID, "field type invalid");
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_TYPE_INVALID, "field type invalid"
+  );
+  error_free(error);
 
   test_validator_teardown(fixture);
 }
@@ -73,9 +79,11 @@ static void test_validator_field_type_unknown() {
     "}"
   );
 
-  enum SpecValidationError retval =
-    validate_spec_json(fixture->parsed, &fixture->prompts);
-  sput_fail_unless(retval == SVE_FIELD_TYPE_UNKNOWN, "field type unknown");
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN, "field type unknown"
+  );
+  error_free(error);
 
   test_validator_teardown(fixture);
 }
@@ -90,9 +98,11 @@ static void test_validator_field_prompt_invalid() {
     "}"
   );
 
-  enum SpecValidationError retval =
-    validate_spec_json(fixture->parsed, &fixture->prompts);
-  sput_fail_unless(retval == SVE_FIELD_PROMPT_INVALID, "field prompt invalid");
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_PROMPT_INVALID, "field prompt invalid"
+  );
+  error_free(error);
 
   test_validator_teardown(fixture);
 }
@@ -107,9 +117,8 @@ static void test_validator_valid() {
     "}"
   );
 
-  enum SpecValidationError retval =
-    validate_spec_json(fixture->parsed, &fixture->prompts);
-  sput_fail_unless(retval == 0, "valid");
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(error == 0, "valid");
 
   test_validator_teardown(fixture);
 }

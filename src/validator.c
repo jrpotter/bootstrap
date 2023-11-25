@@ -2,27 +2,39 @@
 
 #include <string.h>
 
-static enum SpecValidationError read_field(
-  const cJSON *const field, struct Field **out
-) {
+static struct Error *read_field(const cJSON *const field, struct Field **out) {
   if (!cJSON_IsObject(field)) {
-    return SVE_FIELD_NOT_OBJECT;
+    return ERROR_NEW(
+      ERROR_VALIDATOR_FIELD_NOT_OBJECT,
+      "Field \"",
+      field->string,
+      "\" is not a JSON object."
+    );
   }
 
-  enum SpecValidationError retval = 0;
-
+  struct Error *error = 0;
   *out = malloc(sizeof(struct Field));
 
   const cJSON *type = cJSON_GetObjectItemCaseSensitive(field, "type");
   if (!cJSON_IsString(type)) {
-    retval = SVE_FIELD_TYPE_INVALID;
+    error = ERROR_NEW(
+      ERROR_VALIDATOR_FIELD_TYPE_INVALID,
+      "Field \"",
+      field->string,
+      "\" has non-string \"type\"."
+    );
     goto cleanup;
   }
 
   if (strcmp(type->valuestring, "STRING") == 0) {
     (*out)->type = FT_STRING;
   } else {
-    retval = SVE_FIELD_TYPE_UNKNOWN;
+    error = ERROR_NEW(
+      ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,
+      "Field \"",
+      field->string,
+      "\" has unknown \"type\"."
+    );
     goto cleanup;
   }
 
@@ -30,18 +42,23 @@ static enum SpecValidationError read_field(
   if (cJSON_IsString(prompt)) {
     (*out)->prompt = prompt->valuestring;
   } else {
-    retval = SVE_FIELD_PROMPT_INVALID;
+    error = ERROR_NEW(
+      ERROR_VALIDATOR_FIELD_PROMPT_INVALID,
+      "Field \"",
+      field->string,
+      "\" has non-string \"prompt\"."
+    );
     goto cleanup;
   }
 
-  return retval;
+  return error;
 
 cleanup:
   free(*out);
-  return retval;
+  return error;
 }
 
-enum SpecValidationError validate_spec_json(
+struct Error *validate_spec_json(
   const cJSON *const parsed, struct DynArray **fields
 ) {
   *fields = 0;
@@ -52,10 +69,13 @@ enum SpecValidationError validate_spec_json(
   }
 
   if (!cJSON_IsObject(parsed)) {
-    return SVE_TOPLEVEL_NOT_OBJECT;
+    return ERROR_NEW(
+      ERROR_VALIDATOR_TOP_LEVEL_NOT_OBJECT,
+      "Top-level JSON value in spec.json is not an object."
+    );
   }
 
-  enum SpecValidationError retval = 0;
+  struct Error *error = 0;
   // `cJSON_GetArraySize` works because internally JSON objects are stored as
   // arrays.
   *fields = dyn_array_new(cJSON_GetArraySize(parsed));
@@ -63,8 +83,8 @@ enum SpecValidationError validate_spec_json(
   cJSON *child = parsed->child;
   while (child) {
     struct Field *field = 0;
-    retval = read_field(child, &field);
-    if (retval) {
+    error = read_field(child, &field);
+    if (error) {
       goto cleanup;
     }
     dyn_array_push(*fields, field);
@@ -78,5 +98,5 @@ cleanup:
     dyn_array_free(*fields);
     *fields = 0;
   }
-  return retval;
+  return error;
 }
