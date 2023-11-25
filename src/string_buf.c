@@ -15,7 +15,6 @@ struct StringBuf *string_buf_new(size_t capacity) {
 
 size_t string_buf_size(struct StringBuf *sb) {
   assert(sb);
-
   return sb->size;
 }
 
@@ -55,15 +54,15 @@ void string_buf_sappend(struct StringBuf *sb, const char s[static 1]) {
 
 const char *string_buf_convert(struct StringBuf *sb) {
   assert(sb);
-
   const char *buf = sb->buf;
   free(sb);
   return buf;
 }
 
 void string_buf_free(struct StringBuf *sb) {
-  assert(sb);
-
+  if (!sb) {
+    return;
+  }
   free((void *)sb->buf);
   free(sb);
   sb = 0;

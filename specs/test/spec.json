@@ -1,0 +1,6 @@
+{
+  "display": {
+    "type": "STRING",
+    "prompt": "This is a prompt"
+  }
+}

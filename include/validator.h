@@ -11,7 +11,9 @@ enum FieldType {
 
 struct Field {
   enum FieldType type;
+  // OWNERSHIP: Does not take ownership.
   const char *key;
+  // OWNERSHIP: Does not take ownership.
   const char *prompt;
 };
 

@@ -1,9 +1,7 @@
 # bootstrap
 
 TODO:
-- [ ] Make free-ing data consistent with null pointers.
 - [ ] Add documentation throughout (ownership, docstrings, etc.).
-- [ ] Organize variables in each function to the top?
 
 CLI utility for initializing projects in reproducible ways.
 

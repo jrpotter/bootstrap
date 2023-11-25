@@ -7,7 +7,7 @@
 
 int evaluate_run_sh(
   const struct Config *const config,
-  const struct DynArray *const prompts,
+  const struct DynArray *const fields,
   struct Error **error
 );
 

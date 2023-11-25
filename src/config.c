@@ -14,6 +14,8 @@ struct Error *config_load(
   const char *target,
   struct Config **config
 ) {
+  assert(target);
+
   if (cwd == 0) {
     return ERROR_NEW(ERROR_CONFIG_ENV_CWD_INVALID, "Could not retrieve $CWD.");
   }
@@ -22,11 +24,9 @@ struct Error *config_load(
       ERROR_CONFIG_ENV_ROOT_DIR_INVALID, "No specified root directory."
     );
   }
-  assert(target);
 
-  // Check if the specified directory exists.
   const char *segments[] = {root_dir, target};
-  char *filepath =
+  const char *filepath =
     join_path_segments(sizeof(segments) / sizeof(char *), segments);
 
   struct stat sb;
@@ -58,7 +58,7 @@ struct Error *config_load(
   (*config)->target = target;
 
 cleanup:
-  free(filepath);
+  free((void *)filepath);
   return error;
 }
 

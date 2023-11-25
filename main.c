@@ -46,14 +46,10 @@ static int run(const char *root_dir, const char *target) {
   }
 
 cleanup_prompts:
-  if (prompts) {
-    dyn_array_free(prompts);
-  }
+  dyn_array_free(prompts);
 
 cleanup_parsed:
-  if (parsed) {
-    cJSON_Delete(parsed);
-  }
+  cJSON_Delete(parsed);
 
 cleanup_config:
   config_free(config);

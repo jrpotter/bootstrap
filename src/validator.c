@@ -14,6 +14,7 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
 
   struct Error *error = 0;
   *out = malloc(sizeof(struct Field));
+  (*out)->key = field->string;
 
   const cJSON *type = cJSON_GetObjectItemCaseSensitive(field, "type");
   if (!cJSON_IsString(type)) {
@@ -94,9 +95,7 @@ struct Error *validate_spec_json(
   return 0;
 
 cleanup:
-  if (*fields) {
-    dyn_array_free(*fields);
-    *fields = 0;
-  }
+  dyn_array_free(*fields);
+  *fields = 0;
   return error;
 }
