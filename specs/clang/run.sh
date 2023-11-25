@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-cp -r "template" "$OUT"
+cp -r template/* "$OUT"
