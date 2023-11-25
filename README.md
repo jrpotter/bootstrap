@@ -1,40 +1,86 @@
 # bootstrap
 
+CLI utility for defining custom project initialization scripts.
+
 TODO:
-- [ ] Add documentation throughout (ownership, docstrings, etc.).
 - [ ] Add evaluator tests.
 - [ ] Color output to console.
 
-CLI utility for initializing projects in reproducible ways.
-
 ## Overview
 
-Within the `specs` directory exists so-called *specs*. A spec is a directory
-containing an optional `spec.json` file and a `run.sh` file. The former is
-configured like so:
+`bootstrap` is a tool for quickly defining your own init-like scripts. If you
+are familiar with tools like
 
-```spec.json
+* `npm init`
+* `nix flake init`
+* `django-admin startproject`
+* `mix phx.new`
+* etc.
+
+this project will feel at home. Ultimately the goal is to create (optionally)
+interactive scripts like those mentioned in the above list to quickly scaffold
+your new projects in a consistent way.
+
+We start with an example. Consider the following *spec*, which we'll name
+`example`:
+```json
 {
-  versions: [...]
+  "filename": {
+    "type": "STRING",
+    "prompt": "What file should I create for you?"
+  }
 }
 ```
+and its associated *builder*:
+```bash
+#!/usr/bin/env bash
 
-The keys of this top-level JSON object correspond to the parameters that are
-prompted by the `bootstrap init` curses interface. The value is used to
-determine what kind of prompt `bootstrap` provides for the given question.
-Possible value types include:
+echo "Creating $FILENAME"
+touch "$OUT/$FILENAME"
+```
 
-* `[...]` (list)
-  * This indicates a select option prompt. The user chooses amongst the values
-    specified in the JSON list.
+Running `bootstrap` with these two files configured will invoke the following
+interactive script:
+```bash
+> bootstrap example
+What file should I create for you? hello-world.txt
+Creating hello-world.txt
 
-Once all prompts are evaluated, the keys of the object are converted into
-uppercase environment variables and passed to the `run.sh` file relative to the
-current directory.
+>
+```
+You should now see a new `hello-world.txt` file in the current directory.
+
+## Usage
+
+TODO
+
+### Installation
+
+TODO
+
+### Specs and Builders
+
+TODO
+
+### Other Environment Variables
+
+TODO
+
+### Supplied Specs
+
+TODO
+
+### Using With Nix
+
+TODO
 
 ## Development
 
-This template includes an `.envrc` file for use with [direnv](https://direnv.net/).
+TODO
+
+### Documentation
+
+TODO
 
 ### Formatting
 
@@ -45,5 +91,5 @@ Run the following to configure `git` to use it:
 git config --local core.hooksPath .githooks/
 ```
 
-If running [direnv](https://direnv.net/), this is done automatically provided
-`git` is installed and a repository is initialized.
+If running [direnv](https://direnv.net/), this is done automatically if `git` is
+installed.
