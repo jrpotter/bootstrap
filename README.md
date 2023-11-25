@@ -5,9 +5,7 @@ CLI utility for defining custom project initialization scripts.
 TODO:
 - [ ] Add evaluator tests.
 - [ ] Color output to console.
-- [ ] string -> line, case insensitive
 - [ ] Ensure keys are alphanumeric, underscore
-- [ ] sophie
 
 ## Overview
 

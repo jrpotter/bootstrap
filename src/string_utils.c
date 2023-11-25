@@ -1,6 +1,8 @@
 #include "string_utils.h"
 
 #include <assert.h>
+#include <ctype.h>
+#include <math.h>
 #include <string.h>
 
 char *join(size_t n, const char *segments[static n], char sep) {
@@ -25,4 +27,21 @@ char *join(size_t n, const char *segments[static n], char sep) {
   }
 
   return joined;
+}
+
+int strcmp_ci(const char *s1, const char *s2) {
+  int i = 0;
+  size_t s1_len = strlen(s1);
+  size_t s2_len = strlen(s2);
+  for (; i < (s1_len < s2_len ? s1_len : s2_len); ++i) {
+    if (toupper(s1[i]) < toupper(s2[i])) {
+      return -1;
+    } else if (toupper(s1[i]) > toupper(s2[i])) {
+      return 1;
+    }
+  }
+  if (s1_len == s2_len) {
+    return 0;
+  }
+  return s1_len < s2_len ? -1 : 1;
 }

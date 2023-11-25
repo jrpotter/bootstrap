@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
   sput_enter_suite("string_utils");
   sput_run_test(test_join_single);
   sput_run_test(test_join_multiple);
+  sput_run_test(test_strcmp_ci);
 
   sput_enter_suite("parser");
   sput_run_test(test_parser_missing);
@@ -37,6 +38,7 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_validator_field_not_object);
   sput_run_test(test_validator_field_type_invalid);
   sput_run_test(test_validator_field_type_unknown);
+  sput_run_test(test_validator_valid_type_ci);
   sput_run_test(test_validator_field_prompt_invalid);
   sput_run_test(test_validator_valid);
 

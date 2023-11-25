@@ -88,11 +88,27 @@ static void test_validator_field_type_unknown() {
   test_validator_teardown(fixture);
 }
 
+static void test_validator_valid_type_ci() {
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": \"tExT\","
+    "    \"prompt\": \"What value for key?\""
+    "  }"
+    "}"
+  );
+
+  struct Error *error = validate_spec_json(fixture->parsed, &fixture->prompts);
+  sput_fail_unless(error == 0, "valid");
+
+  test_validator_teardown(fixture);
+}
+
 static void test_validator_field_prompt_invalid() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"
-    "    \"type\": \"STRING\","
+    "    \"type\": \"text\","
     "    \"prompt\": 2"
     "  }"
     "}"
@@ -111,7 +127,7 @@ static void test_validator_valid() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"
-    "    \"type\": \"STRING\","
+    "    \"type\": \"text\","
     "    \"prompt\": \"What value for key?\""
     "  }"
     "}"

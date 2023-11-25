@@ -1,6 +1,6 @@
 #include "validator.h"
 
-#include <string.h>
+#include "string_utils.h"
 
 static struct Error *read_field(const cJSON *const field, struct Field **out) {
   if (!cJSON_IsObject(field)) {
@@ -27,7 +27,7 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
     goto cleanup;
   }
 
-  if (strcmp(type->valuestring, "STRING") == 0) {
+  if (strcmp_ci(type->valuestring, "text") == 0) {
     (*out)->type = FT_TEXT;
   } else {
     error = ERROR_NEW(
