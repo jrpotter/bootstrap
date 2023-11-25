@@ -1044,6 +1044,7 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = include/cJSON.h \
+                         src/cJSON.c \
                          test
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or

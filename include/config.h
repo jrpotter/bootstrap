@@ -14,14 +14,14 @@ Each member of the @ref Config is expected to outlive the @ref Config instance
 itself.
 */
 struct Config {
-  /// The directory the `bootstrap` command was run from. Does not take
+  /// @brief The directory the `bootstrap` command was run from. Does not take
   /// ownership of this pointer.
   const char *cwd;
-  /// The root directory housing our specs. Does not take ownership of this
-  /// pointer.
-  const char *root_dir;
-  /// The name of the spec we want to bootstrap. Does not take ownership of
+  /// @brief The root directory housing our specs. Does not take ownership of
   /// this pointer.
+  const char *root_dir;
+  /// @brief The name of the spec we want to bootstrap. Does not take ownership
+  /// of this pointer.
   const char *target;
 };
 
