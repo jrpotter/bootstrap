@@ -38,12 +38,12 @@ static int run(const char *root_dir, const char *target) {
     goto cleanup_parsed;
   }
 
-  if ((error = evaluate_spec_json(config, prompts))) {
-    fprintf(stderr, "%s", error->message);
+  if ((retval = evaluate_run_sh(config, prompts, &error))) {
+    if (error) {
+      fprintf(stderr, "%s", error->message);
+    }
     goto cleanup_parsed;
   }
-
-  retval = EXIT_SUCCESS;
 
 cleanup_prompts:
   if (prompts) {
@@ -61,6 +61,7 @@ cleanup_config:
 cleanup_cwd:
   free(cwd);
   error_free(error);
+
   return retval;
 }
 

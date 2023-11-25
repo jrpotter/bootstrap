@@ -5,8 +5,10 @@
 #include "error.h"
 #include "validator.h"
 
-struct Error *evaluate_spec_json(
-  const struct Config *const config, const struct DynArray *const prompts
+int evaluate_run_sh(
+  const struct Config *const config,
+  const struct DynArray *const prompts,
+  struct Error **error
 );
 
 #endif /* _BOOTSTRAP_EVALUATOR_H */

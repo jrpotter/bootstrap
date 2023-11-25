@@ -24,17 +24,25 @@ static struct Error *find_run_sh(const struct Config *const config) {
     );
   }
 
-  // TODO: Check run.sh is executable.
+  if (!(sb.st_mode & S_IXUSR)) {
+    return ERROR_NEW(
+      ERROR_EVALUATOR_RUN_SH_NOT_EXEC,
+      config->target,
+      "/run.sh is not executable."
+    );
+  }
 
   return 0;
 }
 
-struct Error *evaluate_spec_json(
-  const struct Config *const config, const struct DynArray *const prompts
+int evaluate_run_sh(
+  const struct Config *const config,
+  const struct DynArray *const prompts,
+  struct Error **error
 ) {
-  struct Error *error = find_run_sh(config);
-  if (error) {
-    return error;
+  *error = find_run_sh(config);
+  if (*error) {
+    return EXIT_FAILURE;
   }
 
   if (prompts) {
@@ -61,8 +69,7 @@ struct Error *evaluate_spec_json(
 
   free(filepath);
 
-  // TODO: Want to return this status out.
-  int status = system(command);
-
-  return 0;
+  int exit_code = system(command);
+  free((void *)command);
+  return WEXITSTATUS(exit_code);
 }
