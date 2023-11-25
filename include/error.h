@@ -1,3 +1,7 @@
+/**
+@file
+@brief Error handling.
+*/
 #ifndef _BOOTSTRAP_ERROR_H
 #define _BOOTSTRAP_ERROR_H
 
@@ -5,27 +9,55 @@
 
 #include "string_buf.h"
 
+/**
+@brief The various error codes produced by `bootstrap`.
+*/
 enum ErrorCode {
+  /// Could not retrieve the value of `$CWD`.
   ERROR_CONFIG_ENV_CWD_INVALID = 1,
+  /// No root directory was specified. This must either be set via the command
+  /// line flag `-d` or environment variable `$BOOTSTRAP_ROOT_DIR`. If both are
+  /// provided, the command line flag takes priority.
   ERROR_CONFIG_ENV_ROOT_DIR_INVALID,
+  /// There is no file at the location corresponding to the specified spec.
   ERROR_CONFIG_TARGET_NOT_FOUND,
+  /// For generic reasons, `bootstrap` could not access the file at the provided
+  /// spec.
   ERROR_CONFIG_TARGET_INVALID,
+  /// The file at the location corresponding to the provided spec is not a
+  /// directory.
   ERROR_CONFIG_TARGET_NOT_DIR,
 
+  /// For generic reasons, `bootstrap` could not access the `spec.json` file.
   ERROR_PARSER_SPEC_JSON_INVALID,
+  /// The `spec.json` file is not valid JSON.
   ERROR_PARSER_SPEC_JSON_INVALID_SYNTAX,
 
+  /// The top-level JSON object of the `spec.json` file is not an object.
   ERROR_VALIDATOR_TOP_LEVEL_NOT_OBJECT,
+  /// A field in `spec.json` is not an object.
   ERROR_VALIDATOR_FIELD_NOT_OBJECT,
+  /// The `type` of a `spec.json` field is not a string.
   ERROR_VALIDATOR_FIELD_TYPE_INVALID,
+  /// The `type` of a `spec.json` field does not correspond to a known prompt
+  /// type.
   ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,
+  /// The `prompt` of a `spec.json` field is not a string.
   ERROR_VALIDATOR_FIELD_PROMPT_INVALID,
 
+  /// The `run.sh` file could not be found.
   ERROR_EVALUATOR_RUN_SH_NOT_FOUND,
+  /// The `run.sh` file is not executable.
   ERROR_EVALUATOR_RUN_SH_NOT_EXEC,
+  /// A user response to a prompt is not valid.
   ERROR_EVALUATOR_RESPONSE_INVALID,
 };
 
+/**
+@brief A `bootstrap` error.
+
+@see ERROR_NEW
+*/
 struct Error {
   enum ErrorCode code;
   const char *message;
@@ -47,10 +79,13 @@ static inline struct Error *priv_error_new(
 // clang-format off
 
 /**
-Return the number of elements of `__VA_ARGS__`.
+@brief Return the number of elements of `__VA_ARGS__`.
 
 Take the `__VA_ARGS__` list and append a list of decreasing numbers
-31, 30, ..., 0. Then, by using ALEN0, return the 31st element of that list.
+31, 30, ..., 0.
+
+@return
+ The number of elements of `__VA_ARGS__`.
 */
 #define ALEN(...) \
   ALEN0(          \
@@ -68,7 +103,17 @@ Take the `__VA_ARGS__` list and append a list of decreasing numbers
   ...) _1F
 
 /**
-Create a new `struct Error` instance.
+@brief Creates a new @ref Error instance.
+
+It is the responsibility of the caller to free the @ref Error instance.
+
+@param __VA_ARGS__
+ Allows supplying up to 31 `const char*` instances. These arguments will be
+ concatenated together and supplied to the new @ref Error instance.
+@return
+ A new @ref Error instance. The caller takes ownership of this value.
+
+@see error_free
 */
 #define ERROR_NEW(code, ...) \
   ERROR_NEW0(code, ALEN(__VA_ARGS__), __VA_ARGS__)
@@ -80,6 +125,14 @@ Create a new `struct Error` instance.
 
 // clang-format on
 
+/**
+@brief Deallocates a previously allocated @ref Error isntance.
+
+@param error
+ A pointer to a @ref Error instance. If null, this function is a no-op.
+
+@see ERROR_NEW
+*/
 void error_free(struct Error *error);
 
 #endif /* _BOOTSTRAP_ERROR_H */

@@ -18,6 +18,7 @@ size_t dyn_array_size(struct DynArray *a) {
 
 void dyn_array_push(struct DynArray *a, void *item) {
   assert(a);
+  assert(item);
   if (a->size == a->_capacity) {
     a->_capacity *= 2;
     a->buf = realloc(a->buf, sizeof(void *) * a->_capacity);

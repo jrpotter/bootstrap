@@ -8,7 +8,7 @@
 
 #include "path.h"
 
-struct Error *config_load(
+struct Error *config_new(
   const char *cwd,
   const char *root_dir,
   const char *target,

@@ -33,16 +33,16 @@ static void test_config_teardown(struct TestConfigFixture *fixture) {
   free(fixture);
 }
 
-static void test_config_load_invalid_args() {
+static void test_config_new_invalid_args() {
   struct TestConfigFixture *fixture = test_config_setup();
 
   struct Error *error = 0;
   struct Config *config = 0;
 
-  error = config_load(0, fixture->root_dir, fixture->target, &config);
+  error = config_new(0, fixture->root_dir, fixture->target, &config);
   sput_fail_unless(error->code == ERROR_CONFIG_ENV_CWD_INVALID, "cwd == 0");
   error_free(error);
-  error = config_load(fixture->cwd, 0, fixture->target, &config);
+  error = config_new(fixture->cwd, 0, fixture->target, &config);
   sput_fail_unless(
     error->code == ERROR_CONFIG_ENV_ROOT_DIR_INVALID, "root_dir == 0"
   );
@@ -51,13 +51,13 @@ static void test_config_load_invalid_args() {
   test_config_teardown(fixture);
 }
 
-static void test_config_load_spec_not_found() {
+static void test_config_new_spec_not_found() {
   struct TestConfigFixture *fixture = test_config_setup();
 
   struct Error *error = 0;
   struct Config *config = 0;
 
-  error = config_load(fixture->cwd, fixture->root_dir, "not_found", &config);
+  error = config_new(fixture->cwd, fixture->root_dir, "not_found", &config);
   sput_fail_unless(
     error->code == ERROR_CONFIG_TARGET_NOT_FOUND, "target not found"
   );
@@ -66,13 +66,13 @@ static void test_config_load_spec_not_found() {
   test_config_teardown(fixture);
 }
 
-static void test_config_load_spec_not_dir() {
+static void test_config_new_spec_not_dir() {
   struct TestConfigFixture *fixture = test_config_setup();
 
   struct Error *error = 0;
   struct Config *config = 0;
 
-  error = config_load(fixture->cwd, fixture->root_dir, "not_dir", &config);
+  error = config_new(fixture->cwd, fixture->root_dir, "not_dir", &config);
   sput_fail_unless(
     error->code == ERROR_CONFIG_TARGET_NOT_DIR, "target not dir"
   );
@@ -81,21 +81,20 @@ static void test_config_load_spec_not_dir() {
   test_config_teardown(fixture);
 }
 
-static void test_config_load_success() {
+static void test_config_new_success() {
   struct TestConfigFixture *fixture = test_config_setup();
 
   struct Error *error = 0;
   struct Config *config = 0;
 
-  error =
-    config_load(fixture->cwd, fixture->root_dir, fixture->target, &config);
-  sput_fail_unless(error == 0, "config_load() success");
-  sput_fail_unless(strcmp(config->cwd, fixture->cwd) == 0, "config_load() cwd");
+  error = config_new(fixture->cwd, fixture->root_dir, fixture->target, &config);
+  sput_fail_unless(error == 0, "config_new() success");
+  sput_fail_unless(strcmp(config->cwd, fixture->cwd) == 0, "config_new() cwd");
   sput_fail_unless(
-    strcmp(config->root_dir, fixture->root_dir) == 0, "config_load() root_dir"
+    strcmp(config->root_dir, fixture->root_dir) == 0, "config_new() root_dir"
   );
   sput_fail_unless(
-    strcmp(config->target, fixture->target) == 0, "config_load() target"
+    strcmp(config->target, fixture->target) == 0, "config_new() target"
   );
 
   config_free(config);

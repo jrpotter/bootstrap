@@ -21,7 +21,7 @@ static int run(const char *root_dir, const char *target) {
   struct Error *error = 0;
   struct Config *config = 0;
 
-  if ((error = config_load(cwd, root_dir, target, &config))) {
+  if ((error = config_new(cwd, root_dir, target, &config))) {
     fprintf(stderr, "%s", error->message);
     goto cleanup_cwd;
   }

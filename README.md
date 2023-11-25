@@ -2,6 +2,8 @@
 
 TODO:
 - [ ] Add documentation throughout (ownership, docstrings, etc.).
+- [ ] Add evaluator tests.
+- [ ] Color output to console.
 
 CLI utility for initializing projects in reproducible ways.
 

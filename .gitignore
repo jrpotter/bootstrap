@@ -1,5 +1,6 @@
 .cache/
 .direnv/
-compile_commands.json
 bootstrap
+compile_commands.json
+docs/
 test/runner

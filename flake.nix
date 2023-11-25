@@ -26,6 +26,7 @@
             bear
             clang-tools
             codelldb
+            doxygen
           ];
           buildInputs = with pkgs; [
             ncurses
