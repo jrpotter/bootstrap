@@ -5,14 +5,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "path.h"
+#include "string_utils.h"
 
 static struct Error *find_spec_json(
   const struct Config *const config, FILE **handle
 ) {
   const char *segments[] = {config->root_dir, config->target, "spec.json"};
-  char *filepath =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+  char *filepath = join(sizeof(segments) / sizeof(char *), segments, '/');
 
   struct Error *error = 0;
   // It is ok if the file does not exist. It is not ok if we couldn't open the

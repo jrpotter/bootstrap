@@ -2,8 +2,8 @@
 #include "test_config.h"
 #include "test_dyn_array.h"
 #include "test_parser.h"
-#include "test_path.h"
 #include "test_string_buf.h"
+#include "test_string_utils.h"
 #include "test_validator.h"
 
 int main(int argc, char *argv[]) {
@@ -23,9 +23,9 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_string_buf_sappend);
   sput_run_test(test_string_buf_cappend);
 
-  sput_enter_suite("path");
-  sput_run_test(test_join_path_single_segments);
-  sput_run_test(test_join_path_multiple_segments);
+  sput_enter_suite("string_utils");
+  sput_run_test(test_join_single);
+  sput_run_test(test_join_multiple);
 
   sput_enter_suite("parser");
   sput_run_test(test_parser_missing);

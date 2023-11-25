@@ -4,8 +4,8 @@
 #include <unistd.h>
 
 #include "config.h"
-#include "path.h"
 #include "sput.h"
+#include "string_utils.h"
 
 struct TestConfigFixture {
   char *cwd;
@@ -16,8 +16,7 @@ struct TestConfigFixture {
 static struct TestConfigFixture *test_config_setup() {
   char *cwd = getcwd(0, 0);
   const char *segments[] = {cwd, "test", "specs"};
-  char *root_dir =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+  char *root_dir = join(sizeof(segments) / sizeof(char *), segments, '/');
 
   struct TestConfigFixture *fixture = malloc(sizeof(struct TestConfigFixture));
   fixture->cwd = getcwd(0, 0);

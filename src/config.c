@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include "path.h"
+#include "string_utils.h"
 
 struct Error *config_new(
   const char *cwd,
@@ -26,8 +26,7 @@ struct Error *config_new(
   }
 
   const char *segments[] = {root_dir, target};
-  const char *filepath =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+  const char *filepath = join(sizeof(segments) / sizeof(char *), segments, '/');
 
   struct stat sb;
   int stat_res = stat(filepath, &sb);

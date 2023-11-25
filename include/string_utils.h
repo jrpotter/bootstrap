@@ -1,9 +1,10 @@
 /**
 @file
-@brief Path-related utility functions.
+@brief String-related utility functions.
 */
-#ifndef _BOOTSTRAP_PATH_H
-#define _BOOTSTRAP_PATH_H
+
+#ifndef _BOOTSTRAP_STRING_UTILS_H
+#define _BOOTSTRAP_STRING_UTILS_H
 
 #include <stdlib.h>
 
@@ -20,6 +21,6 @@ This function assumes a forward slash path separator (i.e. `/`).
  The concatenation of the path components via `/`. The caller takes ownership
  of this value.
 */
-char *join_path_segments(size_t n, const char *segments[static n]);
+char *join(size_t n, const char *segments[static n], char sep);
 
-#endif /* _BOOTSTRAP_PATH_H */
+#endif /* _BOOTSTRAP_STRING_UTILS_H */

@@ -7,8 +7,8 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include "path.h"
 #include "string_buf.h"
+#include "string_utils.h"
 #include "validator.h"
 
 static struct Error *find_run_exec(const struct Config *const config) {
@@ -16,8 +16,7 @@ static struct Error *find_run_exec(const struct Config *const config) {
 
   struct stat sb;
   const char *segments[] = {config->root_dir, config->target, "runner"};
-  char *filepath =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+  char *filepath = join(sizeof(segments) / sizeof(char *), segments, '/');
   int stat_res = stat(filepath, &sb);
   free(filepath);
 
@@ -103,8 +102,7 @@ int evaluate_runner(
   }
 
   const char *segments[] = {config->root_dir, config->target, "runner"};
-  const char *filepath =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+  const char *filepath = join(sizeof(segments) / sizeof(char *), segments, '/');
   const char *env = string_buf_convert(env_buf);
 
   struct StringBuf *command_buf = string_buf_new(1024);

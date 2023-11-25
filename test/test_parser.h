@@ -6,8 +6,8 @@
 #include "cJSON.h"
 #include "config.h"
 #include "parser.h"
-#include "path.h"
 #include "sput.h"
+#include "string_utils.h"
 
 struct TestParserFixture {
   char *cwd;
@@ -19,8 +19,7 @@ struct TestParserFixture {
 static struct TestParserFixture *test_parser_setup(const char *target) {
   char *cwd = getcwd(0, 0);
   const char *segments[] = {cwd, "test", "specs"};
-  char *root_dir =
-    join_path_segments(sizeof(segments) / sizeof(char *), segments);
+  char *root_dir = join(sizeof(segments) / sizeof(char *), segments, '/');
 
   struct TestParserFixture *fixture = malloc(sizeof(struct TestParserFixture));
   fixture->cwd = getcwd(0, 0);
