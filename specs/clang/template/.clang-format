@@ -1,0 +1,8 @@
+BasedOnStyle: Google
+AlignAfterOpenBracket: BlockIndent
+BinPackArguments: false
+BinPackParameters: false
+ColumnLimit: 80
+ContinuationIndentWidth: 2
+IndentCaseLabels: false
+IndentWidth: 2
