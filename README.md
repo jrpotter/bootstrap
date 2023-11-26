@@ -49,11 +49,40 @@ $> ls
 You should now see a new `hello-world.txt` file in your current working
 directory.
 
+## Installation
+
+### Nix
+
+It is recommended you use Nix to install `bootstrap`. If using a flake, specify
+`bootstrap` as an `inputs` attribute the normal way. Otherwise, if you have a
+new enough version of nix, import the executable like so:
+```nix
+(builtins.getFlake "github:jrpotter/bootstrap/v0.1.0").packages.${system}.default;
+```
+If flakes is not enabled or your nix version does not support
+`builtins.getFlake`, you can instead use:
+```nix
+(import (pkgs.fetchFromGitHub {
+  owner = "jrpotter";
+  repo = "bootstrap";
+  ref = "v0.1.0";
+  sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
+})).packages.${system}.default;
+```
+
+### Source
+
+If you do not have Nix or prefer building from source, clone this repository and
+run
+```bash
+$> make BUILD=release
+```
+The `bootstrap` binary will be made available in `dist/release` by default.
+Keep in mind, there is no default `BOOTSTRAP_ROOT_DIR` environment variable
+value set in this case so either set this to the path of some `specs` directory
+or always use the `-d` flag when running `bootstrap`.
+
 ## Usage
-
-### Installation
-
-TODO
 
 ### Runners
 
