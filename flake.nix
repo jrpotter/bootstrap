@@ -19,20 +19,20 @@
       in
       {
         packages = {
-          bootstrap = pkgs.stdenv.mkDerivation {
+          release = pkgs.stdenv.mkDerivation {
             pname = "bootstrap";
             src = ./.;
             version = "0.1.0";
-            nativeBuildInputs = with pkgs; [
-              clang
-            ];
-
-            buildPhase = ''
-              make release
-            '';
+            makeFlags = [ "BUILD=release" "PREFIX=$(out)" ];
+            dontInstall = true;
           };
 
-          default = self.packages.${system}.bootstrap;
+          default = pkgs.writeShellScriptBin "bootstrap" ''
+            if [ -z "$BOOTSTRAP_ROOT_DIR" ]; then
+              export BOOTSTRAP_ROOT_DIR="${./specs}"
+            fi
+            exec ${self.packages.${system}.release}/bootstrap "$@"
+          '';
         };
         devShells.default = pkgs.mkShell.override {
           # https://nixos.wiki/wiki/Using_Clang_instead_of_GCC
