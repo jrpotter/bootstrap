@@ -8,6 +8,9 @@ build: include/*.h src/*.c
 bear: include/*.h src/*.c
 	@bear -- ${BUILD}
 
+docs:
+	doxygen
+
 test: test/test
 	$^
 

@@ -113,10 +113,11 @@ field and writes the prompt `"Prompt for field> "` to `stdout`. Since
 `"fieldname"` has type `"text"`, `bootstrap` will wait for the user to input
 a string (submitted with a newline).
 
-If the user were to enter, say `fieldvalue`, in response to the prompt,
-the `runner` script would then have access to an environment variable
-`FIELDNAME` set to `fieldvalue` on launch. Field names should consist of
-alphanumeric characters or underscores, and may not start with a digit.
+If the user were to enter `fieldvalue` in response to the prompt, the `runner`
+script would then have access to an environment variable `FIELDNAME` set to
+`fieldvalue`. Field names should respect the [POSIX standard](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html)
+on environment variable naming. In particular, all field names consist solely
+of alphanumeric characters or underscores and cannot start with a digit.
 
 #### Types
 
@@ -169,20 +170,29 @@ this.
 
 ## Development
 
-TODO
+Keep in mind this tool was originally written for personal usage and as such,
+any functionality (or lack thereof) reflects my own needs as I have come across
+them.
 
 ### Documentation
 
-TODO
+We use [doxygen](https://www.doxygen.nl/index.html) for documentation
+generation. Run either of the following two commands to generate documentation
+locally:
+```bash
+$> make docs
+$> doxygen
+```
 
 ### Formatting
 
-A `pre-commit` file is included in `.githooks` to ensure consistent formatting.
-Run the following to configure `git` to use it:
+We use `clang-format` to ensure consistent formatting. A `pre-commit` file is
+included in `.githooks` to enforce usage. Run the following to configure `git`
+to use it:
 
 ```bash
 git config --local core.hooksPath .githooks/
 ```
 
-If running [direnv](https://direnv.net/), this is done automatically if `git` is
-installed.
+If running [direnv](https://direnv.net/), this is done automatically upon
+entering the project directory.
