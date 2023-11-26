@@ -4,27 +4,44 @@
 
 #include "string_utils.h"
 
-static struct Error *read_field(const cJSON *const field, struct Field **out) {
+static struct Error *read_field(
+  const struct Config *const config,
+  const cJSON *const field,
+  struct Field **out
+) {
   if (!cJSON_IsObject(field)) {
     return ERROR_NEW(
       ERROR_VALIDATOR_FIELD_NOT_OBJECT,
-      "Field \"",
-      field->string,
-      "\" is not a JSON object."
+      ANSI_RED("ERROR"),
+      ": Field ",
+      ANSI_PURPLE(field->string),
+      " in ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " is not a JSON object."
     );
   }
 
   if (isdigit(field->string[0])) {
     return ERROR_NEW(
       ERROR_VALIDATOR_FIELD_NAME_INVALID,
-      "Field names may not begin with a digit."
+      ANSI_RED("ERROR"),
+      ": Field ",
+      ANSI_PURPLE(field->string),
+      " in ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " may not begin with a digit."
     );
   } else {
     for (const char *c = field->string; *c; ++c) {
       if (*c != '_' && !isalnum(*c)) {
         return ERROR_NEW(
           ERROR_VALIDATOR_FIELD_NAME_INVALID,
-          "Field names must consist of alphanumeric characters or underscores."
+          ANSI_RED("ERROR"),
+          ": Field ",
+          ANSI_PURPLE(field->string),
+          " in ",
+          ANSI_BLUE(config->target, "/spec.json"),
+          " must consist of only alphanumeric characters and underscores."
         );
       }
     }
@@ -38,9 +55,14 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
   if (!cJSON_IsString(type)) {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_INVALID,
-      "Field \"",
-      field->string,
-      "\" has non-string \"type\"."
+      ANSI_RED("ERROR"),
+      ": Field ",
+      ANSI_PURPLE(field->string),
+      " in ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " has non-string ",
+      ANSI_PURPLE("type"),
+      "."
     );
     goto cleanup;
   }
@@ -50,9 +72,14 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,
-      "Field \"",
-      field->string,
-      "\" has unknown \"type\"."
+      ANSI_RED("ERROR"),
+      ": Field ",
+      ANSI_PURPLE(field->string),
+      " in ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " has unknown ",
+      ANSI_PURPLE("type"),
+      "."
     );
     goto cleanup;
   }
@@ -63,9 +90,14 @@ static struct Error *read_field(const cJSON *const field, struct Field **out) {
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_PROMPT_INVALID,
-      "Field \"",
-      field->string,
-      "\" has non-string \"prompt\"."
+      ANSI_RED("ERROR"),
+      ": Field ",
+      ANSI_PURPLE(field->string),
+      " in ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " has non-string ",
+      ANSI_PURPLE("prompt"),
+      "."
     );
     goto cleanup;
   }
@@ -78,7 +110,9 @@ cleanup:
 }
 
 struct Error *validate_spec_json(
-  const cJSON *const parsed, struct DynArray **fields
+  const struct Config *const config,
+  const cJSON *const parsed,
+  struct DynArray **fields
 ) {
   *fields = 0;
 
@@ -90,7 +124,10 @@ struct Error *validate_spec_json(
   if (!cJSON_IsObject(parsed)) {
     return ERROR_NEW(
       ERROR_VALIDATOR_TOP_LEVEL_NOT_OBJECT,
-      "Top-level JSON value in spec.json is not an object."
+      ANSI_RED("ERROR"),
+      ": Top-level JSON value in ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " is not an object."
     );
   }
 
@@ -102,7 +139,7 @@ struct Error *validate_spec_json(
   cJSON *child = parsed->child;
   while (child) {
     struct Field *field = 0;
-    error = read_field(child, &field);
+    error = read_field(config, child, &field);
     if (error) {
       goto cleanup;
     }

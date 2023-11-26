@@ -17,11 +17,19 @@ struct Error *config_new(
   assert(target);
 
   if (cwd == 0) {
-    return ERROR_NEW(ERROR_CONFIG_ENV_CWD_INVALID, "Could not retrieve $CWD.");
+    return ERROR_NEW(
+      ERROR_CONFIG_ENV_CWD_INVALID,
+      ANSI_RED("ERROR"),
+      ": Could not retrieve ",
+      ANSI_CYAN("CWD"),
+      "."
+    );
   }
   if (root_dir == 0) {
     return ERROR_NEW(
-      ERROR_CONFIG_ENV_ROOT_DIR_INVALID, "No specified root directory."
+      ERROR_CONFIG_ENV_ROOT_DIR_INVALID,
+      ANSI_RED("ERROR"),
+      ": Could not find root directory."
     );
   }
 
@@ -35,18 +43,30 @@ struct Error *config_new(
   if (stat_res == -1) {
     if (errno == ENOENT) {
       error = ERROR_NEW(
-        ERROR_CONFIG_TARGET_NOT_FOUND, "Spec ", filepath, " not found."
+        ERROR_CONFIG_TARGET_NOT_FOUND,
+        ANSI_RED("ERROR"),
+        ": Could not find ",
+        ANSI_BLUE(target),
+        " spec."
       );
     } else {
       error = ERROR_NEW(
-        ERROR_CONFIG_TARGET_INVALID, "Spec ", filepath, " is invalid."
+        ERROR_CONFIG_TARGET_INVALID,
+        ANSI_RED("ERROR"),
+        ": ",
+        ANSI_BLUE(target),
+        " is invalid."
       );
     }
     goto cleanup;
   }
   if (!S_ISDIR(sb.st_mode)) {
     error = ERROR_NEW(
-      ERROR_CONFIG_TARGET_NOT_DIR, "Spec ", filepath, " is not a directory."
+      ERROR_CONFIG_TARGET_NOT_DIR,
+      ANSI_RED("ERROR"),
+      ": ",
+      ANSI_CYAN(filepath),
+      " is not a directory."
     );
     goto cleanup;
   }

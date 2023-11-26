@@ -2,10 +2,6 @@
 
 CLI utility for defining custom project initialization scripts.
 
-TODO:
-- [ ] Add evaluator tests.
-- [ ] Color output to console.
-
 ## Overview
 
 `bootstrap` is a tool for quickly defining your own init-like scripts. If you

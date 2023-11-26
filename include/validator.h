@@ -6,6 +6,7 @@
 #define _BOOTSTRAP_VALIDATOR_H
 
 #include "cJSON.h"
+#include "config.h"
 #include "dyn_array.h"
 #include "error.h"
 
@@ -52,6 +53,8 @@ struct Field {
 /**
 @brief Verify the `spec.json` file is formatted correctly.
 
+@param config
+ A reference to the parameters describing the desired spec.
 @param parsed
  A possible null pointer to the parsed `spec.json` file. If null, this method
  simply sets *fields to a null pointer.
@@ -62,7 +65,9 @@ struct Field {
  A null pointer if no error occurs. Otherwise an @ref Error pointer.
 */
 struct Error *validate_spec_json(
-  const cJSON *const parsed, struct DynArray **fields
+  const struct Config *const config,
+  const cJSON *const parsed,
+  struct DynArray **fields
 );
 
 #endif /* _BOOTSTRAP_VALIDATOR_H */

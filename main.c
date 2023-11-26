@@ -33,7 +33,7 @@ static int run(const char *root_dir, const char *target) {
   }
 
   struct DynArray *prompts = 0;
-  if ((error = validate_spec_json(parsed, &prompts))) {
+  if ((error = validate_spec_json(config, parsed, &prompts))) {
     fprintf(stderr, "%s", error->message);
     goto cleanup_parsed;
   }

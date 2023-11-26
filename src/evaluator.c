@@ -23,17 +23,20 @@ static struct Error *find_run_exec(const struct Config *const config) {
   if (stat_res == -1 && errno == ENOENT) {
     return ERROR_NEW(
       ERROR_EVALUATOR_RUNNER_NOT_FOUND,
-      "Could not find ",
-      config->target,
-      "/runner"
+      ANSI_RED("NOT_FOUND"),
+      ": Could not find ",
+      ANSI_BLUE(config->target, "/runner"),
+      "."
     );
   }
 
   if (!(sb.st_mode & S_IXUSR)) {
     return ERROR_NEW(
       ERROR_EVALUATOR_RUNNER_NOT_EXEC,
-      config->target,
-      "/runner is not executable."
+      ANSI_RED("ERROR"),
+      ": ",
+      ANSI_BLUE(config->target, "/runner"),
+      " is not executable."
     );
   }
 
@@ -42,20 +45,21 @@ static struct Error *find_run_exec(const struct Config *const config) {
 
 static const char *prompt_field(struct Field *field) {
   assert(field);
+  printf("%s", field->prompt);
+
+  char *response = calloc(1, 1024);
 
   switch (field->type) {
   case FT_TEXT:
-    printf("%s", field->prompt);
     // TODO: Probably want this buffer size to be a bit more dynamic.
-    char *input = calloc(1, 1024);
-    if (fgets(input, 1024, stdin)) {
-      size_t len = strlen(input);
-      if (len > 0 && input[len - 1] == '\n') {
-        input[len - 1] = '\0';
+    if (fgets(response, 1024, stdin)) {
+      size_t len = strlen(response);
+      if (len > 0 && response[len - 1] == '\n') {
+        response[len - 1] = '\0';
       }
-      return input;
+      return response;
     } else {
-      free(input);
+      free(response);
       return 0;
     }
   }
@@ -92,7 +96,9 @@ int evaluate_runner(
       const char *response = prompt_field(field);
       if (!response) {
         *error = ERROR_NEW(
-          ERROR_EVALUATOR_RESPONSE_INVALID, "Could not read in response."
+          ERROR_EVALUATOR_RESPONSE_INVALID,
+          ANSI_RED("ERROR"),
+          ": Could not read response."
         );
         string_buf_free(env_buf);
         return EXIT_FAILURE;

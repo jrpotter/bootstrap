@@ -19,7 +19,11 @@ static struct Error *find_spec_json(
   *handle = fopen(filepath, "r");
   if (!*handle && errno != ENOENT) {
     error = ERROR_NEW(
-      ERROR_PARSER_SPEC_JSON_INVALID, config->target, "/spec.json is invalid."
+      ERROR_PARSER_SPEC_JSON_INVALID,
+      ANSI_RED("ERROR"),
+      ": ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " is invalid."
     );
   }
 
@@ -60,7 +64,10 @@ struct Error *parse_spec_json(
   if (!*parsed) {
     return ERROR_NEW(
       ERROR_PARSER_SPEC_JSON_INVALID_SYNTAX,
-      "The spec.json file contains invalid JSON."
+      ANSI_RED("ERROR"),
+      ": ",
+      ANSI_BLUE(config->target, "/spec.json"),
+      " contains invalid JSON."
     );
   }
 
