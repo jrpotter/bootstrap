@@ -5,7 +5,7 @@ the [clang](https://clang.llvm.org/) (version 16.0.6) toolchain. [direnv](https:
 can be used to launch a dev shell upon entering this directory (refer to
 `.envrc`). Otherwise run via:
 ```bash
-nix develop
+$> nix develop
 ```
 
 ## Language Server
