@@ -1,9 +1,9 @@
 {
   description = ''
-  An opinionated mix flake.
+    An opinionated mix flake.
 
-  To generate a copy of this template elsewhere, run:
-  > nix flake init -t github:jrpotter/flake-templates#mix
+    To generate a copy of this template elsewhere, run:
+    > bootstrap mix
   '';
 
   inputs = {
