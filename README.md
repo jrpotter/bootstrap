@@ -57,7 +57,7 @@ It is recommended you use Nix to install `bootstrap`. If using a flake, specify
 `bootstrap` as an `inputs` attribute the normal way. Otherwise, if you have a
 new enough version of nix, import the executable like so:
 ```nix
-(builtins.getFlake "github:jrpotter/bootstrap/v0.1.0").packages.${system}.default;
+(builtins.getFlake "github:jrpotter/bootstrap/${version}").packages.${system}.default;
 ```
 If flakes is not enabled or your nix version does not support
 `builtins.getFlake`, you can instead use:
@@ -65,8 +65,8 @@ If flakes is not enabled or your nix version does not support
 (import (pkgs.fetchFromGitHub {
   owner = "jrpotter";
   repo = "bootstrap";
-  ref = "v0.1.0";
-  sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
+  rev = "${version}";
+  sha256 = "${sha256}";
 })).packages.${system}.default;
 ```
 
