@@ -170,13 +170,20 @@ this.
 
 ## Development
 
-Keep in mind this tool was originally written for personal usage and as such,
-any functionality (or lack thereof) reflects my own needs as I have come across
-them.
+This tool was originally written for personal usage and, as such, any
+functionality (or lack thereof) reflects my own needs as I have come across
+them. If interested in adding more capabilities, please send a PR or just fork
+the project for your own purposes.
 
 ### Testing
 
-TODO
+We use [Sput](https://www.use-strict.de/sput-unit-testing/) for unit tests. To
+run tests, type:
+```bash
+$> make test
+```
+Tests are located in the `test` directory. `test/suites.c` serves as the
+entrypoint for the test runner.
 
 ### Documentation
 
