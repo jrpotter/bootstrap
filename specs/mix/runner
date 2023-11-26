@@ -2,5 +2,4 @@
 
 cp -r template/. "$OUT"
 
-nix develop "$OUT"
-mix new "$OUT" --app "$APP"
+nix develop "$OUT" --command bash -c "yes | mix new $OUT --app '$APP'"
