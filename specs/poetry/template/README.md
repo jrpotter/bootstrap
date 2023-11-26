@@ -1,4 +1,4 @@
-# Poetry Flake Tempalte
+# Poetry Flake Template
 
 This is a template for constructing a working environment for Python (version
 3.11.6) development. Packaging and dependency management relies on [poetry](https://python-poetry.org/)
