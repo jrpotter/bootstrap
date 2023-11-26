@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+cp -r template/. "$OUT"
+
+# Generate a new project with the specified name using `mix`. Pipe in `yes`
+# since `mix` requires confirmation when writing out to a directory that already
+# has content.
+nix develop "$OUT" --command bash -c "yes | mix new $OUT --app '$APP'"
+
+# Replace the template name of the flake.nix file with the new app name. The
+# mix generator would fail if `$APP` does not consist of just lowercase ASCII
+# letters, numbers, or underscores. Thus the following command is safe.
+sed -i "s/<APP_NAME>/$APP/g" "$OUT/flake.nix"
