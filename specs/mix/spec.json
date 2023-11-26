@@ -1,6 +1,6 @@
 {
   "app": {
     "type": "text",
-    "prompt": "Name> "
+    "prompt": "App Name> "
   }
 }
