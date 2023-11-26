@@ -174,6 +174,10 @@ Keep in mind this tool was originally written for personal usage and as such,
 any functionality (or lack thereof) reflects my own needs as I have come across
 them.
 
+### Testing
+
+TODO
+
 ### Documentation
 
 We use [doxygen](https://www.doxygen.nl/index.html) for documentation

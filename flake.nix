@@ -18,6 +18,22 @@
         '';
       in
       {
+        packages = {
+          bootstrap = pkgs.stdenv.mkDerivation {
+            pname = "bootstrap";
+            src = ./.;
+            version = "0.1.0";
+            nativeBuildInputs = with pkgs; [
+              clang
+            ];
+
+            buildPhase = ''
+              make release
+            '';
+          };
+
+          default = self.packages.${system}.bootstrap;
+        };
         devShells.default = pkgs.mkShell.override {
           # https://nixos.wiki/wiki/Using_Clang_instead_of_GCC
           stdenv = pkgs.clangStdenv;
@@ -27,9 +43,6 @@
             clang-tools
             codelldb
             doxygen
-          ];
-          buildInputs = with pkgs; [
-            ncurses
           ];
           shellHook = ''
             export BOOTSTRAP_ROOT_DIR="${./specs}"

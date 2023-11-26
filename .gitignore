@@ -2,5 +2,5 @@
 .direnv/
 bootstrap
 compile_commands.json
+dist/
 docs/
-test/test
