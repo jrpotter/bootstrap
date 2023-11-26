@@ -32,27 +32,27 @@
       in
       {
         packages = {
-          tmpl-lib = buildMix {
-            name = "tmpl";
+          lib = buildMix {
+            name = "<APP_NAME>";
             src = ./.;
-            version = "0.0.0";
+            version = "0.1.0";
             beamDeps = builtins.attrValues deps;
           };
 
-          tmpl-app = mixRelease {
-            pname = "tmpl";
+          app = mixRelease {
+            pname = "<APP_NAME>";
             src = ./.;
-            version = "0.0.0";
+            version = "0.1.0";
             mixNixDeps = deps;
           };
 
-          default = self.packages.${system}.tmpl-lib;
+          default = self.packages.${system}.lib;
         };
 
         devShells.default = pkgs.mkShell {
           inputsFrom = [
-            self.packages.${system}.tmpl-app
-            self.packages.${system}.tmpl-lib
+            self.packages.${system}.app
+            self.packages.${system}.lib
           ];
           packages = [
             elixir
