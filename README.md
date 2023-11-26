@@ -78,9 +78,6 @@ run
 $> make BUILD=release
 ```
 The `bootstrap` binary will be made available in `dist/release` by default.
-Keep in mind, there is no default `BOOTSTRAP_ROOT_DIR` environment variable
-value set in this case so either set this to the path of some `specs` directory
-or always use the `-d` flag when running `bootstrap`.
 
 ## Usage
 
@@ -190,8 +187,8 @@ values:
 A number of specs are provided out of the box. If you installed `bootstrap`
 using `nix`, the `BOOTSTRAP_ROOT_DIR` will automatically be set to the location
 of these [specs](./specs). Keep in mind this list is very opinionated - they
-reflect my personal needs for projects. Feel free to specify a different specs
-root directory if these do not fit your needs.
+reflect my personal needs for projects. Feel free to specify a different root
+directory if these do not fit your needs.
 
 As a suggestion, use `nix` from within your `runner` scripts for maximum
 reproducibility. Refer to the provided specs for inspiration on how you can do
