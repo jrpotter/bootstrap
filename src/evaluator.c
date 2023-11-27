@@ -50,7 +50,7 @@ static const char *prompt_field(struct Field *field) {
   char *response = calloc(1, 1024);
 
   switch (field->type) {
-  case FT_TEXT:
+  case FT_LINE:
     // TODO: Probably want this buffer size to be a bit more dynamic.
     if (fgets(response, 1024, stdin)) {
       size_t len = strlen(response);

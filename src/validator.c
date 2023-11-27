@@ -67,8 +67,8 @@ static struct Error *read_field(
     goto cleanup;
   }
 
-  if (strcmp_ci(type->valuestring, "text") == 0) {
-    (*out)->type = FT_TEXT;
+  if (strcmp_ci(type->valuestring, "line") == 0) {
+    (*out)->type = FT_LINE;
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,

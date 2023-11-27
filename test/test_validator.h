@@ -73,7 +73,7 @@ static void test_validator_field_name_leading_digit() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"1abc\": {"
-    "    \"type\": \"text\""
+    "    \"type\": \"line\""
     "  }"
     "}"
   );
@@ -93,7 +93,7 @@ static void test_validator_field_name_non_alnum() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"a~bc\": {"
-    "    \"type\": \"text\""
+    "    \"type\": \"line\""
     "  }"
     "}"
   );
@@ -150,7 +150,7 @@ static void test_validator_valid_type_ci() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"
-    "    \"type\": \"tExT\","
+    "    \"type\": \"LiNe\","
     "    \"prompt\": \"What value for key?\""
     "  }"
     "}"
@@ -167,7 +167,7 @@ static void test_validator_field_prompt_invalid() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"
-    "    \"type\": \"text\","
+    "    \"type\": \"line\","
     "    \"prompt\": 2"
     "  }"
     "}"
@@ -187,7 +187,7 @@ static void test_validator_valid() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"
-    "    \"type\": \"text\","
+    "    \"type\": \"line\","
     "    \"prompt\": \"What value for key?\""
     "  }"
     "}"

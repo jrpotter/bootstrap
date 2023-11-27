@@ -24,7 +24,7 @@ We start with an example. Consider the following *spec*, which we'll name
 ```json
 {
   "filename": {
-    "type": "text",
+    "type": "line",
     "prompt": "What file should I create for you? "
   }
 }
@@ -128,7 +128,7 @@ child objects called *fields*. A typical `spec.json` file looks like:
 ```json
 {
   "fieldname": {
-    "type": "text",
+    "type": "line",
     "prompt": "Prompt for field> "
   },
   ...
@@ -136,7 +136,7 @@ child objects called *fields*. A typical `spec.json` file looks like:
 ```
 In this example, the first field is called `"fieldname"`. `bootstrap` sees this
 field and writes the prompt `"Prompt for field> "` to `stdout`. Since
-`"fieldname"` has type `"text"`, `bootstrap` will wait for the user to input
+`"fieldname"` has type `"line"`, `bootstrap` will wait for the user to input
 a string (submitted with a newline).
 
 If the user were to enter `fieldvalue` in response to the prompt, the `runner`
@@ -150,7 +150,7 @@ of alphanumeric characters or underscores and cannot start with a digit.
 The value of `type` determines how a field is prompted for. Note the value of
 `type` is case insenstive. The currently supported list of types are:
 
-* `text`
+* `line`
   * The simplest prompt type. Takes in a free-form response submitted after a
     newline (`\n`) is encountered.
 

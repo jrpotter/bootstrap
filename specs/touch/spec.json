@@ -1,6 +1,6 @@
 {
   "filename": {
-    "type": "text",
+    "type": "line",
     "prompt": "What file should I create for you? "
   }
 }
