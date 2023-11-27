@@ -46,10 +46,9 @@ cp -r template/* "$BUILD"
 # subdirectory to avoid interaction and potential overwriting of files.
 nix develop "$BUILD" --command bash -c "mix new $BUILD/project --app '$APP'"
 
-# Can now copy over all the generated files into the intermediate build
-# directory. Also overwrite the generated README in favor of that already in
-# our template.
-mv "$BUILD"/project/* "$BUILD"
+# Copy the generated files into the intermediate build directory. Also overwrite
+# the generated README in favor of that defined in our template.
+mv -f "$BUILD"/project/* "$BUILD"
 rmdir "$BUILD"/project
 cp template/README.md "$BUILD"
 
