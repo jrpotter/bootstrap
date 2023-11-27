@@ -1,13 +1,37 @@
 #!/usr/bin/env bash
+set -e
 
-cp -r template/. "$OUT"
+# Create a new intermediate, guaranteed unique, build directory. The final step
+# of this script will copy all the content from this directory to $OUT.
+mkdir -p "/tmp/bootstrap-mix"
+TMPOUT=$(mktemp -d -p "/tmp/bootstrap-mix")
+
+if [ -z "$TMPOUT" ]; then
+  >&2 echo "Failed to create temp directory"
+  exit 1
+fi
+
+function cleanup {
+  # Use basename with an explicit path prefix to ensure we never evaluate to `/`.
+  # Here we already verify `$TMPOUT` isn't empty prior to registering this
+  # cleanup function, but this is nonetheless a good habit to establish.
+  rm -r "/tmp/bootstrap-mix/$(basename "$TMPOUT")"
+}
+
+trap cleanup EXIT
+
+# Begin copying content over to our new directory.
+cp -r template/. "$TMPOUT"
 
 # Generate a new project with the specified name using `mix`. Pipe in `yes`
 # since `mix` requires confirmation when writing out to a directory that already
 # has content.
-nix develop "$OUT" --command bash -c "yes | mix new $OUT --app '$APP'"
+nix develop "$TMPOUT" --command bash -c "yes | mix new $TMPOUT --app '$APP'"
 
 # Replace the template name of the flake.nix file with the new app name. The
 # mix generator would fail if `$APP` does not consist of just lowercase ASCII
 # letters, numbers, or underscores. Thus the following command is safe.
-sed -i "s/<APP_NAME>/$APP/g" "$OUT/flake.nix"
+sed -i "s/<APP_NAME>/$APP/g" "$TMPOUT/flake.nix"
+
+# Everything succeeded. Copy contents over.
+cp -r "$TMPOUT/." "$OUT"
