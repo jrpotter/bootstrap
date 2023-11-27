@@ -8,6 +8,6 @@ filesToFormat=$(
 
 for path in $filesToFormat
 do
-  black --quiet $path
-  git add $path
+  black --quiet "$path"
+  git add "$path"
 done;
