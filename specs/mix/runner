@@ -1,37 +1,70 @@
 #!/usr/bin/env bash
+
+# Exit immediately if the script encounters a non-zero status.
 set -e
 
-# Create a new intermediate, guaranteed unique, build directory. The final step
-# of this script will copy all the content from this directory to $OUT.
-mkdir -p "/tmp/bootstrap-mix"
-TMPOUT=$(mktemp -d -p "/tmp/bootstrap-mix")
+# If set, Bash includes filenames beginning with a `.` in the results of
+# filename expansion. The filenames `.` and `..` must always be matched
+# explicitly, even if dotglob is set.
+shopt -s dotglob
 
-if [ -z "$TMPOUT" ]; then
-  >&2 echo "Failed to create temp directory"
+# ============================================================
+# PROLOGUE
+# ============================================================
+
+# Create a new top-level directory as fallback in case $BUILD (defined below)
+# is ever empty.
+mkdir -p "/tmp/bs.mix"
+
+# Create an intermediate build directory. The final step of this script will
+# copy the content from this directory to $OUT.
+BUILD=$(mktemp -d -p "/tmp/bs.mix")
+
+if [ -z "$BUILD" ]; then
+  >&2 echo "Failed to create temp directory."
   exit 1
 fi
 
+# Deletes the intermediate build directory on exit. We use a concatenation of
+# the intermediate directory with the basename of the generated temp directory
+# to ensure we never evaluate to root (i.e. `/`). That should never actually
+# happen but a good habit to establish nonetheless.
 function cleanup {
-  # Use basename with an explicit path prefix to ensure we never evaluate to `/`.
-  # Here we already verify `$TMPOUT` isn't empty prior to registering this
-  # cleanup function, but this is nonetheless a good habit to establish.
-  rm -r "/tmp/bootstrap-mix/$(basename "$TMPOUT")"
+  rm -r "/tmp/bs.mix/$(basename "$BUILD")"
 }
 
 trap cleanup EXIT
 
-# Begin copying content over to our new directory.
-cp -r template/. "$TMPOUT"
+# ============================================================
+# BUILD
+# ============================================================
 
-# Generate a new project with the specified name using `mix`. Pipe in `yes`
-# since `mix` requires confirmation when writing out to a directory that already
-# has content.
-nix develop "$TMPOUT" --command bash -c "yes | mix new $TMPOUT --app '$APP'"
+# Copy template contents over to the intermediate build directory.
+cp -r template/* "$BUILD"
 
-# Replace the template name of the flake.nix file with the new app name. The
-# mix generator would fail if `$APP` does not consist of just lowercase ASCII
-# letters, numbers, or underscores. Thus the following command is safe.
-sed -i "s/<APP_NAME>/$APP/g" "$TMPOUT/flake.nix"
+# Generate a new project with the specified name using `mix`. Generate in a
+# subdirectory to avoid interaction and potential overwriting of files.
+nix develop "$BUILD" --command bash -c "mix new $BUILD/project --app '$APP'"
 
-# Everything succeeded. Copy contents over.
-cp -r "$TMPOUT/." "$OUT"
+# Can now copy over all the generated files into the intermediate build
+# directory. Also overwrite the generated README in favor of that already in
+# our template.
+mv "$BUILD"/project/* "$BUILD"
+rmdir "$BUILD"/project
+cp template/README.md "$BUILD"
+
+# Replace the template name found in the flake.nix file. The mix generator would
+# fail if $APP did not consist of just lowercase ASCII letters, numbers, or
+# underscores. Thus $APP is safe to interpolate into the following command.
+sed -i "s/<APP_NAME>/$APP/g" "$BUILD/flake.nix"
+
+# Explicitly set permissions on all the new files.
+find "$BUILD" -type f -execdir chmod 644 {} +
+find "$BUILD" -type d -execdir chmod 755 {} +
+
+# ============================================================
+# EPILOGUE
+# ============================================================
+
+# Success! Copy contents to target directory.
+cp -r "$BUILD"/* "$OUT"
