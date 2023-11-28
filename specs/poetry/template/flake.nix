@@ -67,6 +67,12 @@
           app = mkPoetryApplication {
             projectDir = ./.;
             overrides = poetry2nix-overrides;
+            # Use wheels rather than sdist as much as possible
+            # preferWheels = true;
+          } // {
+            # These attributes are passed to `buildPythonApplication`.
+            pname = "app";
+            version = "0.1.0";
           };
 
           default = self.packages.${system}.app;
