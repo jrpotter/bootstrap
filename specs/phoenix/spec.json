@@ -1,0 +1,6 @@
+{
+  "app": {
+    "type": "line",
+    "prompt": "App Name> "
+  }
+}

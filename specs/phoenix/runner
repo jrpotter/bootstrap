@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+# Exit immediately if the script encounters a non-zero status.
+set -e
+
+# If set, Bash includes filenames beginning with a `.` in the results of
+# filename expansion. The filenames `.` and `..` must always be matched
+# explicitly, even if dotglob is set.
+shopt -s dotglob
+
+# ============================================================
+# PROLOGUE
+# ============================================================
+
+# Create a new top-level directory as fallback in case $BUILD (defined below)
+# is ever empty.
+mkdir -p "/tmp/bs.phoenix"
+
+# Create an intermediate build directory. The final step of this script will
+# copy the content from this directory to $OUT.
+BUILD=$(mktemp -d -p "/tmp/bs.phoenix")
+
+if [ -z "$BUILD" ]; then
+  >&2 echo "Failed to create temp directory."
+  exit 1
+fi
+
+# Deletes the intermediate build directory on exit. We use a concatenation of
+# the intermediate directory with the basename of the generated temp directory
+# to ensure we never evaluate to root (i.e. `/`). That should never actually
+# happen but a good habit to establish nonetheless.
+function cleanup {
+  rm -r "/tmp/bs.phoenix/$(basename "$BUILD")"
+}
+
+trap cleanup EXIT
+
+# ============================================================
+# BUILD
+# ============================================================
+
+# Copy template contents over to the intermediate build directory.
+cp -r template/* "$BUILD"
+
+# Explicitly set permissions on all copied files.
+find "$BUILD" -type f -execdir chmod 644 {} +
+find "$BUILD" -type d -execdir chmod 755 {} +
+
+# Generate a new project with the specified name using `mix`. Generate in a
+# subdirectory to avoid interactive conflict resolution.
+nix develop "$BUILD" --command bash -c "mix phx.new $BUILD/project --app '$APP'"
+
+# Copy the generated files into the intermediate build directory.
+mv -f "$BUILD"/project/* "$BUILD"
+rmdir "$BUILD"/project
+
+# Overwrite the generated README in favor of that defined in our template.
+cp template/README.md "$BUILD"
+chmod 644 "$BUILD"/README.md
+
+# Replace the template name found in the flake.nix file. The mix generator would
+# fail if $APP did not consist of just lowercase ASCII letters, numbers, or
+# underscores. Thus $APP is safe to interpolate into the following command.
+sed -i "s/<APP_NAME>/$APP/g" "$BUILD/flake.nix"
+
+# By default Phoenix generates a postgres configuration with assumed username
+# `postgres`. This flake encourages a local postgres database with username
+# `$(whoami)`. Reflect this in the config.
+sed -i "s/username: \"postgres\"/username: \"$(whoami)\"/g" "$BUILD/config/dev.exs"
+
+# ============================================================
+# EPILOGUE
+# ============================================================
+
+# Success! Copy contents to target directory.
+cp -r "$BUILD"/* "$OUT"
