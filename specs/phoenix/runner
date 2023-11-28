@@ -75,6 +75,12 @@ nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/data"
 cat <<EOF >> "$BUILD"/.gitignore
 # The default location of the generated database cluster.
 /data/
+
+# Directory used by \`direnv\` to hold \`use flake\`-generated profiles.
+/.direnv/
+
+# A symlink produced by default when running \`nix build\`.
+/result
 EOF
 
 # ============================================================

@@ -13,7 +13,7 @@ $> nix develop
 An empty Postgres cluster is initialized at `/data`. To start the database, run
 the following:
 ```bash
-$> pg_ctl start -o --unix_socket_directories="$PGDATA"
+$> pg_ctl start -o --unix_socket_directories="$PWD/data"
 ```
 To shut the database down, run:
 ```bash
@@ -21,5 +21,5 @@ $> pg_ctl stop
 ```
 You can connect to this database from the project root directory by running:
 ```bash
-$> psql -h "$PWD"/data -d postgres
+$> psql -h "$PWD/data" -d postgres
 ```
