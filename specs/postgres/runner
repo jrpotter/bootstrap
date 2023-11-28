@@ -42,6 +42,9 @@ trap cleanup EXIT
 # Copy template contents over to the intermediate build directory.
 cp -r template/* "$BUILD"
 
+# Create a new database cluster.
+nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/data"
+
 # Explicitly set permissions on all copied files.
 find "$BUILD" -type f -execdir chmod 644 {} +
 
