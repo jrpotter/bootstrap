@@ -50,10 +50,6 @@
         };
 
         devShells.default = pkgs.mkShell {
-          inputsFrom = [
-            self.packages.${system}.app
-            self.packages.${system}.lib
-          ];
           packages = [
             elixir
             elixir-ls

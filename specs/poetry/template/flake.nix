@@ -73,7 +73,6 @@
         };
 
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ self.packages.${system}.app ];
           packages = [
             pkgs.poetry
           ] ++ (with pkgs.python311Packages; [
