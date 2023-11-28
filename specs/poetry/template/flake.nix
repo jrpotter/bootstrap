@@ -64,21 +64,23 @@
       in
       {
         packages = {
-          tmpl-app = mkPoetryApplication {
+          app = mkPoetryApplication {
             projectDir = ./.;
             overrides = poetry2nix-overrides;
           };
-          default = self.packages.${system}.tmpl-app;
+
+          default = self.packages.${system}.app;
         };
 
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ self.packages.${system}.tmpl-app ];
+          inputsFrom = [ self.packages.${system}.app ];
           packages = [
             pkgs.poetry
           ] ++ (with pkgs.python311Packages; [
             black
             debugpy
             mccabe
+            mypy
             pycodestyle
             pyflakes
             python-lsp-black
