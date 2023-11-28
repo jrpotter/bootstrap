@@ -42,7 +42,7 @@ trap cleanup EXIT
 # Copy template contents over to the intermediate build directory.
 cp -r template/* "$BUILD"
 
-# Explicitly set permissions on all the new files.
+# Explicitly set permissions on all copied files.
 find "$BUILD" -type f -execdir chmod 644 {} +
 find "$BUILD" -type d -execdir chmod 755 {} +
 chmod 755 "$BUILD"/.githooks/pre-commit
