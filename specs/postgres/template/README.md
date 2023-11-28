@@ -12,16 +12,16 @@ $> nix develop
 
 To begin, create a new database:
 ```bash
-pg_ctl initdb
+$> pg_ctl initdb
 ```
 If the flake's default `devShell` is loaded, this will create a database cluster
 at `$PWD/data`. To start the database, run the following:
 ```bash
-pg_ctl start -o --unix_socket_directories="$PGDATA"
+$> pg_ctl start -o --unix_socket_directories="$PGDATA"
 ```
 To shut the database down, run:
 ```bash
-pg_ctl stop
+$> pg_ctl stop
 ```
 You can also specify a different location for the database cluster using the
 `-D` option in each of the above commands.
