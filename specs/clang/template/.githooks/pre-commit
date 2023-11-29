@@ -10,4 +10,4 @@ for path in $filesToFormat
 do
   clang-format -i "$path"
   git add "$path"
-done;
+done

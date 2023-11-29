@@ -3,11 +3,11 @@ set -e
 
 filesToFormat=$(
   git --no-pager diff --name-status --no-color --cached | \
-    awk '$1 != "D" && $2 ~ /\.py$/ {print $NF}'
+    awk '$1 != "D" && $2 ~ /\.exs?$/ {print $NF}'
 )
 
 for path in $filesToFormat
 do
-  black --quiet "$path"
+  mix format "$path"
   git add "$path"
 done
