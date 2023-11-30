@@ -2,5 +2,9 @@
   "app": {
     "type": "line",
     "prompt": "App Name> "
+  },
+  "module": {
+    "type": "line",
+    "prompt": "Module (optional)> "
   }
 }

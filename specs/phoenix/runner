@@ -36,6 +36,18 @@ function cleanup {
 trap cleanup EXIT
 
 # ============================================================
+# ENVIRONMENT
+# ============================================================
+
+# Trims away any whitespace around the module name.
+MODULE=$(echo "$MODULE" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+if [ -z "$MODULE" ]; then
+  MODULE_ARG=
+else
+  MODULE_ARG="--module '$MODULE'"
+fi
+
+# ============================================================
 # BUILD
 # ============================================================
 
@@ -48,7 +60,9 @@ find "$BUILD" -type d -execdir chmod 755 {} +
 
 # Generate a new project with the specified name using `mix`. Generate in a
 # subdirectory to avoid interactive conflict resolution.
-nix develop "$BUILD" --command bash -c "mix phx.new $BUILD/project --app '$APP'"
+nix develop "$BUILD" \
+  --command bash \
+  -c "mix phx.new $BUILD/project --app '$APP' $MODULE_ARG"
 
 # Copy the generated files into the intermediate build directory.
 mv -f "$BUILD"/project/* "$BUILD"
