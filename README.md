@@ -153,9 +153,8 @@ The value of `type` determines how a field is prompted for. Note the value of
 
 * `line`
   * The simplest prompt type. Takes in a free-form response submitted after
-    encountering a newline (`\n`).
-  * The resulting environment variable has leading and trailing whitespace
-    trimmed.
+    encountering a newline (`\n`). The resulting environment variable has
+    leading and trailing whitespace trimmed.
   * If `required`, whitespace-only strings are re-prompted.
 
 #### Options
@@ -163,8 +162,7 @@ The value of `type` determines how a field is prompted for. Note the value of
 Additional options can be included in a field definition.
 
 * `required`
-  * A value must be specified. How this option is interpreted is depended on
-    `type`.
+  * A value must be specified. How this option is interpreted depends on `type`.
   * Defaults to `true`.
 
 #### Root Directory
