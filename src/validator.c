@@ -2,6 +2,7 @@
 
 #include <ctype.h>
 
+#include "console.h"
 #include "string_utils.h"
 
 static struct Error *read_field(
@@ -12,11 +13,11 @@ static struct Error *read_field(
   if (!cJSON_IsObject(field)) {
     return ERROR_NEW(
       ERROR_VALIDATOR_FIELD_NOT_OBJECT,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Field ",
-      ANSI_PURPLE(field->string),
+      ANSI_PURPLE_F(field->string),
       " in ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " is not a JSON object."
     );
   }
@@ -24,11 +25,11 @@ static struct Error *read_field(
   if (isdigit(field->string[0])) {
     return ERROR_NEW(
       ERROR_VALIDATOR_FIELD_NAME_INVALID,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Field ",
-      ANSI_PURPLE(field->string),
+      ANSI_PURPLE_F(field->string),
       " in ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " may not begin with a digit."
     );
   } else {
@@ -36,11 +37,11 @@ static struct Error *read_field(
       if (*c != '_' && !isalnum(*c)) {
         return ERROR_NEW(
           ERROR_VALIDATOR_FIELD_NAME_INVALID,
-          ANSI_RED("ERROR"),
+          ANSI_RED_F("ERROR"),
           ": Field ",
-          ANSI_PURPLE(field->string),
+          ANSI_PURPLE_F(field->string),
           " in ",
-          ANSI_BLUE(config->target, "/spec.json"),
+          ANSI_BLUE_F(config->target, "/spec.json"),
           " must consist of only alphanumeric characters and underscores."
         );
       }
@@ -55,13 +56,13 @@ static struct Error *read_field(
   if (!cJSON_IsString(type)) {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_INVALID,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Field ",
-      ANSI_PURPLE(field->string),
+      ANSI_PURPLE_F(field->string),
       " in ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " has non-string ",
-      ANSI_PURPLE("type"),
+      ANSI_PURPLE_F("type"),
       "."
     );
     goto cleanup;
@@ -72,13 +73,33 @@ static struct Error *read_field(
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Field ",
-      ANSI_PURPLE(field->string),
+      ANSI_PURPLE_F(field->string),
       " in ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " has unknown ",
-      ANSI_PURPLE("type"),
+      ANSI_PURPLE_F("type"),
+      "."
+    );
+    goto cleanup;
+  }
+
+  const cJSON *required = cJSON_GetObjectItemCaseSensitive(field, "required");
+  if (!required) {
+    (*out)->required = true;
+  } else if (cJSON_IsBool(required)) {
+    (*out)->required = required->valueint;
+  } else {
+    error = ERROR_NEW(
+      ERROR_VALIDATOR_FIELD_REQUIRED_INVALID,
+      ANSI_RED_F("ERROR"),
+      ": Field ",
+      ANSI_PURPLE_F(field->string),
+      " in ",
+      ANSI_BLUE_F(config->target, "/spec.json"),
+      " has non-boolean ",
+      ANSI_PURPLE_F("required"),
       "."
     );
     goto cleanup;
@@ -90,13 +111,13 @@ static struct Error *read_field(
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_PROMPT_INVALID,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Field ",
-      ANSI_PURPLE(field->string),
+      ANSI_PURPLE_F(field->string),
       " in ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " has non-string ",
-      ANSI_PURPLE("prompt"),
+      ANSI_PURPLE_F("prompt"),
       "."
     );
     goto cleanup;
@@ -124,9 +145,9 @@ struct Error *validate_spec_json(
   if (!cJSON_IsObject(parsed)) {
     return ERROR_NEW(
       ERROR_VALIDATOR_TOP_LEVEL_NOT_OBJECT,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Top-level JSON value in ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " is not an object."
     );
   }

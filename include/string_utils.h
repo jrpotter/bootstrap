@@ -42,4 +42,20 @@ This function operates like `strcmp` except comparison ignores case.
 */
 int strcmp_ci(const char *s1, const char *s2);
 
+/**
+Removes any leading whitespace characters from the string in-place.
+
+@param s
+ The string to trim the start of.
+*/
+void trim_leading(char *s);
+
+/**
+Removes any tailing whitespace characters from the string in-place.
+
+@param s
+ The string to trim the end of.
+*/
+void trim_trailing(char *s);
+
 #endif /* _BOOTSTRAP_STRING_UTILS_H */

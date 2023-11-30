@@ -75,7 +75,7 @@ of the internal array the necessary number of times to accommodate.
 void string_buf_sappend(struct StringBuf *sb, const char s[static 1]);
 
 /**
-@brief Converts a @ref StringBuf instance into a `char*`.
+@brief Casts a @ref StringBuf instance into a `char*`.
 
 This function frees the memory associated with @p sb.
 
@@ -85,7 +85,7 @@ This function frees the memory associated with @p sb.
  A null pointer if @p sb is null. Otherwise a NUL-terminated string
  corresponding to the value of @p sb. The caller takes ownership of this value.
 */
-const char *string_buf_convert(struct StringBuf *sb);
+const char *string_buf_cast(struct StringBuf *sb);
 
 /**
 @brief Deallocates a previously allocated @ref StringBuf instance.

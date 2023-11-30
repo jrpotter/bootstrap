@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "console.h"
 #include "string_utils.h"
 
 static struct Error *find_spec_json(
@@ -20,9 +21,9 @@ static struct Error *find_spec_json(
   if (!*handle && errno != ENOENT) {
     error = ERROR_NEW(
       ERROR_PARSER_SPEC_JSON_INVALID,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " is invalid."
     );
   }
@@ -64,9 +65,9 @@ struct Error *parse_spec_json(
   if (!*parsed) {
     return ERROR_NEW(
       ERROR_PARSER_SPEC_JSON_INVALID_SYNTAX,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": ",
-      ANSI_BLUE(config->target, "/spec.json"),
+      ANSI_BLUE_F(config->target, "/spec.json"),
       " contains invalid JSON."
     );
   }

@@ -1,10 +1,11 @@
 {
   "app": {
     "type": "line",
-    "prompt": "App Name> "
+    "prompt": "App> "
   },
   "module": {
     "type": "line",
-    "prompt": "Module (optional)> "
+    "required": false,
+    "prompt": "Module> "
   }
 }

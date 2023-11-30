@@ -4,10 +4,10 @@
 
 struct DynArray *dyn_array_new(size_t capacity) {
   struct DynArray *a = malloc(sizeof(struct DynArray));
-  size_t new_capacity = capacity ? capacity : 1;
-  a->buf = calloc(new_capacity, sizeof(void *));
+  a->_capacity = (capacity == 0) ? 1 : capacity;
+  a->buf = malloc(a->_capacity * sizeof(void *));
+  a->buf[0] = 0;
   a->size = 0;
-  a->_capacity = new_capacity;
   return a;
 }
 

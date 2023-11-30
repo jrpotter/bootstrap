@@ -39,8 +39,6 @@ trap cleanup EXIT
 # ENVIRONMENT
 # ============================================================
 
-# Trims away any whitespace around the module name.
-MODULE=$(echo "$MODULE" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 if [ -z "$MODULE" ]; then
   MODULE_ARG=
 else

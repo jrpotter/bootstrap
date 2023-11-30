@@ -12,10 +12,9 @@ static void test_string_buf_sappend() {
   sput_fail_unless(
     string_buf_size(sb) == strlen("hello world!!"), "sappend size"
   );
-  const char *converted = string_buf_convert(sb);
-  sput_fail_unless(
-    strcmp(converted, "hello world!!") == 0, "sappend converted"
-  );
+  const char *cast = string_buf_cast(sb);
+  sput_fail_unless(strcmp(cast, "hello world!!") == 0, "sappend cast");
+  free((void *)cast);
 }
 
 static void test_string_buf_cappend() {
@@ -27,10 +26,9 @@ static void test_string_buf_cappend() {
   sput_fail_unless(
     string_buf_size(sb) == strlen("hello world!!"), "cappend size"
   );
-  const char *converted = string_buf_convert(sb);
-  sput_fail_unless(
-    strcmp(converted, "hello world!!") == 0, "cappend converted"
-  );
+  const char *cast = string_buf_cast(sb);
+  sput_fail_unless(strcmp(cast, "hello world!!") == 0, "cappend cast");
+  free((void *)cast);
 }
 
 static void test_string_buf_nonzero_capacity() {

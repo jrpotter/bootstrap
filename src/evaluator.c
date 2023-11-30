@@ -7,9 +7,12 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#include "console.h"
 #include "string_buf.h"
 #include "string_utils.h"
 #include "validator.h"
+
+#define BANNER_LENGTH 60
 
 static struct Error *find_run_exec(const struct Config *const config) {
   assert(config);
@@ -23,9 +26,9 @@ static struct Error *find_run_exec(const struct Config *const config) {
   if (stat_res == -1 && errno == ENOENT) {
     return ERROR_NEW(
       ERROR_EVALUATOR_RUNNER_NOT_FOUND,
-      ANSI_RED("NOT_FOUND"),
+      ANSI_RED_F("NOT_FOUND"),
       ": Could not find ",
-      ANSI_BLUE(config->target, "/runner"),
+      ANSI_BLUE_F(config->target, "/runner"),
       "."
     );
   }
@@ -33,9 +36,9 @@ static struct Error *find_run_exec(const struct Config *const config) {
   if (!(sb.st_mode & S_IXUSR)) {
     return ERROR_NEW(
       ERROR_EVALUATOR_RUNNER_NOT_EXEC,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": ",
-      ANSI_BLUE(config->target, "/runner"),
+      ANSI_BLUE_F(config->target, "/runner"),
       " is not executable."
     );
   }
@@ -43,38 +46,105 @@ static struct Error *find_run_exec(const struct Config *const config) {
   return 0;
 }
 
-static const char *prompt_field(struct Field *field) {
-  assert(field);
-  printf("%s", field->prompt);
+static void print_header(const struct Config *const config) {
+  assert(config);
 
+  struct StringBuf *banner = string_buf_new(BANNER_LENGTH * 2);
+  for (int i = 0; i < BANNER_LENGTH; ++i) {
+    string_buf_cappend(banner, '=');
+  }
+
+  struct StringBuf *header = string_buf_new(128);
+  string_buf_sappend(header, config->target);
+  string_buf_sappend(header, "/spec.json");
+  int left_padding = (BANNER_LENGTH - header->size) / 2;
+
+  printf("%s\n", banner->buf);
+  printf("%*s", left_padding, "");
+  printf("%s%s/spec.json%s\n\n", ANSI_BLUE_F(config->target));
+  printf("(%s%s%s) indicates a required field.\n", ANSI_YELLOW_F("*"));
+  printf("%s\n\n", banner->buf);
+
+  string_buf_free(header);
+  string_buf_free(banner);
+}
+
+static void print_prompt(const struct Field *const field) {
+  assert(field);
+
+  if (field->required) {
+    printf("%s%s%s%s", ANSI_YELLOW_F("*"), field->prompt);
+  } else {
+    printf("%s", field->prompt);
+  }
+}
+
+static const char *query_line(const struct Field *const field) {
+  assert(field);
+
+  // TODO: Dynamically size this value.
   char *response = calloc(1, 1024);
 
-  switch (field->type) {
-  case FT_LINE:
-    // TODO: Probably want this buffer size to be a bit more dynamic.
+  do {
+    print_prompt(field);
     if (fgets(response, 1024, stdin)) {
-      size_t len = strlen(response);
-      if (len > 0 && response[len - 1] == '\n') {
-        response[len - 1] = '\0';
+      trim_leading(response);
+      trim_trailing(response);
+      if (response[0] != 0) {
+        return response;
       }
-      return response;
-    } else {
-      free(response);
-      return 0;
+    } else {  // Likely EOF. Force-quit even if required.
+      printf("\n");
+      break;
     }
-  }
+  } while (field->required);
+
+  free(response);
+  return 0;
 }
 
 static void push_env(
   struct StringBuf *env, const char *key, const char *value
 ) {
   assert(env);
+
   for (const char *c = key; *c; ++c) {
     string_buf_cappend(env, toupper(*c));
   }
-  string_buf_sappend(env, "='");
-  string_buf_sappend(env, value);
-  string_buf_sappend(env, "' ");
+  string_buf_sappend(env, "=");
+
+  if (value) {
+    string_buf_cappend(env, '\'');
+    string_buf_sappend(env, value);
+    string_buf_sappend(env, "' ");
+  } else {
+    string_buf_cappend(env, ' ');
+  }
+}
+
+static struct Error *push_fields(
+  const struct Config *const config,
+  const struct DynArray *const fields,
+  struct StringBuf **env_buf
+) {
+  for (int i = 0; i < fields->size; ++i) {
+    struct Field *field = fields->buf[i];
+    const char *response = 0;
+    switch (field->type) {
+    case FT_LINE:
+      response = query_line(field);
+      break;
+    }
+    if (field->required && !response) {
+      return ERROR_NEW(
+        ERROR_EVALUATOR_RESPONSE_INVALID,
+        ANSI_RED_F("ERROR"),
+        ": Could not read response."
+      );
+    }
+    push_env(*env_buf, field->key, response);
+  }
+  return 0;
 }
 
 int evaluate_runner(
@@ -82,34 +152,23 @@ int evaluate_runner(
   const struct DynArray *const fields,
   struct Error **error
 ) {
-  *error = find_run_exec(config);
-  if (*error) {
+  if ((*error = find_run_exec(config))) {
     return EXIT_FAILURE;
   }
 
   struct StringBuf *env_buf = string_buf_new(512);
   push_env(env_buf, "OUT", config->cwd);
-
   if (fields) {
-    for (int i = 0; i < fields->size; ++i) {
-      struct Field *field = fields->buf[i];
-      const char *response = prompt_field(field);
-      if (!response) {
-        *error = ERROR_NEW(
-          ERROR_EVALUATOR_RESPONSE_INVALID,
-          ANSI_RED("ERROR"),
-          ": Could not read response."
-        );
-        string_buf_free(env_buf);
-        return EXIT_FAILURE;
-      }
-      push_env(env_buf, field->key, response);
+    print_header(config);
+    if ((*error = push_fields(config, fields, &env_buf))) {
+      string_buf_free(env_buf);
+      return EXIT_FAILURE;
     }
   }
 
   const char *segments[] = {config->root_dir, config->target, "runner"};
   const char *filepath = join(sizeof(segments) / sizeof(char *), segments, '/');
-  const char *env = string_buf_convert(env_buf);
+  const char *env = string_buf_cast(env_buf);
 
   struct StringBuf *command_buf = string_buf_new(1024);
   string_buf_sappend(command_buf, "cd ");
@@ -119,7 +178,7 @@ int evaluate_runner(
   string_buf_sappend(command_buf, " && ");
   string_buf_sappend(command_buf, env);
   string_buf_sappend(command_buf, filepath);
-  const char *command = string_buf_convert(command_buf);
+  const char *command = string_buf_cast(command_buf);
 
   free((void *)env);
   free((void *)filepath);

@@ -142,8 +142,9 @@ a string (submitted with a newline).
 If the user were to enter `fieldvalue` in response to the prompt, the `runner`
 script would then have access to an environment variable `FIELDNAME` set to
 `fieldvalue`. Field names should respect the [POSIX standard](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html)
-on environment variable naming. In particular, all field names consist solely
-of alphanumeric characters or underscores and cannot start with a digit.
+on environment variable naming. That is, field names must consist solely of
+alphanumeric characters or underscores and are not permitted to start with a
+digit.
 
 #### Types
 
@@ -151,8 +152,18 @@ The value of `type` determines how a field is prompted for. Note the value of
 `type` is case insenstive. The currently supported list of types are:
 
 * `line`
-  * The simplest prompt type. Takes in a free-form response submitted after a
-    newline (`\n`) is encountered.
+  * The simplest prompt type. Takes in a free-form response submitted after
+    encountering a newline (`\n`). The resulting environment variable has
+    leading and trailing whitespace trimmed.
+  * If `required`, whitespace-only strings are re-prompted.
+
+#### Options
+
+Additional options can be included in a field definition.
+
+* `required`
+  * A value must be specified. How this option is interpreted depends on `type`.
+  * Defaults to `true`.
 
 #### Root Directory
 
