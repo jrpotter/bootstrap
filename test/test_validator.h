@@ -208,7 +208,6 @@ static void test_validator_field_prompt_invalid() {
     "{"
     "  \"key\": {"
     "    \"type\": \"line\","
-    "    \"type\": \"line\","
     "    \"prompt\": 2"
     "  }"
     "}"
