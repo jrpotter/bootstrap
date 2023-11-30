@@ -5,6 +5,8 @@
 #ifndef _BOOTSTRAP_VALIDATOR_H
 #define _BOOTSTRAP_VALIDATOR_H
 
+#include <stdbool.h>
+
 #include "cJSON.h"
 #include "config.h"
 #include "dyn_array.h"
@@ -42,6 +44,8 @@ struct Field {
   /// @brief The type of field. Denotes what prompt should be displayed prior to
   /// evaluation.
   enum FieldType type;
+  /// @brief Indicates the field is required.
+  bool required;
   /// @brief A reference to the name of the field. Does not take ownership of
   /// this value.
   const char *key;

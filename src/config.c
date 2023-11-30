@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#include "console.h"
 #include "string_utils.h"
 
 struct Error *config_new(
@@ -19,16 +20,16 @@ struct Error *config_new(
   if (cwd == 0) {
     return ERROR_NEW(
       ERROR_CONFIG_ENV_CWD_INVALID,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Could not retrieve ",
-      ANSI_CYAN("CWD"),
+      ANSI_CYAN_F("CWD"),
       "."
     );
   }
   if (root_dir == 0) {
     return ERROR_NEW(
       ERROR_CONFIG_ENV_ROOT_DIR_INVALID,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": Could not find root directory."
     );
   }
@@ -44,17 +45,17 @@ struct Error *config_new(
     if (errno == ENOENT) {
       error = ERROR_NEW(
         ERROR_CONFIG_TARGET_NOT_FOUND,
-        ANSI_RED("ERROR"),
+        ANSI_RED_F("ERROR"),
         ": Could not find ",
-        ANSI_BLUE(target),
+        ANSI_BLUE_F(target),
         " spec."
       );
     } else {
       error = ERROR_NEW(
         ERROR_CONFIG_TARGET_INVALID,
-        ANSI_RED("ERROR"),
+        ANSI_RED_F("ERROR"),
         ": ",
-        ANSI_BLUE(target),
+        ANSI_BLUE_F(target),
         " is invalid."
       );
     }
@@ -63,9 +64,9 @@ struct Error *config_new(
   if (!S_ISDIR(sb.st_mode)) {
     error = ERROR_NEW(
       ERROR_CONFIG_TARGET_NOT_DIR,
-      ANSI_RED("ERROR"),
+      ANSI_RED_F("ERROR"),
       ": ",
-      ANSI_CYAN(filepath),
+      ANSI_CYAN_F(filepath),
       " is not a directory."
     );
     goto cleanup;

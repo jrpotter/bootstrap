@@ -163,10 +163,51 @@ static void test_validator_valid_type_ci() {
   test_validator_teardown(fixture);
 }
 
+static void test_validator_field_required_invalid() {
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": \"line\","
+    "    \"required\": 5"
+    "  }"
+    "}"
+  );
+
+  struct Error *error =
+    validate_spec_json(&fixture->config, fixture->parsed, &fixture->prompts);
+  sput_fail_unless(
+    error->code == ERROR_VALIDATOR_FIELD_REQUIRED_INVALID,
+    "field required invalid"
+  );
+  error_free(error);
+
+  test_validator_teardown(fixture);
+}
+
+static void test_validator_field_required_valid() {
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"key\": {"
+    "    \"type\": \"line\","
+    "    \"required\": true,"
+    "    \"prompt\": \"What value for key? \""
+    "  }"
+    "}"
+  );
+
+  struct Error *error =
+    validate_spec_json(&fixture->config, fixture->parsed, &fixture->prompts);
+  sput_fail_unless(error == 0, "required valid");
+  error_free(error);
+
+  test_validator_teardown(fixture);
+}
+
 static void test_validator_field_prompt_invalid() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"
+    "    \"type\": \"line\","
     "    \"type\": \"line\","
     "    \"prompt\": 2"
     "  }"
@@ -183,7 +224,7 @@ static void test_validator_field_prompt_invalid() {
   test_validator_teardown(fixture);
 }
 
-static void test_validator_valid() {
+static void test_validator_valid_no_required() {
   struct TestValidatorFixture *fixture = test_validator_setup(
     "{"
     "  \"key\": {"

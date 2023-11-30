@@ -5,6 +5,7 @@
   },
   "module": {
     "type": "line",
-    "prompt": "Module (optional)> "
+    "required": false,
+    "prompt": "Module Name> "
   }
 }

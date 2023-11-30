@@ -40,12 +40,14 @@ enum ErrorCode {
   /// A field name in `spec.json` is not alphanumeric and beginning with a
   /// non-digit.
   ERROR_VALIDATOR_FIELD_NAME_INVALID,
-  /// The `type` of a `spec.json` field is not a string.
+  /// The `type` field of a `spec.json` file is not a string.
   ERROR_VALIDATOR_FIELD_TYPE_INVALID,
-  /// The `type` of a `spec.json` field does not correspond to a known prompt
-  /// type.
+  /// The `type` field of a `spec.json` file does not correspond to a known
+  /// prompt type.
   ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,
-  /// The `prompt` of a `spec.json` field is not a string.
+  /// The `required` field of a `spec.json` file is not a boolean.
+  ERROR_VALIDATOR_FIELD_REQUIRED_INVALID,
+  /// The `prompt` field of a `spec.json` file is not a string.
   ERROR_VALIDATOR_FIELD_PROMPT_INVALID,
 
   /// The `runner` file could not be found.
@@ -75,7 +77,7 @@ static inline struct Error *priv_error_new(
   for (int i = 0; i < n; ++i) {
     string_buf_sappend(sb, messages[i]);
   }
-  e->message = string_buf_convert(sb);
+  e->message = string_buf_cast(sb);
   return e;
 }
 
@@ -125,15 +127,6 @@ It is the responsibility of the caller to free the @ref Error instance.
   priv_error_new((code), (nargs), (const char *[nargs]){__VA_ARGS__})
 
 // clang-format on
-
-#define ANSI_BLACK(...) "\e[0;30m", __VA_ARGS__, "\e[0m"
-#define ANSI_RED(...) "\e[0;31m", __VA_ARGS__, "\e[0m"
-#define ANSI_GREEN(...) "\e[0;32m", __VA_ARGS__, "\e[0m"
-#define ANSI_YELLOW(...) "\e[0;33m", __VA_ARGS__, "\e[0m"
-#define ANSI_BLUE(...) "\e[0;34m", __VA_ARGS__, "\e[0m"
-#define ANSI_PURPLE(...) "\e[0;35m", __VA_ARGS__, "\e[0m"
-#define ANSI_CYAN(...) "\e[0;36m", __VA_ARGS__, "\e[0m"
-#define ANSI_WHITE(...) "\e[0;37m", __VA_ARGS__, "\e[0m"
 
 /**
 @brief Deallocates a previously allocated @ref Error isntance.
