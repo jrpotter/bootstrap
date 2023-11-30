@@ -45,3 +45,33 @@ int strcmp_ci(const char *s1, const char *s2) {
   }
   return s1_len < s2_len ? -1 : 1;
 }
+
+void trim_leading(char *s) {
+  int count = 0;
+  for (const char *c = s; isspace(*c); ++c) {
+    count++;
+  }
+  if (count == 0) {
+    return;
+  }
+  // Shift elements down.
+  size_t len = strlen(s);
+  for (int i = 0; i < len - count + 1; ++i) {
+    s[i] = s[i + count];
+  }
+}
+
+void trim_trailing(char *s) {
+  int last = -1;
+  size_t len = strlen(s);
+  for (int i = 0; i < len; ++i) {
+    if (!isspace(s[i])) {
+      last = i;
+    }
+  }
+  if (last == -1) {
+    s[0] = 0;
+  } else if (last < len - 1) {
+    s[last + 1] = 0;
+  }
+}

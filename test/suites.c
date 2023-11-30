@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_join_single);
   sput_run_test(test_join_multiple);
   sput_run_test(test_strcmp_ci);
+  sput_run_test(test_trim_leading);
+  sput_run_test(test_trim_trailing);
 
   sput_enter_suite("parser");
   sput_run_test(test_parser_missing);
