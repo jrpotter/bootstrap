@@ -81,12 +81,12 @@ sed -i "s/<APP_NAME>/$APP/g" "$BUILD/flake.nix"
 sed -i "s/username: \"postgres\"/username: \"$(whoami)\"/g" "$BUILD/config/dev.exs"
 
 # Create a new database cluster.
-nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/data"
+nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
 
 # Append an additional rule to `.gitignore` to ignore the database cluster.
 cat <<EOF >> "$BUILD"/.gitignore
 # The default location of the generated database cluster.
-/data/
+/db/
 
 # Directory used by \`direnv\` to hold \`use flake\`-generated profiles.
 /.direnv/

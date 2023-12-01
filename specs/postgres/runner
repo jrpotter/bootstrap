@@ -43,7 +43,7 @@ trap cleanup EXIT
 cp -r template/* "$BUILD"
 
 # Create a new database cluster.
-nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/data"
+nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
 
 # Explicitly set permissions on all copied files.
 find "$BUILD" -type f -execdir chmod 644 {} +

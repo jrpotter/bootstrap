@@ -10,8 +10,8 @@ $ nix develop
 
 ## Quickstart
 
-An empty Postgres cluster is initialized at `/db`. To start the database, run
-the following:
+An empty Postgres cluster is initialized at `db`. To start the database, run the
+following:
 ```bash
 $ pg_ctl -D db -l db/logfile -o --unix_socket_directories=@postgres start
 ```
