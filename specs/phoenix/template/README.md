@@ -10,18 +10,20 @@ $> nix develop
 
 ## Quickstart
 
-An empty Postgres cluster is initialized at `/data`. To start the database, run
+An empty Postgres cluster is initialized at `/db`. To start the database, run
 the following:
 ```bash
-$> pg_ctl start -o --unix_socket_directories="$PWD/data"
+$> pg_ctl -D db -l db/logfile -o --unix_socket_directories=@phoenix start
 ```
-To shut the database down, run:
+In the above command, `@phoenix` refers to an [abstract socket name](https://www.postgresql.org/docs/15/runtime-config-connection.html#GUC-UNIX-SOCKET-DIRECTORIES).
+Rename to whatever is appropriate for your use case. To then connect to this
+database instance, run:
 ```bash
-$> pg_ctl stop
+$> psql -h @phoenix
 ```
-You can connect to this database from the project root directory by running:
+To later shut the database down, run:
 ```bash
-$> psql -h "$PWD/data" -d postgres
+$> pg_ctl -D db stop
 ```
 
 Afterward, you can run the Phoenix setup commands:
@@ -39,7 +41,7 @@ $> mix phx.server
 This project pins Mix dependencies using [mix2nix](https://github.com/ydlr/mix2nix).
 After updating your `mix.lock` file, make sure to re-run the following:
 ```bash
-mix2nix > deps.nix
+$> mix2nix > deps.nix
 ```
 As of now, `mix2nix` cannot handle git dependencies found inside the `mix.lock`
 file. If you have git dependencies, add them manually or use
