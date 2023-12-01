@@ -40,10 +40,10 @@ touch "$OUT/$FILENAME"
 Running `bootstrap` with these two files configured will invoke the following
 interactive script:
 ```bash
-$> bootstrap touch
+$ bootstrap touch
 What file should I create for you? hello-world.txt
 Creating hello-world.txt
-$> ls
+$ ls
 ... hello-world.txt ...
 ```
 You should now see a new `hello-world.txt` file in your current working
@@ -75,7 +75,7 @@ If flakes is not enabled or your nix version does not support
 If you do not have Nix or prefer building from source, clone this repository and
 run
 ```bash
-$> make BUILD=release
+$ make BUILD=release
 ```
 The `bootstrap` binary will be made available in `dist/release` by default.
 
@@ -217,7 +217,7 @@ the project for your own purposes.
 We use [Sput](https://www.use-strict.de/sput-unit-testing/) for unit tests. To
 run tests, type:
 ```bash
-$> make test
+$ make test
 ```
 Tests are located in the `test` directory. `test/suites.c` serves as the
 entrypoint for the test runner.
@@ -228,8 +228,8 @@ We use [doxygen](https://www.doxygen.nl/index.html) for documentation
 generation. Run either of the following two commands to generate documentation
 locally:
 ```bash
-$> make docs
-$> doxygen
+$ make docs
+$ doxygen
 ```
 
 ### Formatting

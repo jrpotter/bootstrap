@@ -5,8 +5,11 @@
     This flake has been adapted from the `app` template found in:
     https://github.com/nix-community/poetry2nix
 
-    To generate a copy of this template elsewhere, run:
-    $> bootstrap poetry
+    To generate a copy of this template elsewhere, install
+    [bootstrap](https://github.com/jrpotter/bootstrap) and run:
+    ```bash
+    $ bootstrap poetry
+    ```
   '';
 
   inputs = {

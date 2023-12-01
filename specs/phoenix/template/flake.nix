@@ -2,8 +2,11 @@
   description = ''
     An opinionated pheonix flake.
 
-    To generate a copy of this template elsewhere, run:
-    $> bootstrap phoenix
+    To generate a copy of this template elsewhere, install
+    [bootstrap](https://github.com/jrpotter/bootstrap) and run:
+    ```bash
+    $ bootstrap phoenix
+    ```
   '';
 
   inputs = {

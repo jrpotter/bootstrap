@@ -5,7 +5,7 @@ This is a template for constructing a working environment for Elixir development
 tool. [direnv](https://direnv.net/) can be used to launch a dev shell upon
 entering this directory (refer to `.envrc`). Otherwise run via:
 ```bash
-$> nix develop
+$ nix develop
 ```
 
 ## Dependencies
@@ -30,7 +30,7 @@ Formatting depends on the `mix format` task. A `pre-commit` hook is included in
 `.githooks` that can be used to format all `*.exs?` files prior to commit.
 Install via:
 ```bash
-$> git config --local core.hooksPath .githooks/
+$ git config --local core.hooksPath .githooks/
 ```
 If running [direnv](https://direnv.net/), this hook is installed automatically
 when entering the directory.

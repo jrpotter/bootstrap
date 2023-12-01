@@ -2,8 +2,11 @@
   description = ''
     An opinionated clang flake.
 
-    To generate a copy of this template elsewhere, run:
-    $> bootstrap clang
+    To generate a copy of this template elsewhere, install
+    [bootstrap](https://github.com/jrpotter/bootstrap) and run:
+    ```bash
+    $ bootstrap clang
+    ```
   '';
 
   inputs = {

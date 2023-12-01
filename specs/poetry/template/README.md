@@ -5,7 +5,7 @@ This is a template for constructing a working environment for Python (version
 (version 1.7.0). [direnv](https://direnv.net/) can be used to a launch a dev
 shell upon entering this directory (refer to `.envrc`). Otherwise run via:
 ```bash
-$> nix develop
+$ nix develop
 ```
 
 ## Language Server
@@ -23,7 +23,7 @@ Formatting depends on the [black](https://black.readthedocs.io/en/stable/index.h
 (version 23.9.1) tool. A `pre-commit` hook is included in `.githooks` that can
 be used to format all `*.py` files prior to commit. Install via:
 ```bash
-$> git config --local core.hooksPath .githooks/
+$ git config --local core.hooksPath .githooks/
 ```
 If running [direnv](https://direnv.net/), this hook is installed automatically
 when entering the directory.

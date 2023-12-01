@@ -1,6 +1,6 @@
 {
   description = ''
-  CLI for initializing new projects deterministically with flakes.
+    CLI for initializing new projects deterministically with flakes.
   '';
 
   inputs = {

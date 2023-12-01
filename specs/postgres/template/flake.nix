@@ -2,8 +2,11 @@
   description = ''
     An opinionated postgres flake.
 
-    To generate a copy of this template elsewhere, run:
-    $> bootstrap postgres
+    To generate a copy of this template elsewhere, install
+    [bootstrap](https://github.com/jrpotter/bootstrap) and run:
+    ```bash
+    $ bootstrap postgres
+    ```
   '';
 
   inputs = {
