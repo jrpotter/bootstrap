@@ -1,0 +1,6 @@
+{
+  "name": {
+    "type": "line",
+    "prompt": "Name> "
+  }
+}

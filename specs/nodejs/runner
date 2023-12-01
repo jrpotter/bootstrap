@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# Exit immediately if the script encounters a non-zero status.
+set -e
+
+# If set, Bash includes filenames beginning with a `.` in the results of
+# filename expansion. The filenames `.` and `..` must always be matched
+# explicitly, even if dotglob is set.
+shopt -s dotglob extglob
+
+# ============================================================
+# PROLOGUE
+# ============================================================
+
+# Create a new top-level directory as fallback in case $BUILD (defined below)
+# is ever empty.
+mkdir -p "/tmp/bs.nodejs"
+
+# Create an intermediate build directory. The final step of this script will
+# copy the content from this directory to $OUT.
+BUILD=$(mktemp -d -p "/tmp/bs.nodejs")
+
+if [ -z "$BUILD" ]; then
+  >&2 echo "Failed to create temp directory."
+  exit 1
+fi
+
+# Deletes the intermediate build directory on exit. We use a concatenation of
+# the intermediate directory with the basename of the generated temp directory
+# to ensure we never evaluate to root (i.e. `/`). That should never actually
+# happen but a good habit to establish nonetheless.
+function cleanup {
+  rm -r "/tmp/bs.nodejs/$(basename "$BUILD")"
+}
+
+trap cleanup EXIT
+
+# ============================================================
+# BUILD
+# ============================================================
+
+# Copy template contents over to the intermediate build directory.
+cp -r template/* "$BUILD"
+
+# Copy over the CommonJS module responsible for validating the given NAME.
+cp validate.cjs "$BUILD"
+
+# Explicitly set permissions on all copied files.
+find "$BUILD" -type f -execdir chmod 644 {} +
+find "$BUILD" -type d -execdir chmod 755 {} +
+
+# Validate the provided name is usable.
+nix develop "$BUILD" --command bash -c \
+  "cd $BUILD &&
+   npm install validate-npm-package-name &&
+   node validate.cjs"
+
+# Replace the placeholder name found in the template files.
+sed -i "s/<NAME>/$NAME/g" "$BUILD/flake.nix"
+sed -i "s/<NAME>/$NAME/g" "$BUILD/package.json"
+sed -i "s/<NAME>/$NAME/g" "$BUILD/package-lock.json"
+
+# Precompute the build hash with the new package name in place.
+nix develop "$BUILD" --command bash -c \
+  "cd $BUILD &&
+   sed -i \"s,<SHA_256>,\$(prefetch-npm-deps package-lock.json),g\" flake.nix"
+
+# ============================================================
+# EPILOGUE
+# ============================================================
+
+# Success! Copy contents to target directory.
+cp -r "$BUILD"/!(node_modules|validate.cjs) "$OUT"
