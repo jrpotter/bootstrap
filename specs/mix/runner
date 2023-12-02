@@ -61,11 +61,11 @@ chmod 755 "$BUILD"/.githooks/pre-commit
 # subdirectory to avoid interactive conflict resolution.
 nix develop "$BUILD" \
   --command bash \
-  -c "mix new $BUILD/project --app '$APP' $MODULE_ARG"
+  -c "mix new $BUILD/bs.project --app '$APP' $MODULE_ARG"
 
 # Copy the generated files into the intermediate build directory.
-mv -f "$BUILD"/project/* "$BUILD"
-rmdir "$BUILD"/project
+mv -f "$BUILD"/bs.project/* "$BUILD"
+rmdir "$BUILD"/bs.project
 
 # Overwrite the generated README in favor of that defined in our template.
 cp template/README.md "$BUILD"
