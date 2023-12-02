@@ -72,7 +72,7 @@ cp template/README.md "$BUILD"
 chmod 644 "$BUILD"/README.md
 
 # Include additional build files for our assets. Group into subdirectory so
-# the `chmod` command can use globs.
+# the `chmod` command can take advantage of globbing.
 cp -r assets "$BUILD"/bs.assets
 chmod 644 "$BUILD"/bs.assets/*
 mv "$BUILD"/bs.assets/* "$BUILD"/assets
@@ -96,7 +96,7 @@ done
 # Allow specifying a custom path to our :esbuild and :tailwind configs.
 # Typically when building a Phoenix application, Mix will download
 # esbuild/tailwind binaries on demand. Within nix environments this is not
-# possible so specify them directly with these environment variables.
+# possible. Instead, specify them directly with these environment variables.
 sed -i \
   '42 s/$/,/;
    43 i \ \ path: System.get_env("MIX_ESBUILD_PATH")
