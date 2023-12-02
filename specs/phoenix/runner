@@ -88,7 +88,7 @@ nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
 # The mix generator would fail if $APP did not consist of just lowercase ASCII
 # letters, numbers, or underscores. Thus $APP is safe to interpolate into the
 # following command.
-for file in flake.nix assets/package.json assets/package-lock.json
+for file in flake.nix assets/{package.json,package-lock.json,node-packages.nix}
 do
   sed -i "s/<APP>/$APP/g" "$BUILD/$file"
 done

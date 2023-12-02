@@ -71,9 +71,13 @@ rmdir "$BUILD"/project
 cp template/README.md "$BUILD"
 chmod 644 "$BUILD"/README.md
 
-# Replace the template name found in the flake.nix file. The mix generator would
-# fail if $APP did not consist of just lowercase ASCII letters, numbers, or
-# underscores. Thus $APP is safe to interpolate into the following command.
+# ============================================================
+# REWRITES
+# ============================================================
+
+# ix file. The mix generator would fail if $APP did not consist of just
+# lowercase ASCII letters, numbers, or underscores. Thus $APP is safe to
+# interpolate into the following command.
 sed -i "s/<APP>/$APP/g" "$BUILD/flake.nix"
 
 # ============================================================

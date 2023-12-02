@@ -5,8 +5,8 @@
 let
   sources = {};
   args = {
-    name = "<APP_NAME>";
-    packageName = "<APP_NAME>";
+    name = "<APP>";
+    packageName = "<APP>";
     version = "0.1.0";
     src = ./.;
     buildInputs = globalBuildInputs;
