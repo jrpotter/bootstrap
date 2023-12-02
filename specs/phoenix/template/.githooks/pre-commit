@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 set -e
 
-filesToFormat=$(
+mixFiles=$(
   git --no-pager diff --name-status --no-color --cached | \
     awk '$1 != "D" && $2 ~ /\.exs?$/ {print $NF}'
 )
 
-for path in $filesToFormat
+for path in $mixFiles
 do
   mix format "$path"
+  git add "$path"
+done
+
+webFiles=$(
+  git --no-pager diff --name-status --no-color --cached | \
+    awk '$1 != "D" && $2 ~ /\.jsx?$|\.tsx?$/ {print $NF}'
+)
+
+for path in $webFiles
+do
+  prettier --write "$path"
   git add "$path"
 done

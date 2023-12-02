@@ -78,12 +78,14 @@ supports lock versions 1 and 2.
 ## Language Server
 
 The [elixir-ls](https://github.com/elixir-lsp/elixir-ls) LSP (version 0.17.10)
-is included in this flake.
+and [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server)
+(version 4.1.2) is included in this flake.
 
 ## Formatting
 
-Formatting depends on the `mix format` task. A `pre-commit` hook is included in
-`.githooks` that can be used to format all `*.exs?` files prior to commit.
+Formatting depends on [prettier](https://prettier.io/) (version 3.1.0) and the
+`mix format` task. A `pre-commit` hook is included in `.githooks` that can be
+used to format all `*.exs?`, `*.jsx?`, and `*.tsx?` files prior to commit.
 Install via:
 ```bash
 $ git config --local core.hooksPath .githooks/
