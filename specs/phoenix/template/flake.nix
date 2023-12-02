@@ -52,7 +52,12 @@
           ] ++ (with pkgs; [
             inotify-tools  # For file watching in development.
             mix2nix
+            node2nix
+            nodePackages.prettier
+            nodePackages.typescript-language-server
+            nodejs
             postgresql_15
+            typescript
           ]);
           shellHook = ''
             # The server will try to use the data directory named by this
