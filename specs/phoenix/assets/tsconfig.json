@@ -1,0 +1,30 @@
+{
+  // https://esbuild.github.io/content-types/#tsconfig-json
+  "compilerOptions": {
+    // Keep in mind that ES6+ syntax to ES5 is not supported in esbuild yet.
+    "target": "es2016",
+    // Even when transpiling a single module, the TypeScript compiler actually
+    // parses imported files so it can tell whether an imported name is a type
+    // or a value. However, tools like esbuild compile each file in isolation so
+    // they can't tell if an imported name is a type or a value.
+    // https://esbuild.github.io/content-types/#isolated-modules
+    "isolatedModules": true,
+    // Disables legacy behavior around imports and makes TypeScript's type
+    // system compatible with ESM.
+    "esModuleInterop": true,
+    // Enables define semantics. In this mode, TypeScript class fields behave
+    // like normal JavaScript class fields. Field initializers do not trigger
+    // setters on the base class.
+    "useDefineForClassFields": true,
+    // If either of these options are enabled, esbuild will consider all code
+    // in all TypeScript files to be in strict mode and will prefix generated
+    // code with "use strict" unless the output format is set to esm (since all
+    // ESM files are automatically in strict mode).
+    "strict": true,
+    // Emit .js files with JSX changed to the equivalent React.createElement
+    // calls. It seems like the "react" value mirrors esbuild's native
+    // "transform" option, but it isn't obvious how these two relate from the
+    // documentation: https://esbuild.github.io/api/#jsx.
+    "jsx": "react"
+  }
+}

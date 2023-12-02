@@ -55,25 +55,30 @@ cp -r template/* "$BUILD"
 # Explicitly set permissions on all copied files.
 find "$BUILD" -type f -execdir chmod 644 {} +
 find "$BUILD" -type d -execdir chmod 755 {} +
+chmod 755 "$BUILD"/.githooks/pre-commit
 
 # Generate a new project with the specified name using `mix`. Generate in a
 # subdirectory to avoid interactive conflict resolution.
 nix develop "$BUILD" \
   --command bash \
-  -c "mix new $BUILD/project --app '$APP' $MODULE_ARG"
+  -c "mix new $BUILD/bs.project --app '$APP' $MODULE_ARG"
 
 # Copy the generated files into the intermediate build directory.
-mv -f "$BUILD"/project/* "$BUILD"
-rmdir "$BUILD"/project
+mv -f "$BUILD"/bs.project/* "$BUILD"
+rmdir "$BUILD"/bs.project
 
 # Overwrite the generated README in favor of that defined in our template.
 cp template/README.md "$BUILD"
 chmod 644 "$BUILD"/README.md
 
-# Replace the template name found in the flake.nix file. The mix generator would
-# fail if $APP did not consist of just lowercase ASCII letters, numbers, or
-# underscores. Thus $APP is safe to interpolate into the following command.
-sed -i "s/<APP_NAME>/$APP/g" "$BUILD/flake.nix"
+# ============================================================
+# REWRITES
+# ============================================================
+
+# ix file. The mix generator would fail if $APP did not consist of just
+# lowercase ASCII letters, numbers, or underscores. Thus $APP is safe to
+# interpolate into the following command.
+sed -i "s/<APP>/$APP/g" "$BUILD/flake.nix"
 
 # ============================================================
 # EPILOGUE
