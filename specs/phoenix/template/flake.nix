@@ -35,7 +35,7 @@
       {
         packages = {
           app = mixRelease {
-            pname = "<APP_NAME>";
+            pname = "<APP>";
             src = ./.;
             version = "0.1.0";
             mixNixDeps = deps;

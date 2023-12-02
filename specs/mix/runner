@@ -74,7 +74,7 @@ chmod 644 "$BUILD"/README.md
 # Replace the template name found in the flake.nix file. The mix generator would
 # fail if $APP did not consist of just lowercase ASCII letters, numbers, or
 # underscores. Thus $APP is safe to interpolate into the following command.
-sed -i "s/<APP_NAME>/$APP/g" "$BUILD/flake.nix"
+sed -i "s/<APP>/$APP/g" "$BUILD/flake.nix"
 
 # ============================================================
 # EPILOGUE

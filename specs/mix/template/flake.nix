@@ -36,14 +36,14 @@
       {
         packages = {
           lib = buildMix {
-            name = "<APP_NAME>";
+            name = "<APP>";
             src = ./.;
             version = "0.1.0";
             beamDeps = builtins.attrValues deps;
           };
 
           app = mixRelease {
-            pname = "<APP_NAME>";
+            pname = "<APP>";
             src = ./.;
             version = "0.1.0";
             mixNixDeps = deps;
