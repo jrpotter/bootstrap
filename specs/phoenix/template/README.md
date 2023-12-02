@@ -56,7 +56,7 @@ using [node2nix](https://github.com/svanderburg/node2nix). You can generate the
 relevant nix files for import using the following sequence of commands:
 ```bash
 $ cd assets
-$ rm -r node_modules
+$ rm -r node_modules  # If this directory exists.
 $ node2nix -l
 ```
 In the above, we must remove `node_modules` (if it exists). Otherwise the
