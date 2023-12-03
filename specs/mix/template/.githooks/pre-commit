@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-filesToFormat=$(
+FORMAT_FILES=$(
   git --no-pager diff --name-status --no-color --cached | \
     awk '$1 != "D" && $2 ~ /\.exs?$/ {print $NF}'
 )
 
-for path in $filesToFormat
-do
-  mix format "$path"
-  git add "$path"
-done
+mix format "$FORMAT_FILES"
+
+git add "$FORMAT_FILES"
