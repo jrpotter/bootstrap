@@ -6,6 +6,7 @@ FORMAT_FILES=$(
     awk '$1 != "D" && $2 ~ /\.c$|\.h$/ {print $NF}'
 )
 
-clang-format -i "$FORMAT_FILES"
-
-git add "$FORMAT_FILES"
+if [ -n "$FORMAT_FILES" ]; then
+  clang-format -i "$FORMAT_FILES"
+  git add "$FORMAT_FILES"
+fi

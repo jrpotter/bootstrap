@@ -6,6 +6,7 @@ FORMAT_FILES=$(
     awk '$1 != "D" && $2 ~ /\.py$/ {print $NF}'
 )
 
-black --quiet "$FORMAT_FILES"
-
-git add "$FORMAT_FILES"
+if [ -n "$FORMAT_FILES" ]; then
+  black --quiet "$FORMAT_FILES"
+  git add "$FORMAT_FILES"
+fi

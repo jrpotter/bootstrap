@@ -6,6 +6,7 @@ FORMAT_FILES=$(
     awk '$1 != "D" && $2 ~ /\.jsx?$|\.tsx?$/ {print $NF}'
 )
 
-prettier --write "$FORMAT_FILES"
-
-git add "$FORMAT_FILES"
+if [ -n "$FORMAT_FILES" ]; then
+  prettier --write "$FORMAT_FILES"
+  git add "$FORMAT_FILES"
+fi
