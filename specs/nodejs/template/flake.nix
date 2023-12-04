@@ -28,6 +28,9 @@
             src = ./.;
             npmDepsHash = "<SHA_256>";
 
+            # Needed to properly invoke npm run build.
+            nativeBuildInputs = [ pkgs.typescript ];
+
             installPhase = ''
               mkdir $out
               cp dist/index.js $out

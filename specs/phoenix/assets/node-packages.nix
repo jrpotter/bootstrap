@@ -3,14 +3,29 @@
 {nodeEnv, fetchurl, fetchgit, nix-gitignore, stdenv, lib, globalBuildInputs ? []}:
 
 let
-  sources = {};
+  sources = {
+    "lodash-4.17.21" = {
+      name = "lodash";
+      packageName = "lodash";
+      version = "4.17.21";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
+      };
+    };
+  };
   args = {
-    name = "<APP>";
-    packageName = "<APP>";
+    name = "blah";
+    packageName = "blah";
     version = "0.1.0";
     src = ./.;
+    dependencies = [
+      sources."lodash-4.17.21"
+    ];
     buildInputs = globalBuildInputs;
     meta = {
+      description = "";
+      license = "ISC";
     };
     production = true;
     bypassCache = true;

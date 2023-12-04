@@ -43,7 +43,8 @@ trap cleanup EXIT
 cp -r template/* "$BUILD"
 
 # Copy over the CommonJS module responsible for validating the given NAME.
-cp validate.cjs "$BUILD"
+mkdir "$BUILD"/bs.nodejs
+cp validate.cjs "$BUILD"/bs.nodejs
 
 # Explicitly set permissions on all copied files.
 find "$BUILD" -type f -execdir chmod 644 {} +
@@ -51,9 +52,8 @@ find "$BUILD" -type d -execdir chmod 755 {} +
 
 # Validate the provided name is usable.
 nix develop "$BUILD" --command bash -c \
-  "cd $BUILD &&
-   npm install validate-npm-package-name &&
-   node validate.cjs"
+  "npm --prefix $BUILD/bs.nodejs install validate-npm-package-name &&
+   node $BUILD/bs.nodejs/validate.cjs"
 
 # Replace the placeholder name found in the template files.
 sed -i "s/<NAME>/$NAME/g" "$BUILD/flake.nix"
@@ -70,4 +70,4 @@ nix develop "$BUILD" --command bash -c \
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/!(node_modules|validate.cjs) "$OUT"
+cp -r "$BUILD"/!(bs.nodejs) "$OUT"
