@@ -50,7 +50,7 @@ fi
 # ============================================================
 
 # Copy template contents over to the intermediate build directory.
-cp -r template/* "$BUILD"
+cp -a template/* "$BUILD"
 
 # Explicitly set permissions on all copied template files.
 find "$BUILD" -type f -execdir chmod 644 {} +
@@ -73,9 +73,11 @@ chmod 644 "$BUILD"/README.md
 
 # Include additional build files for our assets. Group into subdirectory so
 # the `chmod` command can take advantage of globbing.
-cp -r assets "$BUILD"/bs.assets
+mkdir -p "$BUILD"/bs.assets
+cp assets/* "$BUILD"/bs.assets
 chmod 644 "$BUILD"/bs.assets/*
-cp "$BUILD"/bs.assets/* "$BUILD"/assets
+mv "$BUILD"/bs.assets/* "$BUILD"/assets
+rmdir "$BUILD"/bs.assets
 
 # Create a new database cluster.
 nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
@@ -127,4 +129,4 @@ EOF
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/!(bs.assets) "$OUT"
+cp -a "$BUILD"/* "$OUT"
