@@ -110,14 +110,16 @@ done
 # Typically when building a Phoenix application, Mix will download
 # esbuild/tailwind binaries on demand. Within nix environments this is not
 # possible. Instead, specify them directly with these environment variables.
-sed -i \
-  '42 s/$/,/;
-   43 i \ \ path: System.get_env("MIX_ESBUILD_PATH")
-   s/version: \"0.17.11\"/version: \"0.19.7\"/
-   54 s/$/,/;
-   55 i \ \ path: System.get_env("MIX_TAILWIND_PATH")
-   s/version: \"3.3.2\"/version: \"3.3.5\"/' \
-  "$BUILD/config/config.exs"
+sed -i '/config :esbuild/, /^$/ {' \
+       's/0.17.11/0.19.7/; ' \
+       's/]$/],/; ' \
+       's/^$/  path: System.get_env("MIX_ESBUILD_PATH")\n}'
+       "$BUILD"/config/config.exs
+sed -i '/config :tailwind/, /^$/ {' \
+       's/3.3.2/3.3.5/; ' \
+       's/]$/],/; ' \
+       's/^$/  path: System.get_env("MIX_TAILWIND_PATH")\n}'
+       "$BUILD"/config/config.exs
 
 # By default Phoenix generates a postgres configuration with assumed username
 # `postgres`. This flake encourages a local postgres database with username
