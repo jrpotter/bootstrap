@@ -50,7 +50,7 @@ fi
 # ============================================================
 
 # Copy template contents over to the intermediate build directory.
-cp -a template/* "$BUILD"
+cp -r template/* "$BUILD"
 
 # Explicitly set permissions on all copied template files.
 find "$BUILD" -type f -execdir chmod 644 {} +

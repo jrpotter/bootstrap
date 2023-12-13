@@ -70,4 +70,4 @@ nix develop "$BUILD" --command bash -c \
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/!(bs.nodejs) "$OUT"
+cp -a "$BUILD"/!(bs.nodejs) "$OUT"

@@ -85,4 +85,4 @@ sed -i "s/<APP>/$APP/g" "$BUILD/flake.nix"
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/* "$OUT"
+cp -a "$BUILD"/* "$OUT"
