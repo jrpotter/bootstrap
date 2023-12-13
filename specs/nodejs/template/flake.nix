@@ -27,6 +27,7 @@
             version = "0.1.0";
             src = ./.;
             npmDepsHash = "<SHA_256>";
+            # npmDepsHash = pkgs.lib.fakeHash;
 
             # Needed to properly invoke npm run build.
             nativeBuildInputs = [ pkgs.typescript ];

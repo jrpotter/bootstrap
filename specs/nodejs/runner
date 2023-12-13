@@ -49,6 +49,7 @@ cp validate.cjs "$BUILD"/bs.nodejs
 # Explicitly set permissions on all copied files.
 find "$BUILD" -type f -execdir chmod 644 {} +
 find "$BUILD" -type d -execdir chmod 755 {} +
+chmod 755 "$BUILD"/.githooks/pre-commit
 
 # Validate the provided name is usable.
 nix develop "$BUILD" --command bash -c \

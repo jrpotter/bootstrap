@@ -9,6 +9,20 @@ run via:
 $ nix develop
 ```
 
+## Building
+
+If you make changes to the `package-lock.json` file, you'll need to update the
+`npmDepsHash` value in `flake.nix`. The easiest way to discover this value is
+by running the following:
+```bash
+$ prefetch-npm-deps package-lock.json
+```
+Alternatively, you can set the value of `npmDepsHash` to `lib.fakeHash` and run:
+```bash
+$ nix build
+```
+Nix will complain with the has value it actually expected.
+
 ## Language Server
 
 The [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server)
