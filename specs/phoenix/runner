@@ -73,10 +73,10 @@ chmod 644 "$BUILD"/README.md
 
 # Include additional build files for our assets. Group into subdirectory so
 # the `chmod` command can take advantage of globbing.
-cp -a assets "$BUILD"/bs.assets
+cp -r assets "$BUILD"/bs.assets
 chmod 644 "$BUILD"/bs.assets/*
-mv "$BUILD"/bs.assets/* "$BUILD"/assets
-rmdir "$BUILD"/bs.assets
+cp "$BUILD"/bs.assets/* "$BUILD"/assets
+rm -r "$BUILD"/bs.assets
 
 # Create a new database cluster.
 nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
@@ -128,4 +128,4 @@ EOF
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -a "$BUILD"/* "$OUT"
+cp -r "$BUILD"/* "$OUT"
