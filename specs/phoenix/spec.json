@@ -7,5 +7,9 @@
     "type": "line",
     "required": false,
     "prompt": "Module> "
+  },
+  "ecto": {
+    "type": "yes",
+    "prompt": "Include Ecto? [Yn] "
   }
 }

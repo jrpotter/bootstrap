@@ -152,10 +152,18 @@ The value of `type` determines how a field is prompted for. Note the value of
 `type` is case insenstive. The currently supported list of types are:
 
 * `line`
-  * The simplest prompt type. Takes in a free-form response submitted after
-    encountering a newline (`\n`). The resulting environment variable has
-    leading and trailing whitespace trimmed.
+  * Takes in a free-form response submitted after encountering a newline (`\n`).
+    The resulting environment variable has leading and trailing whitespace
+    trimmed.
   * If `required`, whitespace-only strings are re-prompted.
+* `yes`
+  * Takes in any of `"yes"`, `"y"`, `"no"`, and `"n"`. Answers are case
+    insensitive.
+  * Even if not `required`, any answer that does not match one of these patterns
+    is re-prompted.
+  * A value of `"yes"` has an environment variable with value `1` passed to the
+    runner. A value of `"no"` has an environment variable with a null value
+    (i.e. an empty string) passed to the runner.
 
 #### Options
 

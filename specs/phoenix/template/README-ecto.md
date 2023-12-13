@@ -28,6 +28,7 @@ $ pg_ctl -D db stop
 
 Afterward, you can run the Phoenix setup commands:
 ```bash
+$ mix deps.get
 $ mix ecto.setup
 $ mix assets.setup
 ```

@@ -70,6 +70,8 @@ static struct Error *read_field(
 
   if (strcmp_ci(type->valuestring, "line") == 0) {
     (*out)->type = FT_LINE;
+  } else if (strcmp_ci(type->valuestring, "yes") == 0) {
+    (*out)->type = FT_YES;
   } else {
     error = ERROR_NEW(
       ERROR_VALIDATOR_FIELD_TYPE_UNKNOWN,

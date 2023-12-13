@@ -79,7 +79,7 @@ static void print_prompt(const struct Field *const field) {
   }
 }
 
-static const char *query_line(const struct Field *const field) {
+static char *query_line(const struct Field *const field) {
   assert(field);
 
   // TODO: Dynamically size this value.
@@ -101,6 +101,38 @@ static const char *query_line(const struct Field *const field) {
 
   free(response);
   return 0;
+}
+
+static bool query_yes(const struct Field *const field) {
+  assert(field);
+
+  // TODO: Dynamically size this value.
+  char *response = calloc(1, 1024);
+  bool answer = false;
+
+  while (true) {
+    print_prompt(field);
+    if (fgets(response, 1024, stdin)) {
+      trim_leading(response);
+      trim_trailing(response);
+      if (strcmp_ci(response, "y") == 0 || strcmp_ci(response, "yes") == 0) {
+        answer = true;
+        break;
+      } else if (
+        strcmp_ci(response, "n") == 0 ||
+        strcmp_ci(response, "no") == 0 ||
+        (response[0] == 0 && !field->required)
+      ) {
+        break;
+      }
+    } else {  // Likely EOF. Force-quit even if required.
+      printf("\n");
+      break;
+    }
+  }
+
+  free(response);
+  return answer;
 }
 
 static void push_env(
@@ -129,20 +161,30 @@ static struct Error *push_fields(
 ) {
   for (int i = 0; i < fields->size; ++i) {
     struct Field *field = fields->buf[i];
-    const char *response = 0;
     switch (field->type) {
-    case FT_LINE:
-      response = query_line(field);
-      break;
+      case FT_LINE: {
+        char *response = query_line(field);
+        if (field->required && !response) {
+          return ERROR_NEW(
+            ERROR_EVALUATOR_RESPONSE_INVALID,
+            ANSI_RED_F("ERROR"),
+            ": Could not read response."
+          );
+        }
+        push_env(*env_buf, field->key, response);
+        free(response);
+        break;
+      }
+      case FT_YES: {
+        bool response = query_yes(field);
+        if (response) {
+          push_env(*env_buf, field->key, "1");
+        } else {
+          push_env(*env_buf, field->key, "");
+        }
+        break;
+      }
     }
-    if (field->required && !response) {
-      return ERROR_NEW(
-        ERROR_EVALUATOR_RESPONSE_INVALID,
-        ANSI_RED_F("ERROR"),
-        ": Could not read response."
-      );
-    }
-    push_env(*env_buf, field->key, response);
   }
   return 0;
 }

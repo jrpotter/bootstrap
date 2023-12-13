@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
   sput_run_test(test_validator_field_required_valid);
   sput_run_test(test_validator_field_prompt_invalid);
   sput_run_test(test_validator_valid_no_required);
+  sput_run_test(test_validator_field_type_yes);
 
   sput_finish_testing();
 
