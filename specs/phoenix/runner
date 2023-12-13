@@ -6,7 +6,7 @@ set -e
 # If set, Bash includes filenames beginning with a `.` in the results of
 # filename expansion. The filenames `.` and `..` must always be matched
 # explicitly, even if dotglob is set.
-shopt -s dotglob
+shopt -s dotglob extglob
 
 # ============================================================
 # PROLOGUE
@@ -56,7 +56,7 @@ fi
 # ============================================================
 
 # Copy template contents over to the intermediate build directory.
-cp -r template/* "$BUILD"
+cp -r template/!(README*) "$BUILD"
 
 # Explicitly set permissions on all copied template files.
 find "$BUILD" -type f -execdir chmod 644 {} +
@@ -74,7 +74,11 @@ mv -f "$BUILD"/bs.project/* "$BUILD"
 rmdir "$BUILD"/bs.project
 
 # Overwrite the generated README in favor of that defined in our template.
-cp template/README.md "$BUILD"
+if [ -n "$ECTO" ]; then
+  cp template/README-ecto.md "$BUILD"/README.md
+else
+  cp template/README-no-ecto.md "$BUILD"/README.md
+fi
 chmod 644 "$BUILD"/README.md
 
 # Include additional build files for our assets. Group into subdirectory so
@@ -86,7 +90,9 @@ mv "$BUILD"/bs.assets/* "$BUILD"/assets
 rmdir "$BUILD"/bs.assets
 
 # Create a new database cluster.
-nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
+if [ -n "$ECTO" ]; then
+  nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
+fi
 
 # ============================================================
 # REWRITES
@@ -120,15 +126,20 @@ sed -i "s/username: \"postgres\"/username: \"$(whoami)\"/g" "$BUILD/config/dev.e
 
 # Append an additional rule to `.gitignore` to ignore the database cluster.
 cat <<EOF >> "$BUILD"/.gitignore
-# The default location of the generated database cluster.
-/db/
-
 # Directory used by \`direnv\` to hold \`use flake\`-generated profiles.
 /.direnv/
 
 # A symlink produced by default when running \`nix build\`.
 /result
 EOF
+
+if [ -n "$ECTO" ]; then
+  cat <<EOF >> "$BUILD"/.gitignore
+
+  # The default location of the generated database cluster.
+  /db/
+EOF
+fi
 
 # ============================================================
 # EPILOGUE

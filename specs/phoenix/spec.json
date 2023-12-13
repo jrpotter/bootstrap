@@ -10,6 +10,6 @@
   },
   "ecto": {
     "type": "yes",
-    "prompt": "Include Ecto? [Y/n] "
+    "prompt": "Include Ecto? [Yn] "
   }
 }
