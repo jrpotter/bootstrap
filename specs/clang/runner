@@ -52,4 +52,4 @@ chmod 755 "$BUILD"/.githooks/pre-commit
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/* "$OUT"
+cp -a "$BUILD"/* "$OUT"

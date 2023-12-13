@@ -53,4 +53,4 @@ find "$BUILD" -type f -execdir chmod 644 {} +
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/* "$OUT"
+cp -a "$BUILD"/* "$OUT"
