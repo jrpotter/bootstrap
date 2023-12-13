@@ -23,7 +23,7 @@
           release = pkgs.stdenv.mkDerivation {
             pname = "bootstrap";
             src = ./.;
-            version = "0.1.0";
+            version = "0.1.3";
             makeFlags = [ "BUILD=release" "PREFIX=$(out)" ];
             dontInstall = true;
           };
