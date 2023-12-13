@@ -240,4 +240,21 @@ static void test_validator_valid_no_required() {
   test_validator_teardown(fixture);
 }
 
+static void test_validator_field_type_yes() {
+  struct TestValidatorFixture *fixture = test_validator_setup(
+    "{"
+    "  \"abc\": {"
+    "    \"type\": \"yes\""
+    "    \"prompt\": \"What value for key?\""
+    "  }"
+    "}"
+  );
+
+  struct Error *error =
+    validate_spec_json(&fixture->config, fixture->parsed, &fixture->prompts);
+  sput_fail_unless(error == 0, "yes valid");
+
+  test_validator_teardown(fixture);
+}
+
 #endif /* _BOOTSTRAP_TEST_VALIDATOR */

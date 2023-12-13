@@ -17,6 +17,7 @@
 */
 enum FieldType {
   FT_LINE = 1,
+  FT_YES = 2,
 };
 
 /**

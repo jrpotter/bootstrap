@@ -45,6 +45,12 @@ else
   MODULE_ARG="--module '$MODULE'"
 fi
 
+if [ -n "$ECTO" ]; then
+  ECTO_ARG=
+else
+  ECTO_ARG="--no-ecto"
+fi
+
 # ============================================================
 # BUILD
 # ============================================================
@@ -61,7 +67,7 @@ chmod 755 "$BUILD"/.githooks/pre-commit
 # subdirectory to avoid interactive conflict resolution.
 nix develop "$BUILD" \
   --command bash \
-  -c "mix phx.new $BUILD/bs.project --app '$APP' $MODULE_ARG"
+  -c "mix phx.new $BUILD/bs.project --app '$APP' $MODULE_ARG $ECTO_ARG"
 
 # Copy the generated files into the intermediate build directory.
 mv -f "$BUILD"/bs.project/* "$BUILD"

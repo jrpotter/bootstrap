@@ -4,5 +4,5 @@ BinPackArguments: false
 BinPackParameters: false
 ColumnLimit: 80
 ContinuationIndentWidth: 2
-IndentCaseLabels: false
+IndentCaseLabels: true
 IndentWidth: 2
