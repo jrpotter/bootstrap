@@ -136,8 +136,8 @@ EOF
 if [ -n "$ECTO" ]; then
   cat <<EOF >> "$BUILD"/.gitignore
 
-  # The default location of the generated database cluster.
-  /db/
+# The default location of the generated database cluster.
+/db/
 EOF
 fi
 
