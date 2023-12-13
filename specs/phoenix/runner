@@ -76,7 +76,6 @@ chmod 644 "$BUILD"/README.md
 cp -r assets "$BUILD"/bs.assets
 chmod 644 "$BUILD"/bs.assets/*
 cp "$BUILD"/bs.assets/* "$BUILD"/assets
-rm -r "$BUILD"/bs.assets
 
 # Create a new database cluster.
 nix develop "$BUILD" --command bash -c "pg_ctl initdb -D $BUILD/db"
@@ -128,4 +127,4 @@ EOF
 # ============================================================
 
 # Success! Copy contents to target directory.
-cp -r "$BUILD"/* "$OUT"
+cp -r "$BUILD"/!(bs.assets) "$OUT"
