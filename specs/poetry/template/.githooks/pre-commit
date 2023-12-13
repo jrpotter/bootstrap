@@ -10,7 +10,7 @@ STAGED=$(
 TARGETS=()
 while IFS= read -r FILENAME
 do
-  if [[ "$FILENAME" =~ .*\.py ]]; then
+  if [[ "$FILENAME" =~ .*\.py$ ]]; then
     TARGETS+=("${FILENAME}")
   fi
 done <<< "$STAGED"

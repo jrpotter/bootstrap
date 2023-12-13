@@ -11,9 +11,9 @@ MIX_TARGETS=()
 WEB_TARGETS=()
 while IFS= read -r FILENAME
 do
-  if [[ "$FILENAME" =~ .*exs? ]]; then
+  if [[ "$FILENAME" =~ .*exs?$ ]]; then
     MIX_TARGETS+=("${FILENAME}")
-  elif [[ "$FILENAME" =~ .*jsx? ]] || [[ "$FILENAME" =~ .*tsx? ]]; then
+  elif [[ "$FILENAME" =~ .*jsx?$ ]] || [[ "$FILENAME" =~ .*tsx?$ ]]; then
     WEB_TARGETS+=("${FILENAME}")
   fi
 done <<< "$STAGED"

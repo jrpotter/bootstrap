@@ -10,7 +10,7 @@ STAGED=$(
 TARGETS=()
 while IFS= read -r FILENAME
 do
-  if [[ "$FILENAME" =~ .*\.exs? ]]; then
+  if [[ "$FILENAME" =~ .*\.exs?$ ]]; then
     TARGETS+=("${FILENAME}")
   fi
 done <<< "$STAGED"
