@@ -23,7 +23,7 @@
       {
         packages = {
           lib = pkgs.buildNpmPackage {
-            pname = "ohaef";
+            pname = "<NAME>";
             version = "0.1.0";
             src = ./.;
             npmDepsHash = "<SHA_256>";
