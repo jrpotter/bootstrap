@@ -15,8 +15,8 @@ let
     };
   };
   args = {
-    name = "blah";
-    packageName = "blah";
+    name = "<APP>";
+    packageName = "<APP>";
     version = "0.1.0";
     src = ./.;
     dependencies = [
