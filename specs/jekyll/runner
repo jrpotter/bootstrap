@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# Exit immediately if the script encounters a non-zero status.
+set -e
+
+# If set, Bash includes filenames beginning with a `.` in the results of
+# filename expansion. The filenames `.` and `..` must always be matched
+# explicitly, even if dotglob is set.
+shopt -s dotglob extglob
+
+# ============================================================
+# PROLOGUE
+# ============================================================
+
+# Create a new top-level directory as fallback in case $BUILD (defined below)
+# is ever empty.
+mkdir -p "/tmp/bs.jekyll"
+
+# Create an intermediate build directory. The final step of this script will
+# copy the content from this directory to $OUT.
+BUILD=$(mktemp -d -p "/tmp/bs.jekyll")
+
+if [ -z "$BUILD" ]; then
+  >&2 echo "Failed to create temp directory."
+  exit 1
+fi
+
+# Deletes the intermediate build directory on exit. We use a concatenation of
+# the intermediate directory with the basename of the generated temp directory
+# to ensure we never evaluate to root (i.e. `/`). That should never actually
+# happen but a good habit to establish nonetheless.
+function cleanup {
+  rm -r "/tmp/bs.jekyll/$(basename "$BUILD")"
+}
+
+trap cleanup EXIT
+
+# ============================================================
+# BUILD
+# ============================================================
+
+# Copy template contents over to the intermediate build directory.
+cp -r template/* "$BUILD"
+
+# Explicitly set permissions on all copied files.
+find "$BUILD" -type f -execdir chmod 644 {} +
+
+# Replace the placeholder name found in the template files.
+sed -i "s/<NAME>/$NAME/g" "$BUILD/flake.nix"
+
+# Generate a new project with the specified name.
+nix develop "$BUILD" --command bash -c "jekyll new $BUILD/$NAME"
+
+# Copy over the generated contents.
+mv "$BUILD/$NAME"/!(Gemfile) "$BUILD"
+rm "$BUILD/$NAME"/Gemfile
+rmdir "$BUILD/$NAME"
+
+# ============================================================
+# EPILOGUE
+# ============================================================
+
+# Success! Copy contents to target directory.
+cp -a "$BUILD"/* "$OUT"
