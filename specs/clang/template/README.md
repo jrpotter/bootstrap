@@ -1,7 +1,7 @@
 # Clang Flake Template
 
-This is a template for constructing a working environment for C development with
-the [clang](https://clang.llvm.org/) (version 16.0.6) toolchain. [direnv](https://direnv.net/)
+This is a template for constructing a working environment for C/C++ development
+with the [clang](https://clang.llvm.org/) (version 16.0.6) toolchain. [direnv](https://direnv.net/)
 can be used to launch a dev shell upon entering this directory (refer to
 `.envrc`). Otherwise run via:
 ```bash
@@ -14,13 +14,11 @@ The [clangd](https://clangd.llvm.org/) LSP (version 14.0.6) is included in this
 flake. The [codelldb](https://github.com/vadimcn/codelldb) VSCode plugin is also
 included to interface with the LSP. Note this plugin, despite its name, is
 compatible with other editors (e.g. neovim). To configure, refer to your
-editor's documentation. To use the LSP across files, a [compilation database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
-must be generated. For this reason, [bear](https://github.com/rizsotto/Bear)
-(version 3.1.3) is included in this flake. Use as follows to generate a
-`compile_commands.json` file:
-```bash
-$ bear -- <your-build-command>
-```
+editor's documentation. To use the LSP across files, a
+[compilation database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
+must be generated. [CMake](https://cmake.org/) (version 3.27.7) is included in
+this flake with `CMAKE_EXPORT_COMPILE_COMMANDS` already set from the
+`CMakeLists.txt` file.
 
 ## Documentation
 
