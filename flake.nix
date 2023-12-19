@@ -24,7 +24,6 @@
             pname = "bootstrap";
             src = ./.;
             version = "0.1.3";
-            makeFlags = [ "BUILD=release" "PREFIX=$(out)" ];
             dontInstall = true;
           };
 
@@ -40,8 +39,8 @@
           stdenv = pkgs.clangStdenv;
         } {
           packages = with pkgs; [
-            bear
             clang-tools
+            cmake
             codelldb
             doxygen
           ];

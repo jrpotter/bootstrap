@@ -6,5 +6,4 @@ void error_free(struct Error *error) {
   }
   free((void *)error->message);
   free(error);
-  error = 0;
 }

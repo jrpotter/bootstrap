@@ -60,5 +60,4 @@ void string_buf_free(struct StringBuf *sb) {
   }
   free((void *)sb->buf);
   free(sb);
-  sb = 0;
 }

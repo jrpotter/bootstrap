@@ -10,7 +10,7 @@ STAGED=$(
 TARGETS=()
 while IFS= read -r FILENAME
 do
-  if [[ "$FILENAME" =~ .*\.c$ ]] || [[ "$FILENAME" == .*\.h$ ]]; then
+  if [[ "$FILENAME" =~ .*\.c(pp)?$ ]] || [[ "$FILENAME" =~ .*\.h(pp)?$ ]]; then
     TARGETS+=("${FILENAME}")
   fi
 done <<< "$STAGED"

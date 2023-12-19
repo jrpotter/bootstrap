@@ -36,5 +36,4 @@ void dyn_array_free(struct DynArray *a) {
   }
   free(a->buf);
   free(a);
-  a = 0;
 }
