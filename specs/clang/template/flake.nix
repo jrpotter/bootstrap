@@ -51,6 +51,7 @@
           packages = with pkgs; [
             clang-tools
             cmake
+            cmakeCurses
             codelldb
             doxygen
           ];
