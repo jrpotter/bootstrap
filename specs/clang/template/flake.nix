@@ -15,7 +15,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
-  outputs = { nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -25,6 +25,25 @@
         '';
       in
       {
+        packages = {
+          app = pkgs.stdenv.mkDerivation {
+            pname = "<NAME>";
+            src = ./.;
+            version = "0.1.0";
+            nativeBuildInputs = with pkgs; [ cmake ];
+            buildPhase = ''
+              cmake -DCMAKE_BUILD_TYPE=Release .
+              cmake --build .
+            '';
+            installPhase = ''
+              mkdir -p $out/bin
+              cp ./"<NAME>" $out/bin
+            '';
+          };
+
+          default = self.packages.${system}.app;
+        };
+
         devShells.default = pkgs.mkShell.override {
           # https://nixos.wiki/wiki/Using_Clang_instead_of_GCC
           stdenv = pkgs.clangStdenv;

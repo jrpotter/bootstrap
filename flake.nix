@@ -20,7 +20,7 @@
       in
       {
         packages = {
-          release = pkgs.stdenv.mkDerivation {
+          app = pkgs.stdenv.mkDerivation {
             pname = "bootstrap";
             src = ./.;
             version = "0.1.3";
@@ -39,7 +39,7 @@
             if [ -z "$BOOTSTRAP_ROOT_DIR" ]; then
               export BOOTSTRAP_ROOT_DIR="${./specs}"
             fi
-            exec ${self.packages.${system}.release}/bootstrap "$@"
+            exec ${self.packages.${system}.app}/bin/bootstrap "$@"
           '';
         };
         devShells.default = pkgs.mkShell.override {

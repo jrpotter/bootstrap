@@ -8,17 +8,35 @@ can be used to launch a dev shell upon entering this directory (refer to
 $ nix develop
 ```
 
+## Building
+
+We use [CMake](https://cmake.org/) (version 3.27.7) to build the project. When
+first starting the project, we recommend running the following commands:
+```bash
+$ mkdir -p build/{Debug,Release}
+$ (cd build/Debug && cmake -DCMAKE_BUILD_TYPE=Debug ../..)
+$ (cd build/Release && cmake -DCMAKE_BUILD_TYPE=Release ../..)
+```
+This will create a CMake cache file in each subdirectory with the build types
+set. Now you can build a `Debug` or `Release` variant by navigating to the
+corresponding subdirectory and running:
+```bash
+$ cmake --build .
+```
+
 ## Language Server
 
 The [clangd](https://clangd.llvm.org/) LSP (version 14.0.6) is included in this
 flake. The [codelldb](https://github.com/vadimcn/codelldb) VSCode plugin is also
 included to interface with the LSP. Note this plugin, despite its name, is
 compatible with other editors (e.g. neovim). To configure, refer to your
-editor's documentation. To use the LSP across files, a
+editor's documentation.
+
+To use the LSP across files, a
 [compilation database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
-must be generated. [CMake](https://cmake.org/) (version 3.27.7) is included in
-this flake with `CMAKE_EXPORT_COMPILE_COMMANDS` already set from the
-`CMakeLists.txt` file.
+must be generated. The `CMakeLists.txt` file already enables this in the Debug
+configuration type. A top-level `compile_commands.json` symbolic link already
+exists and points to this generated database.
 
 ## Documentation
 
@@ -29,12 +47,22 @@ running:
 $ doxygen
 ```
 
+## Testing
+
+We use [CTest](https://cmake.org/cmake/help/latest/module/CTest.html) (version
+3.27.7) for unit testing. To run the tests, navigate to `build/Debug` and type
+the following:
+```bash
+$ cmake --build .
+$ make test
+```
+
 ## Formatting
 
 Formatting depends on the [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
 (version 14.0.6) tool. Refer to `.clang-format` for default formatting options.
 A `pre-commit` hook is included in `.githooks` that can be used to format all
-`*.c` and `*.h` files prior to commit. Install via:
+`*.c(pp)?` and `*.h(pp)?` files prior to commit. Install via:
 ```bash
 $ git config --local core.hooksPath .githooks/
 ```

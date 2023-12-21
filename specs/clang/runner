@@ -30,7 +30,7 @@ fi
 # to ensure we never evaluate to root (i.e. `/`). That should never actually
 # happen but a good habit to establish nonetheless.
 function cleanup {
-  rm -r "/tmp/bs.clang/$(basename "$BUILD")"
+  yes | rm -r "/tmp/bs.clang/$(basename "$BUILD")"
 }
 
 trap cleanup EXIT
@@ -46,6 +46,20 @@ cp -r template/* "$BUILD"
 find "$BUILD" -type f -execdir chmod 644 {} +
 find "$BUILD" -type d -execdir chmod 755 {} +
 chmod 755 "$BUILD"/.githooks/pre-commit
+
+# Create new subdirectories for out-of-source builds. Each should be initialized
+# with `CMAKE_BUILD_TYPE` set appropriately during configuration, e.g.
+# `cd build/Debug && cmake -DCMAKE_BUILD_TYPE=Debug ../..`
+mkdir -p "$BUILD"/build/{Debug,Release}
+
+# ============================================================
+# REWRITES
+# ============================================================
+
+for file in flake.nix {,src/,test/}CMakeLists.txt
+do
+  sed -i "s/<NAME>/$NAME/g" "$BUILD/$file"
+done
 
 # ============================================================
 # EPILOGUE
