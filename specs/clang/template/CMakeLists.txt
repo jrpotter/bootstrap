@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.15)
 project("<NAME>" VERSION 0.1.0)
 
+# The default CMAKE_BUILD_TYPE is undefined, i.e. toolchain specific. Enforcing
+# a default makes builds work more consistently.
+if (NOT CMAKE_BUILD_TYPE)
+  message("CMAKE_BUILD_TYPE was not set. Defaulting to Debug")
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 # The primary executable.
 add_executable("<NAME>" main.c)
 
