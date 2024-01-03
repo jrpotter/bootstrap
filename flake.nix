@@ -25,10 +25,6 @@
             src = ./.;
             version = "0.1.3";
             nativeBuildInputs = with pkgs; [ cmake ];
-            buildPhase = ''
-              cmake -DCMAKE_BUILD_TYPE=Release .
-              cmake --build .
-            '';
             installPhase = ''
               mkdir -p $out/bin
               cp ./bootstrap $out/bin
