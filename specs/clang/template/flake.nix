@@ -30,7 +30,11 @@
             pname = "<NAME>";
             src = ./.;
             version = "0.1.0";
-            nativeBuildInputs = with pkgs; [ cmake ];
+            nativeBuildInputs = with pkgs; [
+              cmake
+              # Include if interested in building documentation.
+              # doxygen
+            ];
             buildPhase = ''
               cmake -DCMAKE_BUILD_TYPE=Release .
               cmake --build .

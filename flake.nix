@@ -24,7 +24,7 @@
             pname = "bootstrap";
             src = ./.;
             version = "0.1.3";
-            nativeBuildInputs = with pkgs; [ cmake ];
+            nativeBuildInputs = with pkgs; [ cmake doxygen ];
             installPhase = ''
               mkdir -p $out/bin
               cp ./bootstrap $out/bin

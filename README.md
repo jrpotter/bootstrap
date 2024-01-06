@@ -251,10 +251,12 @@ $ make test
 
 ### Documentation
 
-We use [doxygen](https://www.doxygen.nl/index.html) for documentation
-generation. Run the following command to generate documentation locally:
+Documentation is generated using [Doxygen](https://www.doxygen.nl/index.html)
+(version 1.9.7) through CMake. (Re)generate documentation by navigating to
+the desired build configuration directory and running:
 ```bash
-$ doxygen
+$ cmake --build .
+$ make docs
 ```
 
 ### Formatting

@@ -15,6 +15,9 @@ add_executable("<NAME>" main.c)
 # for linking the other project source files to our executable.
 add_subdirectory(src)
 
+# Use the Doxygen module to generate documentation through CMake.
+add_subdirectory(docs)
+
 # An example on linking additional libraries. In this case, links `math`.
 target_link_libraries("<NAME>" PUBLIC m)
 

@@ -56,7 +56,7 @@ mkdir -p "$BUILD"/build/{Debug,Release}
 # REWRITES
 # ============================================================
 
-for file in flake.nix {,src/,test/}CMakeLists.txt
+for file in flake.nix {,src/,docs/,test/}CMakeLists.txt
 do
   sed -i "s/<NAME>/$NAME/g" "$BUILD/$file"
 done

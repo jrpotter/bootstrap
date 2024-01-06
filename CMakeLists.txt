@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.19)
 project(bootstrap VERSION 0.1.3 LANGUAGES C)
 
 add_executable(bootstrap main.c)
-
-add_subdirectory(src)
 target_link_libraries(bootstrap PUBLIC m)
 target_include_directories(bootstrap PUBLIC include)
+
+add_subdirectory(src)
+add_subdirectory(docs)
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
   set_target_properties(
