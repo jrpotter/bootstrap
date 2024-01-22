@@ -14,11 +14,11 @@ shopt -s dotglob
 
 # Create a new top-level directory as fallback in case $BUILD (defined below)
 # is ever empty.
-mkdir -p "/tmp/bs.postgres"
+mkdir -p "/tmp/bs.airflow"
 
 # Create an intermediate build directory. The final step of this script will
 # copy the content from this directory to $OUT.
-BUILD=$(mktemp -d -p "/tmp/bs.postgres")
+BUILD=$(mktemp -d -p "/tmp/bs.airflow")
 
 if [ -z "$BUILD" ]; then
   >&2 echo "Failed to create temp directory."
@@ -30,7 +30,7 @@ fi
 # to ensure we never evaluate to root (i.e. `/`). That should never actually
 # happen but a good habit to establish nonetheless.
 function cleanup {
-  rm -r "/tmp/bs.postgres/$(basename "$BUILD")"
+  rm -r "/tmp/bs.airflow/$(basename "$BUILD")"
 }
 
 trap cleanup EXIT
