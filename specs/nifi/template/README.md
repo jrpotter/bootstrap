@@ -1,7 +1,7 @@
 # NiFi Dev Shell
 
 This is a small flake template for experimenting with [Apache NiFi](https://nifi.apache.org/)
-(version 1.19.0). [direnv](https://direnv.net/) can be used to a launch a dev
+(version 1.24.0). [direnv](https://direnv.net/) can be used to a launch a dev
 shell upon entering this directory (refer to `.envrc`). Otherwise run via:
 ```bash
 $ nix develop
@@ -13,7 +13,7 @@ can then be used to boot NiFi. Do so by running:
 ```bash
 $ nix build
 $ docker load < result
-$ docker run -p 8443:8443 nifi:1.19.0
+$ docker run -p 8443:8443 nifi:1.24.0
 ```
 Once running, open `https://localhost:8443/nifi` (notice use of the `https`
 scheme). You can find your login credentials using:
