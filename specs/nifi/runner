@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# Exit immediately if the script encounters a non-zero status.
+set -e
+
+# If set, Bash includes filenames beginning with a `.` in the results of
+# filename expansion. The filenames `.` and `..` must always be matched
+# explicitly, even if dotglob is set.
+shopt -s dotglob
+
+# ============================================================
+# PROLOGUE
+# ============================================================
+
+# Create a new top-level directory as fallback in case $BUILD (defined below)
+# is ever empty.
+mkdir -p "/tmp/bs.nifi"
+
+# Create an intermediate build directory. The final step of this script will
+# copy the content from this directory to $OUT.
+BUILD=$(mktemp -d -p "/tmp/bs.nifi")
+
+if [ -z "$BUILD" ]; then
+  >&2 echo "Failed to create temp directory."
+  exit 1
+fi
+
+# Deletes the intermediate build directory on exit. We use a concatenation of
+# the intermediate directory with the basename of the generated temp directory
+# to ensure we never evaluate to root (i.e. `/`). That should never actually
+# happen but a good habit to establish nonetheless.
+function cleanup {
+  rm -r "/tmp/bs.nifi/$(basename "$BUILD")"
+}
+
+trap cleanup EXIT
+
+# ============================================================
+# BUILD
+# ============================================================
+
+# Copy template contents over to the intermediate build directory.
+cp -r template/* "$BUILD"
+
+# Explicitly set permissions on all copied files.
+find "$BUILD" -type f -execdir chmod 644 {} +
+
+# ============================================================
+# EPILOGUE
+# ============================================================
+
+# Success! Copy contents to target directory.
+cp -a "$BUILD"/* "$OUT"
