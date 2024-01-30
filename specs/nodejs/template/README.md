@@ -21,7 +21,7 @@ Alternatively, you can set the value of `npmDepsHash` to `lib.fakeHash` and run:
 ```bash
 $ nix build
 ```
-Nix will complain with the has value it actually expected.
+Nix will complain with the hash value it actually expected.
 
 ## Language Server
 
